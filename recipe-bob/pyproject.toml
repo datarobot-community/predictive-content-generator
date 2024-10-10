@@ -1,0 +1,63 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[lint]
+ignore = ["E501"]  # Ruff format takes care of line-too-long
+select = [
+    "F",   # Pyflakes
+    "W",   # pycodestyle
+    "E",   # pycodestyle
+    "I",   # isort
+    "UP",  # pyupgrade
+    "PL",  # Pylint
+    "T201", # Print Statement
+]
+
+[project]
+name = "recipe_bob"
+readme = "README.md"
+dynamic = ["dependencies", "version"]
+
+[project.scripts]
+recipe-bob = "recipe_bob.__main__:main"
+
+[project.entry-points."kedro.hooks"]
+
+[project.optional-dependencies]
+
+[tool.setuptools.dynamic]
+dependencies = {file = "requirements.txt"}
+version = {attr = "recipe_bob.__version__"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+namespaces = false
+
+[tool.kedro]
+package_name = "recipe_bob"
+project_name = "recipe-bob"
+kedro_init_version = "0.19.5"
+tools = ['None']
+example_pipeline = "False"
+source_dir = "src"
+
+[tool.pytest.ini_options]
+addopts = """
+--cov-report term-missing \
+--cov src/recipe_bob -ra"""
+
+[tool.coverage.report]
+fail_under = 0
+show_missing = true
+exclude_lines = ["pragma: no cover", "raise NotImplementedError"]
+
+[tool.ruff]
+exclude = [".toml"]
+line-length = 88
+show-fixes = true
+
+[tool.ruff.format]
+docstring-code-format = true
+[tool.kedro_telemetry]
+project_id = "b1ff8e83fbfb4d8db9bf694d1a49ba38"

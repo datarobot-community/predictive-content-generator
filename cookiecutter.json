@@ -1,0 +1,14 @@
+{
+    "project_name": null,
+    "use_case_type_enum": null,
+    "repo_name": "{{ cookiecutter.project_name.strip().replace(' ', '-').replace('_', '-').lower() }}",
+    "python_package": "{{ cookiecutter.project_name.strip().replace(' ', '_').replace('-', '_').lower() }}",
+    "kedro_version": "{{ cookiecutter.kedro_version }}",
+    "analytics_trace_id": "recipe-best-offer-bot",
+    "datarobotx_idp_version": "v0.2.10",
+    "tools": "{{ cookiecutter.tools }}",
+    "example_pipeline": "{{ cookiecutter.example_pipeline }}",
+    "_copy_without_render": [
+        "*.jinja"
+    ]
+}

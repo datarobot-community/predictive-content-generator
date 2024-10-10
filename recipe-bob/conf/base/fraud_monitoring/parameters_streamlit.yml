@@ -1,0 +1,67 @@
+# This is a registry of literal parameters that can be used as node inputs and/or node outputs.
+#
+# When defining node inputs in the pipeline, you can reference keys from this yaml to indicate
+# that the pipeline should map the literal defined here to the node's input at runtime.
+#
+# Kedro precedent defines that the keys in this yaml can be referenced as below when defining
+# node inputs:
+# e.g. "params:my_key_1", "params:my_key_2.my_sub_key_2"
+
+deploy_streamlit_app:
+  custom_app_name: ${globals:project_name} Streamlit
+  environment_name: ${globals:project_name} Streamlit Environment
+  environment_use_cases:
+    - customApplication
+  page_title: Fraud Monitor Officer
+  page_subtitle: |
+    Combine predictive and generative AI to help review customer transaction alerts. 
+    All you need to do is choose a transaction and hit submit!
+  record_identifier:
+    column_name: record_id
+    display_name: Transaction
+  text_explanation_feature: csrNotes # Optional, include when a text variable is present and ngrams feature explanations are desired
+  no_text_gen_label: # Optional, include in predictions where an email is not desired
+  base_environment_id: 6542cd582a9d3d51bf4ac71e
+  allow_auto_stopping: true
+  default_number_of_explanations: 3
+  tones:
+    [
+      "authoritative and expert",
+      "educational and informative",
+      "formal and elevated",
+      "friendly and casual",
+      "lighthearted and funny",
+      "witty and playful",
+    ]
+  verbosity: ["short and sweet", "normal", "long and detailed"]
+  models:
+    - name: gpt-35-turbo
+      input_price_per_1k_tokens: .001
+      output_price_per_1k_tokens: .002
+    - name: gpt-35-turbo-16k
+      input_price_per_1k_tokens: .003
+      output_price_per_1k_tokens: .004
+    - name: gpt-4o
+      input_price_per_1k_tokens: .005
+      output_price_per_1k_tokens: .015
+  default_temperature: 0.5
+  target_probability_description: the likelihood of fraudulent activity # Preceeded in prompt by "Feature is increasing/decreasing"
+  system_prompt: |
+    You are a fraud monitoring specialist named Bob and you work for BankCorp., a regional bank. 
+    Your job is to review customer transactions alerts and determine if they are suspicious or fraudulent. 
+    You have detailed information about each of your customers and their transaction behavior. 
+    You also have a list of important factors that explain why a particular transaction may be suspicious. 
+    The goal is to incorporate these factors into a report addressed to a fraud investigative analyst
+    in order to to decide if a Suspicious Acitivty Report (SAR) should be filed.
+  email_prompt: |
+    Draft an email to a fraud analyst that the transaction was {prediction_label}. 
+    The email should refer to the transaction id {selected_record} and contain a subject line and body. 
+    Keep the email tone {tone}. Keep the length {verbosity}. Try not to use many emojis. 
+    \n Incorporate the following list of factors that influenced the determination:\n\n{rsp}
+  outcome_details: # Each item should be a target value with it's corresponding label and optional description
+    - prediction: 0
+      label: Non fraudulent
+      description: The transaction is not suspicious and does not require further investigation.
+    - prediction: 1
+      label: Suspicious activity
+      description: The transaction is suspicious and warrants further investigation.

@@ -1,0 +1,64 @@
+# This is a registry of literal parameters that can be used as node inputs and/or node outputs.
+#
+# When defining node inputs in the pipeline, you can reference keys from this yaml to indicate
+# that the pipeline should map the literal defined here to the node's input at runtime.
+#
+# Kedro precedent defines that the keys in this yaml can be referenced as below when defining
+# node inputs:
+# e.g. "params:my_key_1", "params:my_key_2.my_sub_key_2"
+
+deploy_streamlit_app:
+  custom_app_name: ${globals:project_name} Streamlit
+  environment_name: ${globals:project_name} Streamlit Environment
+  environment_use_cases:
+    - customApplication
+  page_title: Loan Underwriting Email Helper
+  page_subtitle: |
+    Combine predictive and generative AI to help triage loan applications. 
+    All you need to do is select an application from the dropdown and hit submit!
+  record_identifier:
+    column_name: row_id
+    display_name: Loan Applicant
+  text_explanation_feature: desc # Optional, include when a text variable is present and ngrams feature explanations are desired
+  no_text_gen_label: # Optional, include in predictions where an email is not desired
+  base_environment_id: 6542cd582a9d3d51bf4ac71e
+  allow_auto_stopping: true
+  default_number_of_explanations: 3
+  tones:
+    [
+      "educational and informative",
+      "formal and elevated",
+      "friendly and casual",
+      "authoritative and expert",
+    ]
+  verbosity: ["short and sweet", "normal", "long and detailed"]
+  models:
+    - name: gpt-35-turbo
+      input_price_per_1k_tokens: .001
+      output_price_per_1k_tokens: .002
+    - name: gpt-35-turbo-16k
+      input_price_per_1k_tokens: .003
+      output_price_per_1k_tokens: .004
+    - name: gpt-4o
+      input_price_per_1k_tokens: .005
+      output_price_per_1k_tokens: .015
+  default_temperature: 0.5
+  target_probability_description: the likelihood this loan would default # Preceeded in prompt by "Feature is increasing/decreasing"
+  system_prompt: |
+    You are loan underwriting officer named Bob and you work for BankCorp., a regional bank.
+    Your job is to review loan applications and determine if they should be approved or denied.
+    You have detailed information about your customer's loan application.
+    You also have a list of important factors that explain why a customer was approved or denied for a loan.
+    The goal is to incorporate these factors into an email informing the customer of your decision.
+  email_prompt: |
+    Draft an email to a loan applicant informing them that their request was {prediction_label}.
+    The email should be addressed to {selected_record} and contain a subject line and body. 
+    Keep the email tone {tone}. Keep the length {verbosity}. Try not to use many emojis.
+    \n Incorporate the following list of factors that influenced :\n\n{rsp}
+  outcome_details: # Each item should be a target value with it's corresponding label and optional description
+    - prediction: 0
+      label: Approved
+      description: The loan request was approved.
+    - prediction: 1
+      label: Rejected
+      description: The loan request was denied.
