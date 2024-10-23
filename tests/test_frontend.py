@@ -16,11 +16,13 @@ import contextlib
 import importlib
 import logging
 import os
+import subprocess
 import sys
+import time
 from datetime import datetime, timedelta
 from io import BytesIO
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 
 import datarobot as dr
 import pytest
@@ -30,6 +32,7 @@ from streamlit.testing.v1 import AppTest
 
 from nbo.resources import CustomMetricIds, GenerativeDeployment
 
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
@@ -54,15 +57,27 @@ def output_path() -> Any:
 
 
 @pytest.fixture
-def application(pulumi_up: Any) -> Any:
+def application(
+    pulumi_up: Any,
+    subprocess_runner: Callable[[list[str]], subprocess.CompletedProcess[str]],
+) -> Any:
     import nbo.predict
     import nbo.resources
 
+    stack_name = subprocess.check_output(
+        ["pulumi", "stack", "--show-name"],
+        text=True,
+    ).split("\n")[0]
     with cd(Path("frontend")):
+        subprocess_runner(
+            ["pulumi", "stack", "select", stack_name, "--non-interactive"]
+        )
+        # and ensure we can access `frontend` as if we were running from inside
         sys.path.append(".")
+        logger.info(subprocess.check_output(["pulumi", "stack", "output"]))
         importlib.reload(nbo.predict)
         importlib.reload(nbo.resources)
-        yield AppTest.from_file("app.py", default_timeout=60)
+        yield AppTest.from_file("app.py", default_timeout=180)
 
 
 @pytest.fixture
@@ -116,7 +131,7 @@ def test_submit_feedback(app_post_prompt: AppTest) -> None:
     if feedback_count_before_click is None:
         feedback_count_before_click = 0
     test_app.button(key="button-thumbsup").click().run()
-
+    time.sleep(60)
     feedback_count_after_click = custom_metric.get_summary(
         start=yesterday, end=tomorrow
     ).metric["sample_count"]

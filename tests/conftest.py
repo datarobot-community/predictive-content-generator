@@ -19,6 +19,7 @@ import os
 import subprocess
 import time
 import uuid
+from typing import Callable
 
 import datarobot as dr
 import pandas as pd
@@ -64,10 +65,8 @@ def session_env_vars(request, stack_name):
 
 
 @pytest.fixture(scope="session")
-def pulumi_up(
-    stack_name, session_env_vars, pytestconfig, request: pytest.FixtureRequest
-):
-    def run_command(command):
+def subprocess_runner():
+    def run_command(command: list[str]) -> subprocess.CompletedProcess[str]:
         proc = subprocess.run(command, check=False, text=True, capture_output=True)
         cmd = " ".join(command)
         if proc.returncode:
@@ -77,14 +76,28 @@ def pulumi_up(
             logger.warning(msg)
             msg = f"'{cmd}' STDERR:\n{proc.stderr}"
             logger.warning(msg)
+            logger.info(proc)
         return proc
 
+    return run_command
+
+
+@pytest.fixture(scope="session")
+def pulumi_up(
+    stack_name,
+    session_env_vars,
+    pytestconfig,
+    request: pytest.FixtureRequest,
+    subprocess_runner: Callable[[list[str]], subprocess.CompletedProcess[str]],
+):
     if pytestconfig.getoption("pulumi_up"):
         logger.info(f"Running {stack_name} with {session_env_vars}")
-        run_command(["pulumi", "stack", "init", stack_name, "--non-interactive"])
+        subprocess_runner(["pulumi", "stack", "init", stack_name, "--non-interactive"])
         # ensure stack is deleted - stack init can fail if the name is the same as currently selected
-        run_command(["pulumi", "stack", "select", stack_name, "--non-interactive"])
-        proc = run_command(["pulumi", "up", "-y", "--non-interactive"])
+        subprocess_runner(
+            ["pulumi", "stack", "select", stack_name, "--non-interactive"]
+        )
+        proc = subprocess_runner(["pulumi", "up", "-y", "--non-interactive"])
         stack = subprocess.check_output(["pulumi", "stack", "output"], text=True)
 
         if proc.returncode:
@@ -105,8 +118,8 @@ def pulumi_up(
             or tests_failed_during_module == 0
         ):
             logger.info("Tearing down stack")
-            run_command(["pulumi", "down", "-y", "--non-interactive"])
-            run_command(
+            subprocess_runner(["pulumi", "down", "-y", "--non-interactive"])
+            subprocess_runner(
                 ["pulumi", "stack", "rm", stack_name, "-y", "--non-interactive"]
             )
         else:

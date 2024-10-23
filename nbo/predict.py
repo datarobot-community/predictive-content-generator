@@ -14,6 +14,7 @@
 
 from __future__ import annotations
 
+import logging
 from dataclasses import dataclass
 from typing import Any, Dict, Optional
 
@@ -29,11 +30,13 @@ from pydantic import ValidationError
 from nbo.resources import GenerativeDeployment, PredAIDeployment
 from nbo.schema import Generation, LLMRequest, Prediction  # noqa: E402
 
+logger = logging.getLogger(__name__)
+
 try:
     pred_ai_deployment_id = PredAIDeployment().id
     generative_deployment_id = GenerativeDeployment().id
-    print(f"Pred AI deployment: {pred_ai_deployment_id}")
-    print(f"Email LLM deployment: {generative_deployment_id}")
+    logger.info(f"Pred AI deployment: {pred_ai_deployment_id}")
+    logger.info(f"Email LLM deployment: {generative_deployment_id}")
 except ValidationError as e:
     raise ValueError(
         (

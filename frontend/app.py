@@ -14,6 +14,7 @@
 
 from __future__ import annotations
 
+import logging
 import sys
 
 import datarobot as dr
@@ -43,6 +44,8 @@ from helpers import (
 sys.path.append("..")
 from nbo.predict import make_pred_ai_deployment_predictions
 from nbo.resources import DatasetId
+
+logger = logging.getLogger(__name__)
 
 st.set_page_config(
     layout="wide",
@@ -331,7 +334,7 @@ def main() -> None:
                         st.stop()
                     else:
                         # Log the number of explanations to be used in the prompt
-                        print(
+                        logger.info(
                             f"Incorporating {st.session_state.numberOfExplanations} prediction explanations into the prompt"
                         )
                         # Generate the email content based on the prediction

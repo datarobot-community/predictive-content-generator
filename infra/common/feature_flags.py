@@ -74,6 +74,10 @@ def check_feature_flags(
             f"Feature flag '{flag}' is required to be {correct_value} but is no longer a valid DataRobot feature flag."
         )
     for flag, correct_value in corrections:
-        pulumi.error(f"Required feature flag '{flag}' must be set to {correct_value}.")
+        pulumi.error(
+            f"This app template requires that feature flag '{flag}' is set "
+            f"to {correct_value}. Contact your DataRobot representative for "
+            "assistance."
+        )
     if len(corrections) and raise_corrections:
-        raise pulumi.RunError("Please correct feature flag settings.")
+        raise pulumi.RunError("Please correct feature flag settings and run again.")
