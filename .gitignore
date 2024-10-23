@@ -24,6 +24,7 @@ data/**
 ##########################
 # Common files
 
+.vscode
 # IntelliJ
 .idea/
 *.iml
@@ -150,19 +151,12 @@ venv.bak/
 # mypy
 .mypy_cache/
 
-# airflow
-airflow.db
-airflow.cfg
-standalone_admin_password.txt
-airflow-webserver.pid
-webserver_config.py
-logs/
+deployment_generative/model-metadata.yaml
 
-# datarobotx
-datarobotx/
+frontend/*.yaml
+frontend/metadata.yaml
 
-# data
-recipe-bob/data
-recipe-bob/conf/base/globals.yml
-recipe-bob/conf/local/credentials.yml
-recipe-bob/stats.json
+tests/output
+notebooks/*.yaml
+
+**/e2e/test_results/*
