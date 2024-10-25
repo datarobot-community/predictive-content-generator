@@ -1,131 +1,127 @@
-# Recipe Best Offer Bot (BOB)
-This pipeline builds a model on DataRobot and creates a front end that combines the model with a chatbot to make personalized offers to customers.
+# Predictive content generator
 
-In addition to creating a hosted, shareable user interface, BOB provides:
-* GenAI-focused custom metrics that automatically refresh on a schedule.
-* DataRobot ML Ops hosting, monitoring, and governing the individual backend deployments.
+The predictive content generator is a customizable app template for generating content using predictive model outputs. Real world applications of this technology include:
+
+- Using a next-best-offer predictive model to automatically draft personalized promotions.
+- Using a credit risk model to automatically draft approval and rejection letters.
+
+The predictive content generator highlights the combination of:
+
+- Best-in-class predictive model training and deployment using DataRobot AutoML.
+- Governance & hosting predictive & generative models using DataRobot MLOps.
+- A shareable and customizable front-end for interacting with both predictive and
+  generative models.
 
 ![Using BOB](https://s3.amazonaws.com/datarobot_public/drx/recipe_gifs/bob_ui.gif)
 
-## Getting started
-1. Ensure you have the following DataRobot feature flags turned on:
-   - Enable Public Network Access for all Custom Models
-   - Enable Global Models in the Model Registry
-   - Enable Custom Jobs
-   - Enable Additional Custom Model Output in Prediction Responses
+## Setup
 
-2. Create a [new][virtualenv-docs] python virtual environment with python >= 3.9.
+1. To start using this template, first clone the repository.
 
-3. Install `kedro`, create a new kedro project from this template and `cd` to the newly created directory.
-   Choose a project name that is likely to be unique - DataRobot requires registered model names to be unique
-   for an organization. You can change it later if necessary by editing `parameters.yml`. For authenticating with GitHub please check [here](#gh-auth).
-   ```bash
-   pip install kedro
    ```
-   ```bash
-   kedro new --name=your_project_name --starter=https://github.com/datarobot/recipe-bob --checkout main
-   ```
-   ```bash
-   cd your_project_name
-   ```
-      
-4. Install requirements for this template: `pip install -r requirements.txt`
-
-5. Populate the following credentials in `conf/local/credentials.yml`:
-   ```yaml
-   datarobot:
-     endpoint: <your endpoint>  # e.g. https://your_subdomain.datarobot.com/api/v2
-     api_token: <your api token>
-     prediction_environment_id: <your default prediction server id>
-
-   azure_openai_llm_credentials:
-     azure_endpoint: <your api endpoint>  # e.g. https://your_subdomain.openai.azure.com/
-     api_key: <your api key>
-     api_version: <your api version>
+   git clone https://github.com/datarobot-community/predictive-content-generator.git
    ```
 
-6. Run the pipeline: `kedro run`. Start exploring the pipeline using the kedro GUI: `kedro viz --include-hooks`
-
-![Kedro Viz](https://s3.amazonaws.com/datarobot_public/drx/drx_gifs/kedro-viz.gif)
-
-[virtualenv-docs]: https://docs.python.org/3/library/venv.html#creating-virtual-environments
-
-## Making changes to the pipeline
-The following files govern pipeline execution. In general, you will not need to modify
-any other boilerplate files as you customize the pipeline.:
-
-- `conf/base/parameters.yml`: pipeline configuration options and hyperparameters
-- `conf/local/credentials.yml`: API tokens and other secrets
-- `conf/base/catalog.yml`: file storage locations that can be used as node inputs or outputs,
-  including locations of supporting assets to build DR custom models, execution environments
-- `src/your_project_name/pipelines/*/nodes.py`: function definitions for the pipeline nodes
-- `src/your_project_name/pipelines/*/pipeline.py`: node names, inputs and outputs
-- `src/datarobotx/idp`: directory contains function definitions for for reusable idempotent DR nodes
-- `include/your_project_name`: directory contains raw assets and templates used by the pipeline
-
-For a deeper orientation to kedro principles and project structure visit the [Kedro][kedro-docs]
-documentation.
-
-[kedro-docs]: https://docs.kedro.org/en/stable/
-
-### Example changes
-1. Many simple pipeline configuration options can be changed by editing 
-   `conf/base/parameters.yml` and then rerunning the pipeline using `kedro run`,
-   e.g.:
-   - Names for each created DataRobot asset
-   - Modeling settings such as number of workers and advanced options
-   - User selected tones for input to the Chatbot
-
-2. Assets and templates needed to build DR custom models, execution environments, and
-   custom apps can generally be found in the respective `include/your_project_name` subdirectories
-   and can be edited to e.g. tailor the look and feel of the streamlit app; as with any
-   other change just call `kedro run` to rerun the pipeline and incorporate changes.
-
-3. Update function definitions in `nodes.py` to change the actual logic for
-   a step in the pipeline or to define a new node, e.g.:
-   - `prepare_dataset_for_modeling()`: is an empty function that can be filled with
-     logic to prepare the dataset for modeling prior to loading into DataRobot.
-
-### Debugging your front end
-If you want to change the streamlit app take the following steps:
-1. Run the pipeline (`kedro run`).
-2. `cd` into `include/your_project_name/app`.
-3. `streamlit run app.py`. The app will run using the same files and dependencies it will have when deployed.
-
-## <a name="gh-auth"></a> Authenticating with GitHub
-How to install `gh` [GitHub CLI][GitHub CLI-link] 
-
-[GitHub CLI-link]: https://github.com/cli/cli
-
-Run `gh auth login` in the terminal and answer the following questions with:
-- `? What account do you want to log into?` **GitHub.com**
-- `? What is your preferred protocol for Git operations on this host?` **HTTPS**
-- `? Authenticate Git with your GitHub credentials?` **Yes**
-- `? How would you like to authenticate GitHub CLI?` **Login with a web browser**
-
-Copy the code in: `! First copy your one-time code:` **XXXX-XXXX**
-
-Open a web browser at https://github.com/login/device and enter the above code manually.
-
-You should see in the terminal:
-- `✓ Authentication complete.`
-- `✓ Logged in as YOUR_USERNAME`
-
-More details on GitHub authentication [here][gh-docs].
-
-[gh-docs]: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/about-authentication-to-github#https
-
-
-## Running the pipeline without `kedro new`
-
-If you are making changes to the codebase or constructing your own template, then the cycle of running `kedro new`, testing changes on the instantiated pipeline and copying the changes over to the core template can be inconvenient. For faster development, take the following steps:
-1. Clone the repository.
-2. Create a virtual environment and install the requirements: `pip install -r requirements.txt`.
-3. Add your credentials to `recipe-bob/conf/local/credentials.yml`.
-4. Add a file to `recipe-bob/conf/base/globals.yml` with the following content:
-   ```yaml
-   project_name: your_project_name  # Overrides "${globals:project_name}" in parameters.yml
-   source: # One of nbo | underwriting | fraud_monitoring
+2. Create the file `.env` in the root directory of the repository and provide your credentials.
+   
    ```
-5. Copy the `datarobotx` folder containing the idp helpers into the `recipe-bob/src` folder of the recipe template. You can find these by instantiating a new project with `kedro new`.
-6. When you are finished, it is usually a good idea to execute `kedro run -p delete_assets`. This will remove DataRobot assets created during the pipeline run and unclutter your DataRobot instance.
+   DATAROBOT_API_TOKEN=...
+   DATAROBOT_ENDPOINT=...  # e.g. https://app.datarobot.com/api/v2
+   OPENAI_API_KEY=...
+   OPENAI_API_VERSION=...  # e.g. 2024-02-01
+   OPENAI_API_BASE=...  # e.g. https://your_org.openai.azure.com/
+   OPENAI_API_DEPLOYMENT_ID=...  # e.g. gpt-35-turbo
+   PULUMI_CONFIG_PASSPHRASE=...  # required, choose an alphanumeric passphrase to be used for encrypting pulumi config
+   ```
+   
+3. Set environment variables using the `.env` file. DataRobot has provided a helper script below:
+   ```
+   source set_env.sh
+   # on Windows: set_env.bat or Set-Env.ps1
+   ```
+   
+   This script exports environment variables from `.env` and activates the virtual 
+   environment in `.venv/` (if present).
+
+4. Optional. Open the notebook `notebooks/train_model_nbo.ipynb` and add additional models to `AppDataScienceSettings`:
+
+   ```
+      models=[
+         ...
+         LLMModelSpec(
+            name="gpt-4",
+            input_price_per_1k_tokens=0.003,
+            output_price_per_1k_tokens=0.004,
+         ),
+         ...
+      ],
+   ```
+
+6. If you're a first-time user, install the Pulumi CLI by following the instructions [here](#details) before proceeding with this workflow.
+
+7. Create a new stack for your project (update the placeholder `YOUR_PROJECT_NAME`).
+
+   ```
+   pulumi stack init YOUR_PROJECT_NAME
+   ```
+
+8. Provision all resources and install dependencies in a new virtual environment located in `.venv/`
+
+   ```
+   pulumi up
+   ```
+
+### Details
+
+Instructions for installing Pulumi are [here](https://www.pulumi.com/docs/iac/download-install/). In many cases this can be done
+with:
+
+```
+curl -fsSL https://get.pulumi.com | sh
+pulumi login --local
+```
+
+Restart your terminal.
+
+```
+source set_env.sh
+# on Windows: set_env.bat or Set-Env.ps1
+```
+
+Python must be installed for this project to run. By default, pulumi will use the Python binary aliased to `python3` to create a new virtual environment. If you wish to self-manage your virtual environment, delete the `virtualenv` and `toolchain` keys from `Pulumi.yaml` before running `pulumi up`. For projects that will be maintained, DataRobot recommends forking the repo so upstream fixes and improvements can be merged in the future.
+
+### Feature flags
+
+This app template requires certain feature flags to be enabled or disabled in your DataRobot account. The required feature flags can be found in [infra/feature_flag_requirements.yaml](infra/feature_flag_requirements.yaml). Contact your DataRobot representative or administrator for information on enabling the feature.
+
+## Architecture Overview
+![Predictive content generator](https://s3.amazonaws.com/datarobot_public/drx/recipe_gifs/predictive_content_architecture.svg)
+
+## Make changes
+
+### Change the data and model training method
+
+1. Edit the notebook `notebooks/train_model_nbo.ipynb` which includes steps to import and prepare training data and configure settings to train models. The last cell of each notebook is required for the rest of the pipeline.
+2. Run the revised notebook.
+3. Run `pulumi up` to update your stack with the changes.
+4. `train_model_fraud.ipynb` and `train_model_underwriting.ipynb` contain examples using this template for alternative use cases. You can run them once and call `pulumi up` to explore them. `infra/settings_main.py` can be updated to use these notebooks if you wish other collaborators to run these notebooks by default when first provisioning resources.
+
+### Modify the front-end
+
+1. Ensure you have already run `pulumi up` at least once (to provision the time series deployment).
+2. Streamlit assets are in `frontend/` and can be directly edited. After provisioning the stack 
+   at least once, you can also test the frontend locally using `streamlit run app.py` from the
+   `frontend/` directory (don't forget to initialize your environment using `source set_env.sh`).
+3. Run `pulumi up` again to update your stack with the changes.
+
+## Share results
+
+1. Log into app.datarobot.com
+2. Navigate to **Registry > Application**.
+3. Navigate to the application you want to share, open the actions menu, and select **Share** from the dropdown.
+
+## Delete all provisioned resources
+
+```
+pulumi down
+```

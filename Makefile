@@ -11,13 +11,13 @@ fix-licenses: apply-copyright
 
 check-licenses: copyright-check
 
-check-lint:
-	ruff format --check recipe-bob/.
-	ruff check recipe-bob/.
+fix-lint:
+	ruff format .
+	ruff check . --fix
 
 lint:
-	ruff format recipe-bob/.
-	ruff check recipe-bob/. --fix
+	ruff format --check .
+	ruff check .
+	mypy .
 
-run_app_locally:
-	cd recipe-bob/include/app && streamlit run app.py
+check-all: check-licenses lint
