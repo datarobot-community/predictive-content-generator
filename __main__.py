@@ -32,6 +32,7 @@ from infra.common.urls import get_deployment_url
 from infra.components.custom_model_deployment import CustomModelDeployment
 from infra.components.dr_credential import DRCredential
 from infra.settings_llm_credential import credential, credential_args
+from nbo.i18n import LocaleSettings
 from nbo.resources import (
     app_env_name,
     custom_metric_id_env_name,
@@ -41,7 +42,10 @@ from nbo.resources import (
 )
 from nbo.schema import AppInfraSettings
 
+LocaleSettings().setup_locale()
+
 check_feature_flags(pathlib.Path("infra/feature_flag_requirements.yaml"))
+
 if not (
     settings_main.model_training_output_infra_settings.exists()
     and settings_main.model_training_output_ds_settings.exists()
@@ -122,6 +126,9 @@ app_runtime_parameters = [
         key=dataset_id_env_name,
         type="string",
         value=model_training_output.scoring_dataset_id,
+    ),
+    datarobot.ApplicationSourceRuntimeParameterValueArgs(
+        key="APP_LOCALE", type="string", value=LocaleSettings().app_locale
     ),
 ]
 

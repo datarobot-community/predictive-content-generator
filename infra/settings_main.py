@@ -25,6 +25,7 @@ prediction_environment_resource_name = (
 )
 
 model_training_nb = Path("notebooks/train_model_nbo.ipynb")
+
 model_training_output_ds_settings = Path(f"frontend/app_settings.{project_name}.yaml")
 model_training_output_infra_settings = Path(
     f"notebooks/app_infra_settings.{project_name}.yaml"

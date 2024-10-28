@@ -24,12 +24,26 @@ from typing import Any, Dict
 import pandas as pd
 import pulumi_datarobot as datarobot
 import pytest
-from datarobot_drum.drum.drum import CMRunner
-from datarobot_drum.drum.runtime import DrumRuntime
+
+try:
+    from datarobot_drum.drum.drum import CMRunner
+    from datarobot_drum.drum.runtime import DrumRuntime
+except ImportError:
+    pass
 
 sys.path.append("../")
 from infra.components.dr_credential import DRCredential
 from nbo.schema import LLMRequest
+
+
+@pytest.fixture
+def drum_installed():
+    try:
+        import datarobot_drum  # noqa: F401
+    except ImportError:
+        pytest.skip(
+            "Generative custom model tests requires datarobot_drum to be installed."
+        )
 
 
 class ExtendedDRCredential(DRCredential):
@@ -177,7 +191,7 @@ def code_dir() -> str:
 
 
 def test_diy_rag_custom_model(
-    code_dir: str, test_input: Path, output_dir: Path, pulumi_up
+    code_dir: str, test_input: Path, output_dir: Path, pulumi_up, drum_installed
 ) -> None:
     from infra.settings_generative import (
         custom_model_args,

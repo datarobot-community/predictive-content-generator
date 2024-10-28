@@ -20,6 +20,7 @@ import datarobot as dr
 import pulumi_datarobot as datarobot
 
 from infra.common.schema import ApplicationSourceArgs
+from nbo.i18n import LanguageCode, LocaleSettings
 
 from .settings_main import model_training_output_ds_settings, project_name
 
@@ -73,18 +74,36 @@ def get_app_files(
     ],
 ) -> List[Tuple[str, str]]:
     _prep_metadata_yaml(runtime_parameter_values)
-    return [
+
+    source_files = [
         (str(f), str(f.relative_to(application_path)))
         for f in application_path.glob("**/*")
         if f.is_file()
         and f.name != "metadata.yaml.jinja"
         and not f.name.endswith(".yaml")
-    ] + [
-        ("nbo/__init__.py", "nbo/__init__.py"),
-        ("nbo/schema.py", "nbo/schema.py"),
-        ("nbo/predict.py", "nbo/predict.py"),
-        ("nbo/resources.py", "nbo/resources.py"),
-        ("nbo/credentials.py", "nbo/credentials.py"),
-        (str(application_path / "metadata.yaml"), "metadata.yaml"),
-        (str(model_training_output_ds_settings), "app_settings.yaml"),
     ]
+
+    source_files.extend(
+        [
+            ("nbo/__init__.py", "nbo/__init__.py"),
+            ("nbo/schema.py", "nbo/schema.py"),
+            ("nbo/i18n.py", "nbo/i18n.py"),
+            ("nbo/predict.py", "nbo/predict.py"),
+            ("nbo/resources.py", "nbo/resources.py"),
+            ("nbo/credentials.py", "nbo/credentials.py"),
+            (str(application_path / "metadata.yaml"), "metadata.yaml"),
+            (str(model_training_output_ds_settings), "app_settings.yaml"),
+        ]
+    )
+
+    application_locale = LocaleSettings().app_locale
+
+    if application_locale != LanguageCode.EN:
+        source_files.append(
+            (
+                f"nbo/locale/{application_locale}/LC_MESSAGES/base.mo",
+                f"nbo/locale/{application_locale}/LC_MESSAGES/base.mo",
+            )
+        )
+
+    return source_files

@@ -1,4 +1,4 @@
-# Predictive content generator
+# Predictive Content Generator
 
 The predictive content generator is a customizable app template for generating content using predictive model outputs. Real world applications of this technology include:
 
