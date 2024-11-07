@@ -102,6 +102,7 @@ generative_deployment = CustomModelDeployment(
     registered_model_args=settings_generative.registered_model_args,
     prediction_environment=prediction_environment,
     deployment_args=settings_generative.deployment_args,
+    use_case_ids=[model_training_output.use_case_id],
 )
 
 custom_metrics = generative_deployment.id.apply(settings_generative.set_custom_metrics)
@@ -144,6 +145,7 @@ app_source = datarobot.ApplicationSource(
 app = datarobot.CustomApplication(
     resource_name=settings_app_infra.app_resource_name,
     source_version_id=app_source.version_id,
+    use_case_ids=[model_training_output.use_case_id],
 )
 
 app.id.apply(settings_app_infra.ensure_app_settings)
