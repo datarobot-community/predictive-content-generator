@@ -1,0 +1,319 @@
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2024-10-24 19:39+0000\n"
+"Language: fr_FR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Repo: recipe-bob\n"
+
+msgid "Apply"
+msgstr "Postulez"
+
+msgid "Download Results"
+msgstr "Télécharger les résultats"
+
+msgid "Email"
+msgstr "Courriel"
+
+msgid "Submit"
+msgstr "Soumettre"
+
+msgid ""
+"\n"
+"\n"
+"{customer_prediction_label}\n"
+"\n"
+"{customer_prediction_probability}\n"
+"\n"
+"**List of Prediction Explanations:**\n"
+"\n"
+"{rsp}"
+msgstr ""
+"\n"
+"\n"
+"{customer_prediction_label}\n"
+"\n"
+"{customer_prediction_probability}\n"
+"\n"
+"**Liste des explications sur les prédictions :**\n"
+"\n"
+"{rsp}"
+
+msgid "**Below find more detailed background about possible outcomes:**"
+msgstr "**Vous trouverez ci-dessous des informations plus détaillées sur les résultats possibles :**"
+
+msgid "**Monitoring Metrics:** \n"
+msgstr "**Mesures de surveillance :** \n"
+
+msgid "**Monitoring Settings:** "
+msgstr "**Paramètres de surveillance :** "
+
+msgid "**Predicted Label:** {predicted_label}"
+msgstr "**Étiquette prédite :** {predicted_label}"
+
+msgid "**Predicted Probability:** {predicted_probabilities}"
+msgstr "**Probabilité prédite :** {predicted_probabilities}"
+
+msgid "**Prompt Settings:** "
+msgstr "**Paramètres de l'invite :** "
+
+msgid "Analyzing {count} records..."
+msgstr "Analyse des enregistrements {count}..."
+
+msgid "Batch Emails"
+msgstr "Emails par lots"
+
+msgid "Configure the settings used to create your email"
+msgstr "Configurez les paramètres utilisés pour créer votre courrier électronique"
+
+msgid "Drafted an email for {selected_record}! Expand the container to get more info or check the model out [here](https://app.datarobot.com/projects/{project_id}/models)."
+msgstr "Rédaction d'un courriel pour {selected_record} ! Développez le conteneur pour obtenir plus d'informations ou consultez le modèle [ici](https://app.datarobot.com/projects/{project_id}/models)."
+
+msgid "Email Settings"
+msgstr "Paramètres de l'e-mail"
+
+msgid "Finished! All {count} emails have been drafted and results have been saved."
+msgstr "Terminé ! Tous les courriels {count} ont été rédigés et les résultats ont été enregistrés."
+
+msgid "Generate Emails"
+msgstr "Générer des courriels"
+
+msgid "Generating emails for {count} records..."
+msgstr "Générer des courriels pour {count} enregistrements..."
+
+msgid "Generating response and assessment metrics for {selected_record}..."
+msgstr "Génération des mesures de réponse et d'évaluation pour {selected_record}..."
+
+msgid "Model controls the underlying LLM selection."
+msgstr "Le modèle contrôle la sélection LLM sous-jacente."
+
+msgid "New Draft"
+msgstr "Nouveau projet"
+
+msgid "Newly Generated Email:"
+msgstr "Email nouvellement généré :"
+
+msgid "Our model predicted that you are better off not targeting {selected_record} with any email offer. The best next step is to not take any action."
+msgstr "Notre modèle a prédit qu'il est préférable de ne pas cibler {selected_record} avec une offre par courrier électronique. La meilleure chose à faire est de ne rien faire."
+
+msgid "Outcome Details"
+msgstr "Détails des résultats"
+
+msgid "Please upload a csv file to generate emails."
+msgstr "Veuillez télécharger un fichier csv pour générer des e-mails."
+
+msgid "Predictions have been made! Generating emails..."
+msgstr "Les prédictions ont été faites ! Génération d'emails..."
+
+msgid "Predictive Deployment [{project_name}]"
+msgstr "Déploiement prédictif [{project_name}]"
+
+msgid "See [here] to view and update tracking data"
+msgstr "Voir [ici] pour consulter et mettre à jour les données de suivi"
+
+msgid "See the most important items in text feature `{text_explanation}` that influenced the prediction {customer_prediction_label}"
+msgstr "Voir les éléments les plus importants de l'élément de texte `{text_explanation}` qui ont influencé la prédiction {customer_prediction_label}"
+
+msgid "Select a model type:"
+msgstr "Sélectionnez un type de modèle :"
+
+msgid "Select a temperature value:"
+msgstr "Sélectionnez une valeur de température :"
+
+msgid "Select a tone:"
+msgstr "Sélectionnez un ton :"
+
+msgid "Select a verbosity:"
+msgstr "Sélectionnez une verbosité :"
+
+msgid "Select the number of explanations:"
+msgstr "Sélectionnez le nombre d'explications :"
+
+msgid "The number of explanations argument controls how many prediction explanations we pass to our prompt."
+msgstr "L'argument du nombre d'explications contrôle le nombre d'explications de prédiction que nous transmettons à notre invite."
+
+msgid "The temperature argument in OpenAI's GPT determines the randomness of the model's output."
+msgstr "L'argument de la température dans le GPT d'OpenAI détermine le caractère aléatoire de la sortie du modèle."
+
+msgid "Tone controls the attitude of the email."
+msgstr "Le ton contrôle l'attitude de l'e-mail."
+
+msgid "Upload a csv:"
+msgstr "Téléchargez un fichier csv :"
+
+msgid "⏱️ Reading Time"
+msgstr "⏱️ Temps de lecture"
+
+msgid "✅ Confidence"
+msgstr "✅ Confiance"
+
+msgid "✍ Sentiment"
+msgstr "✍ Sentiment"
+
+msgid "📖 Readability"
+msgstr "📖 Lisibilité"
+
+msgid "Next Best Offer Email Campaign"
+msgstr "Campagne d'e-mailing de la meilleure offre suivante"
+
+msgid ""
+"            Combine predictive and generative AI to help automatically create highly personalized emails for your customers.\n"
+"            All you need to do is select a customer from the dropdown and hit submit!"
+msgstr ""
+"            Combinez l'IA prédictive et générative pour créer automatiquement des emails hautement personnalisés pour vos clients.\n"
+"            Il vous suffit de sélectionner un client dans la liste déroulante et de cliquer sur Envoyer !"
+
+msgid "Customer"
+msgstr "Client"
+
+msgid "the likelihood this customer is expected to purchase"
+msgstr "la probabilité d'achat de ce client"
+
+msgid "Daytime Plan"
+msgstr "Plan de jour"
+
+msgid "Evening Call Plan"
+msgstr "Plan d'appel du soir"
+
+msgid "International Call Plan"
+msgstr "Plan d'appel international"
+
+msgid "Enhanced Voicemail Plan"
+msgstr "Plan de messagerie vocale amélioré"
+
+msgid ""
+"            You are a marketing specialist named Justin and you work for TelCorp., a telecommunications company.\n"
+"            You have detailed information about each of your customers and their past purchasing and usage behavior.\n"
+"            You also have a list of important factors that explain why a customer may enjoy a particular call plan offer.\n"
+"            The goal is to incorporate these factors into a marketing email introducing a specific offer."
+msgstr ""
+"            Vous êtes un spécialiste du marketing nommé Justin et vous travaillez pour TelCorp, une entreprise de télécommunications.\n"
+"            Vous disposez d'informations détaillées sur chacun de vos clients et sur leurs habitudes d'achat et d'utilisation.\n"
+"            Vous disposez également d'une liste de facteurs importants qui expliquent pourquoi un client peut apprécier une offre de plan d'appel particulière.\n"
+"            L'objectif est d'intégrer ces facteurs dans un e-mail marketing présentant une offre spécifique."
+
+msgid ""
+"            Draft an email to an existing client that markets the plan {prediction_label}.\n"
+"            The email should be addressed to {selected_record} and contain a subject line and body.\n"
+"            Be sure to only incorporate the following call plan details:\n"
+"            {outcome_description}\n"
+"            Keep the email tone {tone}. Keep the length {verbosity}. Try not to use many emojis.\n"
+"            Incorporate the following list of factors that influenced our offer decision:\n"
+"\n"
+"            {rsp}"
+msgstr ""
+"            Rédigez un courriel à l'intention d'un client existant qui présente le plan {prediction_label}.\n"
+"            L'e-mail doit être adressé à {selected_record} et contenir une ligne d'objet et un corps de texte.\n"
+"            Veillez à n'inclure que les détails suivants du plan d'appel :\n"
+"            {outcome_description}\n"
+"            Gardez le ton de l'e-mail {ton}. Respectez la longueur {verbosité}. Essayez de ne pas utiliser beaucoup d'emojis.\n"
+"            Incorporez la liste suivante de facteurs qui ont influencé notre décision d'offre :\n"
+"\n"
+"            {rsp}"
+
+msgid ""
+"                    Introducing our new Daytime Plan, tailored for professionals who primarily use their mobile services\n"
+"                    during traditional working hours. The Daytime Plan offers unlimited calls, texts, and a robust 10GB of high-speed data\n"
+"                    from 8 AM to 6 PM, Monday through Friday. Outside of these hours and on weekends, a cost-efficient pay-as-you-go rate\n"
+"                    will be applied to give you the flexibility you need without breaking the bank. The plan also includes free voicemail\n"
+"                    services and call forwarding options, making it an ideal choice for those who want to stay connected without the hassle\n"
+"                    of worrying about overages during their most active hours. Whether you're coordinating with your team, staying in touch\n"
+"                    with clients, or managing remote operations, our Daytime Plan ensures you're always just a call or text away."
+msgstr ""
+"                    Nous vous présentons notre nouveau plan de jour, conçu pour les professionnels qui utilisent principalement leurs services mobiles pendant les heures de travail traditionnelles.\n"
+"                    Le plan Daytime offre des appels et des SMS illimités, ainsi que 10 Go de données à haut débit, de 8 heures à 18 heures, du lundi au vendredi.\n"
+"                    En dehors de ces heures et pendant les week-ends, un tarif économique à la carte sera appliqué pour vous donner la flexibilité dont vous avez besoin sans vous ruiner.\n"
+"                    Le plan comprend également des services de messagerie vocale gratuits et des options de transfert d'appel, ce qui en fait un choix idéal pour ceux qui veulent rester connectés sans avoir à s'inquiéter des dépassements d'appels pendant leurs heures les plus actives.\n"
+"                    Que vous coordonniez votre équipe, restiez en contact avec vos clients ou gériez des opérations à distance, notre plan de jour vous permet d'être toujours à portée d'un appel ou d'un texto."
+
+msgid ""
+"                    Introducing the Evening Call Plan, designed for individuals who are most active during the evening hours and are looking\n"
+"                    for a cost-effective way to stay connected. This plan provides unlimited calls and texts, along with a generous 8GB of\n"
+"                    high-speed data, all available from 6 PM to 12 AM every day. During daytime hours, a reasonable pay-as-you-go rate applies,\n"
+"                    giving you the freedom to use your phone as needed without unexpected costs. Also included in this package are essential\n"
+"                    features like free voicemail and call forwarding, making it a perfect fit for those who love socializing, gaming, or\n"
+"                    streaming content in the evening. The Evening Call Plan offers the ideal solution for night owls, allowing them to\n"
+"                    communicate and surf the web to their heart's content during the hours they are most active."
+msgstr ""
+"                    Nous vous présentons le plan d'appel du soir, conçu pour les personnes qui sont le plus actives pendant les heures du soir et qui recherchent un moyen rentable de rester connectées.\n"
+"                    Ce plan prévoit des appels et des SMS illimités, ainsi qu'une généreuse capacité de 8 Go de données à haut débit, le tout disponible de 18 heures à 0 heure du matin tous les jours.\n"
+"                    Pendant la journée, un tarif raisonnable à la carte s'applique, ce qui vous donne la liberté d'utiliser votre téléphone selon vos besoins, sans frais imprévus.\n"
+"                    Ce forfait comprend également des fonctions essentielles telles que la messagerie vocale gratuite et le transfert d'appel, ce qui en fait un choix idéal pour ceux qui aiment socialiser, jouer ou regarder du contenu en streaming le soir.\n"
+"                    Le plan d'appel du soir est la solution idéale pour les noctambules, car il leur permet de communiquer et de surfer sur le web à leur guise pendant les heures où ils sont le plus actifs."
+
+msgid ""
+"                    Introducing our International Call Plan, specifically designed for the globally connected individual.\n"
+"                    With this plan, enjoy unlimited international calls and texts to over 50 selected countries, ensuring you stay connected\n"
+"                    with family, friends, and colleagues across borders without worrying about hefty fees. This plan also includes 15GB of\n"
+"                    high-speed data, and unlimited domestic calls and texts, providing a comprehensive package for all your communication needs.\n"
+"                    For destinations not included in our selected list, competitive per-minute rates apply, and we've also thrown in premium\n"
+"                    features like free voicemail and call forwarding at no additional cost. The International Call Plan is perfect for\n"
+"                    expatriates, frequent travelers, or anyone who wants to maintain seamless international connections without the burden of\n"
+"                    restrictive costs."
+msgstr ""
+"                    Nous vous présentons notre plan d'appel international, spécialement conçu pour les personnes connectées au monde entier.\n"
+"                    Avec ce plan, vous bénéficiez d'appels et de SMS internationaux illimités vers plus de 50 pays sélectionnés, ce qui vous permet de rester en contact avec votre famille, vos amis et vos collègues au-delà des frontières sans avoir à vous soucier de frais trop élevés.\n"
+"                    Ce forfait comprend également 15 Go de données à haut débit, ainsi que des appels et des SMS illimités à l'intérieur du pays, ce qui en fait un forfait complet pour tous vos besoins de communication.\n"
+"                    Pour les destinations qui ne figurent pas dans notre liste, des tarifs à la minute compétitifs s'appliquent, et nous avons également ajouté des fonctions haut de gamme comme la messagerie vocale gratuite et le renvoi d'appel sans frais supplémentaires.\n"
+"                    Le plan d'appel international est idéal pour les expatriés, les voyageurs fréquents et tous ceux qui souhaitent maintenir des connexions internationales transparentes sans avoir à supporter des coûts restrictifs."
+
+msgid ""
+"                    Introducing the Enhanced Voicemail Plan, the latest offering tailored for individuals seeking a cutting-edge\n"
+"                    solution to their messaging needs. Recognizing the importance of voicemail in modern communication, our plan goes beyond just\n"
+"                    storing messages. It features transcription services, turning your voicemails into readable text sent directly to your email or\n"
+"                    preferred messaging platform. Additionally, users benefit from extended storage capacities, allowing voicemails to be saved for\n"
+"                    up to 6 months, and priority playback options to streamline the most important messages. Integrated with AI-driven spam filters,\n"
+"                    this plan ensures you only receive messages that truly matter, reducing clutter and enhancing productivity. Whether you're a busy\n"
+"                    professional or someone who values organized and efficient communication, our Enhanced Voicemail Plan is designed to keep you\n"
+"                    ahead in the digital age."
+msgstr ""
+"                    Lancement du plan de messagerie vocale amélioré, la dernière offre conçue pour les personnes à la recherche d'une solution de pointe pour leurs besoins en matière de messagerie.\n"
+"                    Reconnaissant l'importance de la messagerie vocale dans la communication moderne, notre plan va au-delà du simple stockage des messages.\n"
+"                    Il comprend des services de transcription, qui transforment vos messages vocaux en texte lisible envoyé directement à votre messagerie électronique ou à votre plateforme de messagerie préférée.\n"
+"                    En outre, les utilisateurs bénéficient de capacités de stockage étendues, permettant de sauvegarder les messages vocaux jusqu'à 6 mois, et d'options de lecture prioritaire pour rationaliser les messages les plus importants.\n"
+"                    Intégrant des filtres anti-spam pilotés par l'IA, ce forfait vous permet de ne recevoir que les messages réellement importants, réduisant ainsi l'encombrement et améliorant la productivité.\n"
+"                    Que vous soyez un professionnel très occupé ou quelqu'un qui attache de l'importance à une communication organisée et efficace, notre plan de messagerie vocale améliorée est conçu pour vous permettre de rester à la pointe de l'ère numérique."
+
+msgid "authoritative and expert"
+msgstr "autorité et expertise"
+
+msgid "educational and informative"
+msgstr "éducatif et informatif"
+
+msgid "formal and elevated"
+msgstr "formel et élégant"
+
+msgid "friendly and casual"
+msgstr "amical et décontracté"
+
+msgid "lighthearted and funny"
+msgstr "léger et drôle"
+
+msgid "witty and playful"
+msgstr "spirituel et enjoué"
+
+msgid "short and sweet"
+msgstr "court et doux"
+
+msgid "normal"
+msgstr "normal"
+
+msgid "long and detailed"
+msgstr "long et détaillé"
+
+msgid "Creating Use Case {use_case_name}"
+msgstr "Création du cas d'utilisation {use_case_name}"
+
+msgid "Creating Dataset {dataset_name}"
+msgstr "Création du jeu de données {dataset_name}"
+
+msgid "Creating Autopilot Run {name}"
+msgstr "Création de l'exécution du pilote automatique {name}"
+
+msgid "Best model: {model_type}\n\nMetrics:"
+msgstr "Meilleur modèle : {model_type}\n\nMétriques :"
+
+msgid "Creating Registered Model Version..."
+msgstr "Création de la version enregistrée du modèle..."

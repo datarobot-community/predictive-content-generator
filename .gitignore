@@ -144,6 +144,8 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+.env*
+!.env.template
 
 # mkdocs documentation
 /site
@@ -160,3 +162,4 @@ tests/output
 notebooks/*.yaml
 
 **/e2e/test_results/*
+

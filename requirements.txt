@@ -4,7 +4,6 @@ pulumi-datarobot>=0.2.5,<0.3
 datarobot>=3.5.2,<3.6
 datarobot-predict>=1.9.2,<1.10
 datarobotx-idp>=0.2.11,<0.3
-datarobot-drum>=1.12.2,<1.13
 
 pydantic>=2.9.2,<2.10
 pydantic-settings>=2.5.2,<2.6
@@ -30,3 +29,5 @@ types-PyYAML==6.0.12
 types-requests==2.32.0.20241016
 pandas-stubs>=2.2.3,<3
 ruff==0.6.9
+
+babel>=2.16,<3

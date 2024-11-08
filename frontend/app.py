@@ -42,6 +42,7 @@ from helpers import (
 )
 
 sys.path.append("..")
+from nbo.i18n import gettext
 from nbo.predict import make_pred_ai_deployment_predictions
 from nbo.resources import DatasetId
 
@@ -114,70 +115,72 @@ def main() -> None:
     # Create the sidebar section
     with st.sidebar:
         # Sidebar title and description
-        st.title("Email Settings")
-        st.caption("Configure the settings used to create your email")
+        st.title(gettext("Email Settings"))
+        st.caption(gettext("Configure the settings used to create your email"))
 
         # Horizontal line
         st.markdown("---")
 
         # Prompt settings section
-        st.markdown("**Prompt Settings:** ")
+        st.markdown(gettext("**Prompt Settings:** "))
 
         # Create a form for settings
         with st.form(key="settings_selection"):
             # Dropdown for model selection
             model = st.selectbox(
-                "Select a model type:",
+                gettext("Select a model type:"),
                 [model.name for model in app_settings.models],
                 index=0,
-                help="Model controls the underlying LLM selection.",
+                help=gettext("Model controls the underlying LLM selection."),
             )
 
             temperature = st.number_input(
-                "Select a temperature value:",
+                gettext("Select a temperature value:"),
                 min_value=0.0,
                 max_value=2.0,
                 value=app_settings.default_temperature,
                 step=0.1,
-                help=(
+                help=gettext(
                     "The temperature argument in OpenAI's GPT determines the "
-                    "randomness of the model's output."
+                    + "randomness of the model's output."
                 ),
             )
             # Number input for selecting the number of explanations
             number_of_explanations = int(
                 st.number_input(
-                    label="Select the number of explanations:",
+                    label=gettext("Select the number of explanations:"),
                     min_value=0,
                     max_value=10,
                     value=app_settings.default_number_of_explanations,
                     step=1,
-                    help=(
+                    help=gettext(
                         "The number of explanations argument controls how "
-                        "many prediction explanations we pass to our prompt."
+                        + "many prediction explanations we pass to our prompt."
                     ),
                 )
             )
 
             # Dropdown for tone selection
             tone = st.selectbox(
-                "Select a tone:",
+                gettext("Select a tone:"),
                 app_settings.tones,
                 index=0,
-                help="Tone controls the attitude of the email.",
+                help=gettext("Tone controls the attitude of the email."),
                 key="selectbox-tone",
             )
 
             # Dropdown for verbosity selection
             verbosity = st.selectbox(
-                "Select a verbosity:",
+                gettext("Select a verbosity:"),
                 app_settings.verbosity,
                 index=0,
-                help="Verbosity helps to determine the length and wordiness of the email.",
+                help=gettext(
+                    "Verbosity helps to determine the length and wordiness of the email."
+                ),
             )
 
             # Apply button for the form
-            new_settings_run = st.form_submit_button("Apply", type="primary")
+            new_settings_run = st.form_submit_button(gettext("Apply"), type="primary")
 
             # Update session state variables upon form submission
             if new_settings_run:
@@ -190,11 +193,13 @@ def main() -> None:
                 st.session_state.verbosity = verbosity
 
         # Monitoring settings section
-        st.markdown("**Monitoring Settings:** ")
+        st.markdown(gettext("**Monitoring Settings:** "))
 
         # Sidebar caption with hyperlink
         st.caption(
-            f"See [here](https://app.datarobot.com/console-nextgen/deployments/{generative_deployment_id}/overview) to view and update tracking data"
+            gettext(
+                "See [here](https://app.datarobot.com/console-nextgen/deployments/{generative_deployment_id}/overview) to view and update tracking data"
+            ).format(generative_deployment_id=generative_deployment_id)
         )
 
     # Create our shared title container
@@ -214,7 +219,7 @@ def main() -> None:
         st.write(app_settings.page_subtitle)
 
         new_email, multiple_emails, outcome_information = st.tabs(
-            ["New Draft", "Batch Emails", "Outcome Details"]
+            [gettext("New Draft"), gettext("Batch Emails"), gettext("Outcome Details")]
         )
 
     with new_email:
@@ -245,7 +250,9 @@ def main() -> None:
                             f"Select a {record_display_name}:", customers_list, index=0
                         )
                     )
-                    submitted = st.form_submit_button("Submit", type="secondary")
+                    submitted = st.form_submit_button(
+                        gettext("Submit"), type="secondary"
+                    )
 
         # If the form has been submitted, or if a previous submission exists in session_state
         if submitted or st.session_state.submitted:
@@ -254,7 +261,9 @@ def main() -> None:
 
             # Spinner appears while the marketing email is being generated
             with st.spinner(
-                f"Generating response and assessment metrics for {selected_record}..."
+                gettext(
+                    "Generating response and assessment metrics for {selected_record}..."
+                ).format(selected_record=selected_record)
             ):
                 # Filter the dataframe to get the row corresponding to the selected customer
                 prediction_row = (
@@ -271,8 +280,18 @@ def main() -> None:
                 prediction = predictions[0]
                 # Extract the predicted label and its probability
                 predicted_label = prediction.predicted_label
-                customer_prediction_label = f"**Predicted Label:** {st.session_state['outcome_details'][predicted_label].label}"
-                customer_prediction_probability = f"**Predicted Probability:** {max([v for k, v in prediction.class_probabilities.items()]) :.1%}"
+                customer_prediction_label = gettext(
+                    "**Predicted Label:** {predicted_label}"
+                ).format(
+                    predicted_label=st.session_state["outcome_details"][
+                        predicted_label
+                    ].label
+                )
+                customer_prediction_probability = gettext(
+                    "**Predicted Probability:** {predicted_probabilities}"
+                ).format(
+                    predicted_probabilities=f"{max([v for k, v in prediction.class_probabilities.items()]) :.1%}"
+                )
                 # Store the prediction information in the session state
                 st.session_state.predicted_label = customer_prediction_label
                 st.session_state.predicted_probability = customer_prediction_probability
@@ -289,7 +308,12 @@ def main() -> None:
 
                     # Informational expander
                     prediction_info_expander = st.expander(
-                        f"Drafted an email for {selected_record}! Expand the container to get more info or check the model out [here](https://app.datarobot.com/projects/{project_id}/models).",
+                        gettext(
+                            "Drafted an email for {selected_record}! Expand the container to get "
+                            + "more info or check the model out [here](https://app.datarobot.com/projects/{project_id}/models)."
+                        ).format(
+                            selected_record=selected_record, project_id=project_id
+                        ),
                         expanded=False,
                     )
 
@@ -301,15 +325,26 @@ def main() -> None:
                         )
 
                         st.info(
-                            f"\n\n{customer_prediction_label}\n\n{customer_prediction_probability}\n\n**List of Prediction Explanations:**\n\n{rsp}"
+                            gettext(
+                                "\n\n{customer_prediction_label}\n\n{customer_prediction_probability}\n\n**List of Prediction Explanations:**\n\n{rsp}"
+                            ).format(
+                                customer_prediction_label=customer_prediction_label,
+                                customer_prediction_probability=customer_prediction_probability,
+                                rsp=rsp,
+                            )
                         )
 
                 with text_response_container:
                     if text_explanation := app_settings.text_explanation_feature:
                         with st.expander(
-                            "See the most important items in text feature "
-                            f"`{text_explanation}` that influenced the "
-                            f"prediction {customer_prediction_label}"
+                            gettext(
+                                "See the most important items in text feature "
+                                + "`{text_explanation}` that influenced the "
+                                + "prediction {customer_prediction_label}"
+                            ).format(
+                                text_explanation=text_explanation,
+                                customer_prediction_label=customer_prediction_label,
+                            )
                         ):
                             if text_explanations:
                                 st.markdown(
@@ -324,12 +359,13 @@ def main() -> None:
                     # Add a bit of space for better layout
                     st.write("\n\n")
                     if predicted_label == app_settings.no_text_gen_label:
-                        generated_email = (
+                        generated_email = gettext(
                             "Our model predicted that you are better off not "
-                            f"targeting {selected_record} with any email "
-                            "offer. The best next step is to not take any "
-                            "action."
-                        )
+                            + "targeting {selected_record} with any email "
+                            + "offer. The best next step is to not take any "
+                            + "action."
+                        ).format(selected_record=selected_record)
+
                         st.error(generated_email)
                         st.stop()
                     else:
@@ -350,9 +386,9 @@ def main() -> None:
                         st.session_state.unique_uuid = generation.association_id
 
                         # Display the generated email
-                        st.subheader("Newly Generated Email:")
+                        st.subheader(gettext("Newly Generated Email:"))
                         generated_email = st.text_area(
-                            label="Email",
+                            label=gettext("Email"),
                             value=generation.content,
                             height=450,
                             label_visibility="collapsed",
@@ -385,7 +421,8 @@ def main() -> None:
                             )
 
                             st.toast(
-                                "Your feedback has been successfully saved!", icon="🥳"
+                                gettext("Your feedback has been successfully saved!"),
+                                icon="🥳",
                             )
 
                         # Clear any Streamlit widgets that may be set to display below this
@@ -411,31 +448,31 @@ def main() -> None:
                         confidence_baseline = CUSTOM_METRIC_BASELINES["confidence"]
 
                         st.write("\n\n")
-                        st.subheader("**Monitoring Metrics:** \n")
+                        st.subheader(gettext("**Monitoring Metrics:** \n"))
                         st.markdown("---")
 
                         # Add guard metrics
                         m1, _, m2, _, m3, _, m4 = st.columns([3, 1, 4, 1, 3, 1, 3])
                         m1.metric(
-                            label="📖 Readability",
+                            label=gettext("📖 Readability"),
                             value=f"{readability}",
                             delta=f"{round((score-score_baseline)/score_baseline*100,0)}%",
                             delta_color="normal",
                         )
                         m2.metric(
-                            label="⏱️ Reading Time",
+                            label=gettext("⏱️ Reading Time"),
                             value=f"{reading_time} seconds",
                             delta=f"{reading_time-reading_time_baseline} seconds",
                             delta_color="inverse",
                         )
                         m3.metric(
-                            label="✍ Sentiment",
+                            label=gettext("✍ Sentiment"),
                             value=f"{reaction}",
                             delta=f"{round(sentiment-sentiment_baseline,2)}",
                             delta_color="normal",
                         )
                         m4.metric(
-                            label="✅ Confidence",
+                            label=gettext("✅ Confidence"),
                             value=f"{confidence :.1%}",
                             delta=f"{round((confidence-confidence_baseline)*100)}%",
                             delta_color="normal",
@@ -481,7 +518,7 @@ def main() -> None:
 
     with multiple_emails:
         csv = st.file_uploader(
-            "Upload a csv:",
+            gettext("Upload a csv:"),
             type=["csv"],
             accept_multiple_files=False,
             label_visibility="visible",
@@ -490,7 +527,7 @@ def main() -> None:
         st.empty()
         st.write("\n\n")
         run_button, download_button = st.columns([1, 1])
-        run = run_button.button("Generate Emails")
+        run = run_button.button(gettext("Generate Emails"))
         if run and csv is not None:
             st.write("\n\n")
             st.session_state.bulk_generated = True
@@ -499,17 +536,23 @@ def main() -> None:
             record_id = app_settings.record_identifier["column_name"]
             status_bar = st.empty()
 
-            with st.spinner(f"Analyzing {count} records..."):
+            with st.spinner(
+                gettext("Analyzing {count} records...").format(count=count)
+            ):
                 predictions = make_pred_ai_deployment_predictions(
                     df=scoring_data,
                     max_explanations=st.session_state.numberOfExplanations,
                 )
 
-                status_bar.success("Predictions have been made! Generating emails...")
+                status_bar.success(
+                    gettext("Predictions have been made! Generating emails...")
+                )
 
             # st.session_state.bulk_prediction_results = predictions
 
-            with st.spinner(f"Generating emails for {count} records..."):
+            with st.spinner(
+                gettext("Generating emails for {count} records...").format(count=count)
+            ):
                 emails = batch_email_responses(
                     record_ids=scoring_data[record_id].to_list(),
                     predictions=predictions,
@@ -522,12 +565,14 @@ def main() -> None:
 
             st.session_state.bulk_prediction_results = emails.to_csv(index=False)
             status_bar.success(
-                f"Finished! All {count} emails have been drafted and results have been saved."
+                gettext(
+                    "Finished! All {count} emails have been drafted and results have been saved."
+                ).format(count=count)
             )
 
             st.dataframe(emails)
         elif run:
-            status_bar.error("Please upload a csv file to generate emails.")  # type: ignore
+            status_bar.error(gettext("Please upload a csv file to generate emails."))  # type: ignore
 
         download = download_button.download_button(
             "Download Results",
@@ -537,11 +582,13 @@ def main() -> None:
         )
 
         if download:
-            st.success("Your download should start automatically.")
+            st.success(gettext("Your download should start automatically."))
 
     with outcome_information:
         st.empty()
-        st.write("**Below find more detailed background about possible outcomes:**")
+        st.write(
+            gettext("**Below find more detailed background about possible outcomes:**")
+        )
         for plan in app_settings.outcome_details:
             with st.expander(plan.label):
                 st.write(plan.description)

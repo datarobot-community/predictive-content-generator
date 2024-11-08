@@ -1,9 +1,6 @@
 name: nbo
 runtime:
   name: python
-  options:
-    toolchain: pip
-    virtualenv: .venv
 description: Predictive Content Generator
 config:
   pulumi:tags:

@@ -25,6 +25,7 @@ import yaml
 from pydantic import ValidationError
 
 sys.path.append("..")  # Adds the parent directory to the system path
+from nbo.i18n import gettext
 from nbo.predict import make_generative_deployment_predictions
 from nbo.resources import (
     CustomMetricIds,
@@ -75,12 +76,12 @@ except (FileNotFoundError, ValidationError) as e:
 
 # Dictionary to map quantitative strength symbols to descriptive text
 QUALITATIVE_STRENGTHS = {
-    "+++": {"label": "is significantly increasing", "color": "#ff0000"},
-    "++": {"label": "is increasing", "color": "#ff5252"},
-    "+": {"label": "is slightly increasing", "color": "#ff7b7b"},
-    "-": {"label": "is slightly decreasing", "color": "#c8deff"},
-    "--": {"label": "is decreasing", "color": "#afcdfb"},
-    "---": {"label": "is significantly decreasing", "color": "#91bafb"},
+    "+++": {"label": gettext("is significantly increasing"), "color": "#ff0000"},
+    "++": {"label": gettext("is increasing"), "color": "#ff5252"},
+    "+": {"label": gettext("is slightly increasing"), "color": "#ff7b7b"},
+    "-": {"label": gettext("is slightly decreasing"), "color": "#c8deff"},
+    "--": {"label": gettext("is decreasing"), "color": "#afcdfb"},
+    "---": {"label": gettext("is significantly decreasing"), "color": "#91bafb"},
 }
 
 

@@ -87,12 +87,55 @@ def check_if_logged_in(browser: webdriver.Chrome) -> bool:
     browser.get(login_url)
 
     # Wait for the username field to be present
-    WebDriverWait(browser, 10).until(EC.presence_of_element_located((By.NAME, "email")))
+    # Wait for the username field to be present using different possible selectors
+    selectors = [
+        (By.ID, "signInInputUsername"),
+        (By.NAME, "email"),
+        (By.CSS_SELECTOR, "[test-id='signInInputUsername']"),
+    ]
+
+    for by, value in selectors:
+        try:
+            WebDriverWait(browser, 10).until(
+                EC.presence_of_element_located((by, value))
+            )
+            break
+        except Exception:
+            continue
+    else:
+        raise Exception("Username field not found using any of the provided selectors")
 
     # Perform login
     # Find the username and password fields and enter the credentials
-    username_field = browser.find_element(By.NAME, "email")
-    password_field = browser.find_element(By.NAME, "password")
+    # Try to find the username and password fields using different possible selectors
+    username_selectors = [
+        (By.ID, "signInInputUsername"),
+        (By.NAME, "email"),
+        (By.CSS_SELECTOR, "[test-id='signInInputUsername']"),
+    ]
+    password_selectors = [
+        (By.ID, "signInInputPassword"),
+        (By.NAME, "password"),
+        (By.CSS_SELECTOR, "[test-id='signInInputPassword']"),
+    ]
+
+    for by, value in username_selectors:
+        try:
+            username_field = browser.find_element(by, value)
+            break
+        except Exception:
+            continue
+    else:
+        raise Exception("Username field not found using any of the provided selectors")
+
+    for by, value in password_selectors:
+        try:
+            password_field = browser.find_element(by, value)
+            break
+        except Exception:
+            continue
+    else:
+        raise Exception("Password field not found using any of the provided selectors")
     username_field.send_keys(username)
     password_field.send_keys(password)
     password_field.send_keys(Keys.RETURN)

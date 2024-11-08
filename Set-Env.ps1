@@ -1,25 +1,3 @@
-$MANUAL_DEP_INSTRUCTIONS = @"
-Please comment out the following three lines 'Pulumi.yaml' to enable manual dependency management with Pulumi:
-  # options:
-  #   toolchain: pip
-  #   virtualenv: .venv
-Then install dependencies manually (make sure to address any conflicts pip identifies):
-  pip install -r requirements.txt
-"@
-
-# Function to check for active conda environment
-function Test-ActiveCondaEnv {
-    if ($env:CONDA_DEFAULT_ENV) {
-        $yamlContent = Get-Content -Path 'Pulumi.yaml' -Raw
-        if ($yamlContent -match "runtime:\s*\n\s*name:\s*python\s*\n\s*options:\s*\n\s*toolchain:\s*pip\s*\n\s*virtualenv:\s*.venv") {
-            Write-Host "Using Pulumi with conda requires manual management of dependencies."
-            Write-Host $MANUAL_DEP_INSTRUCTIONS
-            return $false
-        }
-    }
-    return $true
-}
-
 # Function to load .env file
 function Import-EnvFile {
     if (-not (Test-Path '.env')) {
@@ -45,7 +23,5 @@ function Enable-VirtualEnvironment {
 }
 
 # Main execution
-if (Test-ActiveCondaEnv) {
-    Enable-VirtualEnvironment
-    Import-EnvFile
-}
+Enable-VirtualEnvironment
+Import-EnvFile
