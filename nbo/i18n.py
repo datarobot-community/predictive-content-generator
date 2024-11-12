@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from __future__ import annotations
+
 import gettext as gettext_module
 import os
 from enum import Enum
@@ -25,12 +27,8 @@ from pydantic_settings import BaseSettings
 
 class LanguageCode(str, Enum):
     EN = "en_US"
-    ES = "es_LA"
-    FR = "fr_FR"
     JA = "ja_JP"
-    KO = "ko_KR"
-    PT = "pt_BR"
-    ALL = {EN, ES, FR, JA, KO, PT}
+    ALL = {EN, JA}
 
 
 # Locale for prompts and app front end

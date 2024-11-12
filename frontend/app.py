@@ -40,6 +40,7 @@ from helpers import (
     pred_ai_deployment_id,
     set_outcome_details,
 )
+from streamlit_theme import st_theme  # type: ignore[import-untyped]
 
 sys.path.append("..")
 from nbo.i18n import gettext
@@ -210,7 +211,13 @@ def main() -> None:
             col1,
             _,
         ) = title_container.columns([1, 2])
-        col1.image("./DataRobot.png", width=200)
+
+        theme = st_theme()
+        title_image = "./DataRobot_black.png"
+        if theme and theme.get("base") == "dark":
+            title_image = "./DataRobot_white.png"
+
+        col1.image(title_image, width=200)
 
         st.markdown(
             f"<h1 style='text-align: center;'>{app_settings.page_title}</h1>",

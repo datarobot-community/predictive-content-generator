@@ -17,6 +17,7 @@ from pathlib import Path
 from typing import List, Sequence, Tuple
 
 import datarobot as dr
+import pulumi
 import pulumi_datarobot as datarobot
 
 from infra.common.schema import ApplicationSourceArgs
@@ -32,10 +33,14 @@ app_source_args = ApplicationSourceArgs(
 
 
 def ensure_app_settings(app_id: str) -> None:
-    dr.client.get_client().patch(
-        f"customApplications/{app_id}/",
-        json={"allowAutoStopping": True},
-    )
+    try:
+        dr.client.get_client().patch(
+            f"customApplications/{app_id}/",
+            json={"allowAutoStopping": True},
+            timeout=60,
+        )
+    except Exception:
+        pulumi.warn("Could not enable autostopping for the Application")
 
 
 app_resource_name: str = f"Predictive Content Generator Application [{project_name}]"
