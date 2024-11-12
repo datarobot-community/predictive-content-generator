@@ -141,3 +141,5 @@ button[kind='secondaryFormSubmit']:hover {
     top: 2rem;
     width: calc(100% - 2rem);
 }
+
+.stAppDeployButton {display:none;}

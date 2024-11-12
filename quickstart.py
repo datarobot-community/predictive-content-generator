@@ -20,6 +20,10 @@ import subprocess
 import sys
 from pathlib import Path
 
+if sys.version_info[0] < 3 or (sys.version_info[0] >= 3 and sys.version_info[1] < 9):
+    print("Must be using Python version 3.9 or higher")
+    exit(1)
+
 work_dir = Path(os.path.dirname(__file__))
 dot_env_file = Path(work_dir / ".env")
 venv_dir = work_dir / ".venv"

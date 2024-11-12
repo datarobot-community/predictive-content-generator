@@ -12,6 +12,10 @@ The predictive content generator highlights the combination of:
 - A shareable and customizable front-end for interacting with both predictive and
   generative models.
 
+> [!WARNING]
+> Application Templates are intended to be starting points that provide guidance on how to develop, serve, and maintain AI applications.
+> They require a developer or data scientist to adapt, and modify them to business requirements before being put into production.
+
 ![Using BOB](https://s3.amazonaws.com/datarobot_public/drx/recipe_gifs/bob_ui.gif)
 
 ## Setup
@@ -53,6 +57,15 @@ and `pulumi` invocation see [here](#setup-for-advanced-users).
 ## Architecture Overview
 ![Predictive content generator](https://s3.amazonaws.com/datarobot_public/drx/recipe_gifs/predictive_content_architecture.svg)
 
+## Why build AI Apps with DataRobot App Templates?
+
+App Templates transform your AI projects from notebooks to production-ready applications. Too often, getting models into production means rewriting code, juggling credentials, and coordinating with multiple tools & teams just to make simple changes. DataRobot's composable AI apps framework eliminates these bottlenecks, letting you spend more time experimenting with your ML and app logic and less time wrestling with plumbing and deployment.
+- Start Building in Minutes: Deploy complete AI applications instantly, then customize AI logic or frontend independently - no architectural rewrites needed.
+- Keep Working Your Way: Data scientists keep working in notebooks, developers in IDEs, and configs stay isolated - update any piece without breaking others.
+- Iterate With Confidence: Make changes locally and deploy with confidence - spend less time writing and troubleshooting plumbing, more time improving your app.
+
+Each template provides an end-to-end AI architecture, from raw inputs to deployed application, while remaining highly customizable for specific business requirements.
+
 ## Make changes
 
 ### Change the data and model training method
@@ -69,6 +82,9 @@ and `pulumi` invocation see [here](#setup-for-advanced-users).
    at least once, you can also test the frontend locally using `streamlit run app.py` from the
    `frontend/` directory (don't forget to initialize your environment using `source set_env.sh`).
 3. Run `pulumi up` again to update your stack with the changes.
+
+#### Change the language in the frontend
+Optionally, you can set the application locale here as well, e.g. `MAIN_APP_LOCALE=ja_JP`. Supported locales include Japanese (ja_JP) in addition to the default language (en_US).
 
 ## Share results
 

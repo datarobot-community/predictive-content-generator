@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.7] - 2024-11-12
+
+### Changed
+- Bring release/10.2 in sync with main
+
+## [0.1.6] - 2024-11-12
+
+### Fixed
+- Hide the Streamlit `deploy` button
+- Ensure app settings update does not cause `pulumi up` to fail
+
+### Changed
+- Update DataRobot logo
+
 ## [0.1.5] - 2024-11-07
 
 ### Changed
