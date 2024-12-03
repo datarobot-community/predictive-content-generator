@@ -15,6 +15,7 @@
 # type: ignore
 import argparse
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -200,6 +201,7 @@ def load_dotenv():
             if "=" in line:
                 k, v = line.split("=", 1)
                 k = k.strip()
+                v = re.sub(r"\s?#.*", "", v).rstrip()
                 v = v.strip().strip('"')
                 os.environ[k] = v
                 env_vars[k] = v

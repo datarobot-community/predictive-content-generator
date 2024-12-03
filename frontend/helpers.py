@@ -14,6 +14,7 @@
 
 from __future__ import annotations
 
+import itertools
 import subprocess
 import sys
 import uuid
@@ -25,6 +26,7 @@ import yaml
 from pydantic import ValidationError
 
 sys.path.append("..")  # Adds the parent directory to the system path
+from nbo.custom_metrics import CUSTOM_METRICS, CustomMetric
 from nbo.i18n import gettext
 from nbo.predict import make_generative_deployment_predictions
 from nbo.resources import (
@@ -276,10 +278,8 @@ def get_llm_response(
     prediction: Prediction,
     selected_record: str,
     number_of_explanations: int,
-    temperature: float,
     tone: str,
     verbosity: str,
-    model: str,
 ) -> Generation:
     # Create prompt for GPT
     prompt = create_prompt(
@@ -294,13 +294,11 @@ def get_llm_response(
     # Get output
     request = LLMRequest(
         prompt=prompt,
-        system_prompt=app_settings.system_prompt,
-        model=model,
-        temperature=temperature,
         association_id=request_id,
         number_of_explanations=number_of_explanations,
         tone=tone,
         verbosity=verbosity,
+        system_prompt=app_settings.system_prompt,
     )
     generations = make_generative_deployment_predictions(
         [request],
@@ -313,10 +311,8 @@ def batch_email_responses(
     record_ids: List[str],
     predictions: List[Prediction],
     number_of_explanations: int,
-    temperature: float,
     tone: str,
     verbosity: str,
-    model: str,
 ) -> pd.DataFrame:
     prompts = []
     for selected_record, prediction in zip(record_ids, predictions):
@@ -332,13 +328,11 @@ def batch_email_responses(
     llm_request_data = [
         LLMRequest(
             prompt=prompt,
-            system_prompt=app_settings.system_prompt,
-            model=model,
-            temperature=temperature,
             association_id=request_id,
             number_of_explanations=number_of_explanations,
             tone=tone,
             verbosity=verbosity,
+            system_prompt=app_settings.system_prompt,
         )
         for prompt, request_id in zip(prompts, request_ids)
     ]
@@ -361,3 +355,57 @@ def batch_email_responses(
             "email": emails,
         }
     )
+
+
+@st.cache_data(show_spinner=False)
+def format_metrics_for_datarobot(
+    results: Dict[str, Dict[str, Any]],
+) -> Dict[str, float]:
+    """Format metrics results for DataRobot submission"""
+    return {metric_id: result["value"] for metric_id, result in results.items()}
+
+
+def display_custom_metric(
+    metric: CustomMetric, value: float, display_value: Any
+) -> None:
+    """Display the metric in Streamlit"""
+    delta = metric.get_delta(value)
+    st.metric(
+        label=f"{metric.display_icon} {metric.name}",
+        value=metric.display_format.format(value=display_value),
+        delta=metric.format_delta(delta),
+        delta_color=metric.delta_color,
+    )
+
+
+def display_metrics(metrics_results: Dict[str, Dict[str, Any]]) -> None:
+    """Display all metrics in Streamlit"""
+    st.subheader("**Monitoring Metrics:**")
+    st.markdown("---")
+
+    metrics_results = {
+        k: v for k, v in metrics_results.items() if CUSTOM_METRICS[k].show_in_app
+    }
+    metrics = {k: v for k, v in CUSTOM_METRICS.items() if v.show_in_app}
+    # Create columns for metrics display
+    cols = st.columns(
+        list(
+            itertools.chain(
+                *zip(
+                    [metric.display_column_width for metric in metrics.values()],
+                    [1] * (len(metrics)),
+                )
+            )
+        )
+    )  # Add spacing columns - see https://www.geeksforgeeks.org/python-interleave-multiple-lists-of-same-length/
+
+    # Display each metric
+    for i, (metric_id, result) in enumerate(metrics_results.items()):
+        with cols[i * 2]:  # Skip spacing columns
+            display_custom_metric(
+                metrics[metric_id],
+                value=result["value"],
+                display_value=result["display"],
+            )
+
+    st.markdown("---")

@@ -20,6 +20,7 @@ import datarobot as dr
 import pulumi
 import pulumi_datarobot as datarobot
 
+from infra.common.globals import GlobalRuntimeEnvironment
 from infra.common.schema import ApplicationSourceArgs
 from nbo.i18n import LanguageCode, LocaleSettings
 
@@ -29,6 +30,7 @@ application_path = Path("frontend/")
 
 app_source_args = ApplicationSourceArgs(
     resource_name=f"Predictive Content Generator App Source [{project_name}]",
+    base_environment_id=GlobalRuntimeEnvironment.PYTHON_312_APPLICATION_BASE.value.id,
 ).model_dump(mode="json", exclude_none=True)
 
 
@@ -96,6 +98,8 @@ def get_app_files(
             ("nbo/predict.py", "nbo/predict.py"),
             ("nbo/resources.py", "nbo/resources.py"),
             ("nbo/credentials.py", "nbo/credentials.py"),
+            ("nbo/urls.py", "nbo/urls.py"),
+            ("nbo/custom_metrics.py", "nbo/custom_metrics.py"),
             (str(application_path / "metadata.yaml"), "metadata.yaml"),
             (str(model_training_output_ds_settings), "app_settings.yaml"),
         ]

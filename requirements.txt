@@ -1,5 +1,5 @@
 pulumi>=3.133.0,<4
-pulumi-datarobot>=0.2.5,<0.3
+pulumi-datarobot>=0.4.5,<0.5
 
 datarobot>=3.5.2,<3.6
 datarobot-predict>=1.9.2,<1.10
@@ -10,6 +10,7 @@ pydantic-settings>=2.5.2,<2.6
 eval_type_backport>=0.2.0,<0.3
 
 openai>=1.31.2,<2
+httpx<0.28.0
 # Constrained by datarobot-drum
 pandas>=2.0.3,<3
 

@@ -23,8 +23,8 @@ import pandas as pd
 from datarobot.models.deployment.deployment import Deployment
 from datarobot_predict.deployment import (  # type: ignore[import-untyped]
     PredictionResult,
-    predict,
 )
+from openai import OpenAI
 from pydantic import ValidationError
 
 from nbo.resources import GenerativeDeployment, PredAIDeployment
@@ -65,7 +65,7 @@ def make_pred_ai_deployment_predictions(
     deployment_info = _get_deployment_info(pred_ai_deployment_id)
     deployment = deployment_info.deployment
     target_name = deployment_info.target_name
-
+    # TODO: remove once datarobot-predict supports maxNgramExplanations
     from datarobot_predict.deployment import _deployment_predict, _read_response_csv
 
     params: Dict[str, Any] = (
@@ -106,25 +106,27 @@ def make_generative_deployment_predictions(
 ) -> list[Generation]:
     deployment_info = _get_deployment_info(generative_deployment_id)
     deployment = deployment_info.deployment
-    target_name = deployment_info.target_name
-    df = pd.DataFrame(
-        [request.model_dump(mode="json", by_alias=True) for request in requests]
-    )
+    dr_client = dr.client.get_client()
 
-    predictions = predict(deployment, data_frame=df).dataframe
-
-    predictions = predictions.rename(
-        columns={f"{target_name}_PREDICTION": "prediction"}
+    openai_client = OpenAI(
+        base_url=f"{dr_client.endpoint.rstrip('/')}/deployments/{deployment.id}",
+        api_key=dr_client.token,
     )
-    predictions.columns = predictions.columns.str.replace(
-        "_(PREDICTION|OUTPUT)$", "", regex=True
-    )
+    result = []
 
-    return [
-        Generation(
-            content=prediction["prediction"],
-            prompt_used=request.prompt,
-            association_id=request.association_id,
+    for llm_request in requests:
+        response = openai_client.chat.completions.create(
+            model="llm-blueprint",
+            messages=[
+                {"role": "system", "content": llm_request.system_prompt},
+                {"role": "user", "content": llm_request.prompt},
+            ],
         )
-        for prediction, request in zip(predictions.to_dict(orient="records"), requests)
-    ]
+        generation = Generation(
+            content=response.choices[0].message.content,
+            prompt_used=llm_request.prompt,
+            association_id=llm_request.association_id,
+        )
+        result.append(generation)
+
+    return result

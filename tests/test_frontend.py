@@ -81,12 +81,7 @@ def application(
 
 
 @pytest.fixture
-def app_prompt() -> str:
-    return "Tell me about DataRobot"
-
-
-@pytest.fixture
-def app_post_prompt(application: AppTest, app_prompt: str, pulumi_up: Any) -> AppTest:
+def app_post_prompt(application: AppTest, pulumi_up: Any) -> AppTest:
     logger.info(os.getcwd())
     at = application.run()
     at.button(key="FormSubmitter:customer_selection-Submit").click().run(timeout=120)
@@ -106,6 +101,55 @@ def test_generated_email(app_post_prompt: AppTest) -> None:
     email_content_new = app_post_prompt.text_area(key="generated_email").value
     logger.info(email_content_new)
     assert email_content != email_content_new
+
+
+def test_custom_metric_reported(app_post_prompt: AppTest) -> None:
+    # get all custom metric values apart from user feedback
+    now = datetime.now()
+    all_metrics_ids = {
+        cm: cm_id
+        for cm, cm_id in CustomMetricIds().custom_metric_ids.items()
+        if cm != "user_feedback"
+    }
+    generative_deployment_id = GenerativeDeployment().id
+    values = {}
+    for metric_name, metric_id in all_metrics_ids.items():
+        logger.info(f"Checking metric: {metric_id}")
+        custom_metric = CustomMetric.get(
+            deployment_id=generative_deployment_id,
+            custom_metric_id=metric_id,
+        )
+
+        yesterday = (now - timedelta(days=1)).strftime("%Y-%m-%d")
+        tomorrow = (now + timedelta(days=1)).strftime("%Y-%m-%d")
+
+        metric_count_before_click = custom_metric.get_summary(
+            start=yesterday, end=tomorrow
+        ).metric["sample_count"]
+        if metric_count_before_click is None:
+            metric_count_before_click = 0
+        values[metric_name] = {
+            "metric_count_before_click": metric_count_before_click,
+            "custom_metric": custom_metric,
+        }
+
+    app_post_prompt.button(key="FormSubmitter:customer_selection-Submit").click().run(
+        timeout=300
+    )
+
+    time.sleep(60)
+    for metric_name, metric_id in all_metrics_ids.items():
+        custom_metric = CustomMetric.get(
+            deployment_id=generative_deployment_id,
+            custom_metric_id=metric_id,
+        )
+        metric_count_after_click = custom_metric.get_summary(
+            start=yesterday, end=tomorrow
+        ).metric["sample_count"]
+        assert (
+            values[metric_name]["metric_count_before_click"] + 1
+            == metric_count_after_click
+        )
 
 
 def test_submit_feedback(app_post_prompt: AppTest) -> None:

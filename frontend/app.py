@@ -20,20 +20,13 @@ import sys
 import datarobot as dr
 import pandas as pd
 import streamlit as st
-from custom_metrics import (
-    calculate_metrics,
-    estimated_reading_time,
-    flesch_reading_ease,
-    get_cosine_similarity,
-    get_num_tokens_from_string,
-    get_sentiment,
-    submit_metrics,
-)
 from helpers import (
     app_settings,
     batch_email_responses,
     color_texts,
     custom_metric_ids,
+    display_metrics,
+    format_metrics_for_datarobot,
     generative_deployment_id,
     get_llm_response,
     make_important_features_list,
@@ -43,9 +36,11 @@ from helpers import (
 from streamlit_theme import st_theme  # type: ignore[import-untyped]
 
 sys.path.append("..")
+from nbo.custom_metrics import metrics_manager
 from nbo.i18n import gettext
 from nbo.predict import make_pred_ai_deployment_predictions
 from nbo.resources import DatasetId
+from nbo.urls import get_deployment_url, get_project_url
 
 logger = logging.getLogger(__name__)
 
@@ -87,10 +82,6 @@ def main() -> None:
     df = get_dataset()
 
     # Initialize session states
-    if "model" not in st.session_state:
-        st.session_state.model = app_settings.models[0]
-    if "temperature" not in st.session_state:
-        st.session_state.temperature = app_settings.default_temperature
     if "numberOfExplanations" not in st.session_state:
         st.session_state.numberOfExplanations = (
             app_settings.default_number_of_explanations
@@ -127,25 +118,6 @@ def main() -> None:
 
         # Create a form for settings
         with st.form(key="settings_selection"):
-            # Dropdown for model selection
-            model = st.selectbox(
-                gettext("Select a model type:"),
-                [model.name for model in app_settings.models],
-                index=0,
-                help=gettext("Model controls the underlying LLM selection."),
-            )
-
-            temperature = st.number_input(
-                gettext("Select a temperature value:"),
-                min_value=0.0,
-                max_value=2.0,
-                value=app_settings.default_temperature,
-                step=0.1,
-                help=gettext(
-                    "The temperature argument in OpenAI's GPT determines the "
-                    + "randomness of the model's output."
-                ),
-            )
             # Number input for selecting the number of explanations
             number_of_explanations = int(
                 st.number_input(
@@ -185,10 +157,6 @@ def main() -> None:
 
             # Update session state variables upon form submission
             if new_settings_run:
-                st.session_state.model = [
-                    m for m in app_settings.models if m.name == model
-                ][0]
-                st.session_state.temperature = temperature
                 st.session_state.numberOfExplanations = number_of_explanations
                 st.session_state.tone = tone
                 st.session_state.verbosity = verbosity
@@ -196,11 +164,10 @@ def main() -> None:
         # Monitoring settings section
         st.markdown(gettext("**Monitoring Settings:** "))
 
-        # Sidebar caption with hyperlink
         st.caption(
             gettext(
-                "See [here](https://app.datarobot.com/console-nextgen/deployments/{generative_deployment_id}/overview) to view and update tracking data"
-            ).format(generative_deployment_id=generative_deployment_id)
+                "See [here]({deployment_url}) to view and update tracking data"
+            ).format(deployment_url=get_deployment_url(generative_deployment_id))
         )
 
     # Create our shared title container
@@ -311,21 +278,17 @@ def main() -> None:
                     # Add a bit of space for better layout
                     st.write("\n\n")
                     deployment = dr.Deployment.get(pred_ai_deployment_id)  # type: ignore[attr-defined]
-                    project_id = deployment.model.get("project_id")  # type: ignore[union-attr]
+                    project_id = str(deployment.model.get("project_id"))  # type: ignore[union-attr]
 
                     # Informational expander
                     prediction_info_expander = st.expander(
-                        gettext(
-                            "Drafted an email for {selected_record}! Expand the container to get "
-                            + "more info or check the model out [here](https://app.datarobot.com/projects/{project_id}/models)."
-                        ).format(
-                            selected_record=selected_record, project_id=project_id
+                        gettext("Drafted an email for {selected_record}!").format(
+                            selected_record=selected_record,
                         ),
                         expanded=False,
                     )
 
                     with prediction_info_expander:
-                        # Filter to prediction explanations that have strength greater than 0
                         prediction_explanations = prediction.explanations
                         rsp, text_explanations = make_important_features_list(
                             prediction_explanations=prediction_explanations,
@@ -338,6 +301,11 @@ def main() -> None:
                                 customer_prediction_label=customer_prediction_label,
                                 customer_prediction_probability=customer_prediction_probability,
                                 rsp=rsp,
+                            )
+                        )
+                        st.write(
+                            "Access the [leaderboard]({project_url}) to learn more about the predictive model.".format(
+                                project_url=get_project_url(project_id)
                             )
                         )
 
@@ -385,10 +353,8 @@ def main() -> None:
                             prediction,
                             selected_record=selected_record,
                             number_of_explanations=st.session_state.numberOfExplanations,
-                            temperature=st.session_state.temperature,
                             tone=st.session_state.tone,
                             verbosity=st.session_state.verbosity,
-                            model=st.session_state.model.name,
                         )
                         st.session_state.unique_uuid = generation.association_id
 
@@ -420,13 +386,11 @@ def main() -> None:
                             feedback = (
                                 1.0 if thumbs_up else 0.0 if thumbs_down else None
                             )
-                            user_feedback_id = CUSTOM_METRIC_IDS["user_feedback"]
-                            user_feedback_metric_values = {user_feedback_id: feedback}
-                            submit_metrics(
-                                metric_scores=user_feedback_metric_values,
+                            user_feedback_metric_values = {"user_feedback": feedback}
+                            metrics_manager.submit_metrics(
+                                user_feedback_metric_values,
                                 request_id=st.session_state.unique_uuid,
                             )
-
                             st.toast(
                                 gettext("Your feedback has been successfully saved!"),
                                 icon="🥳",
@@ -436,91 +400,23 @@ def main() -> None:
                         st.empty()
                         st.write("\n")
 
-                        # Calculate a Flesch Readability Score
-                        score, readability = flesch_reading_ease(generated_email)
-                        score_baseline = CUSTOM_METRIC_BASELINES["readability_level"]
+                        input_cost = app_settings.model_spec.input_price_per_1k_tokens
+                        output_cost = app_settings.model_spec.output_price_per_1k_tokens
 
-                        # Calcualte an estimated reading time
-                        reading_time = estimated_reading_time(generated_email)
-                        reading_time_baseline = CUSTOM_METRIC_BASELINES["reading_time"]
-
-                        # Calculate polarity and sentiment
-                        sentiment, reaction = get_sentiment(generated_email)
-                        sentiment_baseline = CUSTOM_METRIC_BASELINES["sentiment"]
-
-                        # Calcualte a confidence score
-                        confidence = get_cosine_similarity(
-                            generation.prompt_used, generated_email
-                        )
-                        confidence_baseline = CUSTOM_METRIC_BASELINES["confidence"]
-
-                        st.write("\n\n")
-                        st.subheader(gettext("**Monitoring Metrics:** \n"))
-                        st.markdown("---")
-
-                        # Add guard metrics
-                        m1, _, m2, _, m3, _, m4 = st.columns([3, 1, 4, 1, 3, 1, 3])
-                        m1.metric(
-                            label=gettext("📖 Readability"),
-                            value=f"{readability}",
-                            delta=f"{round((score-score_baseline)/score_baseline*100,0)}%",
-                            delta_color="normal",
-                        )
-                        m2.metric(
-                            label=gettext("⏱️ Reading Time"),
-                            value=f"{reading_time} seconds",
-                            delta=f"{reading_time-reading_time_baseline} seconds",
-                            delta_color="inverse",
-                        )
-                        m3.metric(
-                            label=gettext("✍ Sentiment"),
-                            value=f"{reaction}",
-                            delta=f"{round(sentiment-sentiment_baseline,2)}",
-                            delta_color="normal",
-                        )
-                        m4.metric(
-                            label=gettext("✅ Confidence"),
-                            value=f"{confidence :.1%}",
-                            delta=f"{round((confidence-confidence_baseline)*100)}%",
-                            delta_color="normal",
-                        )
-
-                        input_cost = st.session_state.model.input_price_per_1k_tokens
-                        output_cost = st.session_state.model.output_price_per_1k_tokens
-
-                        # Count prompt tokens
-                        num_prompt_tokens = get_num_tokens_from_string(
-                            generation.prompt_used, "cl100k_base"
-                        )
-
-                        # Count response tokens
-                        num_response_tokens = get_num_tokens_from_string(
-                            generated_email, "cl100k_base"
-                        )
-
-                        total_cost = (num_prompt_tokens / 1000 * input_cost) + (
-                            num_response_tokens / 1000 * output_cost
-                        )
-
-                        st.markdown("---")
-
-                        # Compile response dictionary
-                        response = {
-                            "prompt_token_count": num_prompt_tokens,
-                            "response_token_count": num_response_tokens,
-                            "llm_cost": total_cost,
-                            "readability_level": score,
-                            "reading_time": reading_time,
-                            "sentiment": sentiment,
-                            "confidence": confidence,
-                        }
                         # Calculate metrics
-                        metric_values = calculate_metrics(CUSTOM_METRIC_IDS, response)
-                        # Report back to deployment
+                        results = metrics_manager.calculate_all_metrics(
+                            generated_email=generated_email,
+                            prompt_used=generation.prompt_used,
+                            output_cost=output_cost,
+                            input_cost=input_cost,
+                        )
+
+                        display_metrics(results)
                         if submitted:
-                            submit_metrics(
-                                metric_scores=metric_values,
-                                request_id=st.session_state.unique_uuid,
+                            # Report back to deployment
+                            dr_metrics = format_metrics_for_datarobot(results)
+                            metrics_manager.submit_metrics(
+                                dr_metrics, request_id=st.session_state.unique_uuid
                             )
 
     with multiple_emails:
@@ -564,10 +460,8 @@ def main() -> None:
                     record_ids=scoring_data[record_id].to_list(),
                     predictions=predictions,
                     number_of_explanations=st.session_state.numberOfExplanations,
-                    temperature=st.session_state.temperature,
                     tone=st.session_state.tone,
                     verbosity=st.session_state.verbosity,
-                    model=st.session_state.model.name,
                 )
 
             st.session_state.bulk_prediction_results = emails.to_csv(index=False)

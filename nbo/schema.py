@@ -23,12 +23,11 @@ association_id = "association_id"
 
 
 class GenerativeDeploymentSettings(BaseModel):
-    target_feature_name: str = "completion"
+    target_feature_name: str = "resultText"
     prompt_feature_name: str = "promptText"
 
 
 class LLMModelSpec(BaseModel):
-    name: str
     input_price_per_1k_tokens: float
     output_price_per_1k_tokens: float
 
@@ -48,14 +47,13 @@ class AppDataScienceSettings(BaseModel):
     default_number_of_explanations: int
     text_explanation_feature: str
     no_text_gen_label: Optional[str]
-    models: list[LLMModelSpec]
-    default_temperature: float
     tones: list[str]
     verbosity: list[str]
     target_probability_description: str
-    system_prompt: str
     email_prompt: str
     outcome_details: list[OutcomeDetail]
+    system_prompt: str
+    model_spec: LLMModelSpec
 
 
 class AppInfraSettings(BaseModel):
@@ -76,9 +74,7 @@ class LLMRequest(BaseModel):
     number_of_explanations: int
     tone: str
     verbosity: str
-    system_prompt: str | None = None
-    model: str | None = None
-    temperature: float | None = None
+    system_prompt: str
 
 
 class Generation(BaseModel):

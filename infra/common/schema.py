@@ -27,7 +27,6 @@ from typing_extensions import TypedDict
 
 from .globals import (
     GlobalGuardrailTemplateName,
-    GlobalLLM,
     GlobalPredictionEnvironmentPlatforms,
 )
 
@@ -66,7 +65,7 @@ class Condition(BaseModel):
 class Intervention(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     action: ModerationAction
-    condition: Condition
+    condition: str
     message: str
     # send_notification: bool
 
@@ -82,7 +81,7 @@ class GuardrailTemplate(BaseModel):
 class CustomModelArgs(BaseModel):
     model_config = ConfigDict(arbitrary_types_allowed=True)
     resource_name: str
-    name: str
+    name: str | None = None
     description: str | None = None
     base_environment_id: str
     base_environment_version_id: str | None = None
@@ -100,7 +99,7 @@ class CustomModelArgs(BaseModel):
 
 class RegisteredModelArgs(BaseModel):
     resource_name: str
-    name: Optional[str] = None
+    name: str | None = None
 
 
 class DeploymentArgs(BaseModel):
@@ -150,12 +149,7 @@ class CustomModelGuardConfigurationArgs(BaseModel):
 
 class PlaygroundArgs(BaseModel):
     resource_name: str
-    name: str
-
-
-class LLMSettings(BaseModel):
-    max_completion_length: int = Field(le=512)
-    system_prompt: str
+    name: str | None = None
 
 
 class VectorDatabaseSettings(BaseModel):
@@ -164,11 +158,16 @@ class VectorDatabaseSettings(BaseModel):
 
 
 class LLMBlueprintArgs(BaseModel):
+    model_config = ConfigDict(arbitrary_types_allowed=True)
     resource_name: str
-    name: str
-    llm_settings: LLMSettings
-    llm_id: GlobalLLM
-    vector_database_settings: VectorDatabaseSettings
+    description: str | None = None
+    llm_id: str
+    llm_settings: datarobot.LlmBlueprintLlmSettingsArgs | None = None
+    name: str | None = None
+    prompt_type: str | None = None
+    vector_database_settings: (
+        datarobot.LlmBlueprintVectorDatabaseSettingsArgs | None
+    ) = None
 
 
 class ChunkingParameters(BaseModel):
@@ -181,20 +180,20 @@ class ChunkingParameters(BaseModel):
 
 class VectorDatabaseArgs(BaseModel):
     resource_name: str
-    name: str
+    name: str | None = None
     chunking_parameters: ChunkingParameters
 
 
 class DatasetArgs(BaseModel):
     resource_name: str
-    name: str
+    name: str | None = None
     file_path: str
 
 
 class UseCaseArgs(BaseModel):
     resource_name: str
-    name: str
-    description: str | None
+    name: str | None = None
+    description: str | None = None
     opts: Optional[pulumi.ResourceOptions] = None
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
@@ -207,7 +206,7 @@ class PredictionEnvironmentArgs(BaseModel):
 
 class CredentialArgs(BaseModel):
     resource_name: str
-    name: Optional[str] = None
+    name: str | None = None
 
 
 class QaApplicationArgs(BaseModel):
@@ -347,10 +346,10 @@ class AutopilotRunArgs(BaseModel):
 class ApplicationSourceArgs(BaseModel):
     model_config = ConfigDict(arbitrary_types_allowed=True)
     resource_name: str
+    base_environment_id: str
     files: Optional[Any] = None
     folder_path: Optional[str] = None
     name: Optional[str] = None
-    resource_settings: Optional[datarobot.ApplicationSourceResourceSettingsArgs] = None
 
 
 class BaselineValues(TypedDict, total=False):
@@ -365,7 +364,6 @@ class CustomMetricArgs(BaseModel):
     is_model_specific: bool
     type: Any
     directionality: Any
-    time_step: str = dr.enums.CustomMetricBucketTimeStep.HOUR
     description: Optional[str] = None
     baseline_values: Optional[list[BaselineValues]] = None
     value_column_name: Optional[str] = None

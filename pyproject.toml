@@ -1,3 +1,4 @@
+[tool.ruff]
 # Exclude a variety of commonly ignored directories.
 exclude = [
     ".bzr",
@@ -35,7 +36,7 @@ indent-width = 4
 # Assume Python 3.10
 target-version = "py310"
 
-[lint]
+[tool.ruff.lint]
 # Enable Pyflakes (`F`) and a subset of the pycodestyle (`E`)  codes by default.
 # Unlike Flake8, Ruff doesn't enable pycodestyle warnings (`W`) or
 # McCabe complexity (`C901`) by default.
@@ -49,7 +50,7 @@ unfixable = []
 # Allow unused variables when underscore-prefixed.
 dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 
-[format]
+[tool.ruff.format]
 # Like Black, use double quotes for strings.
 quote-style = "double"
 
@@ -75,3 +76,33 @@ docstring-code-format = false
 # This only has an effect when the `docstring-code-format` setting is
 # enabled.
 docstring-code-line-length = "dynamic"
+
+
+[tool.mypy]
+plugins = "pydantic.mypy"
+strict = true
+#ignore_missing_imports = true
+exclude = """(?x)(
+    output/ # exclude files starting with "output"
+    # | deployment_.*/
+    | include/   # or files starting with "include."
+    | venv/
+    | .venv/
+    | .cache
+    | tests/
+    | recipe-.*/
+    # | frontend/
+    | hooks/
+    | e2e/
+  )"""
+python_version = 3.9
+[[tool.mypy.overrides]]
+module = [
+    'datarobotx.*',
+    'sklearn.*',
+    'textblob.*'
+]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+norecursedirs = "tests/e2e"

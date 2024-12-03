@@ -26,11 +26,10 @@ from infra import (
     settings_predictive,
 )
 from infra.common.feature_flags import check_feature_flags
-from infra.common.globals import GlobalRuntimeEnvironment
 from infra.common.papermill import run_notebook
-from infra.common.urls import get_deployment_url
 from infra.components.custom_model_deployment import CustomModelDeployment
 from infra.components.dr_credential import DRCredential
+from infra.components.rag_custom_model import RAGCustomModel
 from infra.settings_llm_credential import credential, credential_args
 from nbo.i18n import LocaleSettings
 from nbo.resources import (
@@ -41,6 +40,7 @@ from nbo.resources import (
     pred_ai_deployment_env_name,
 )
 from nbo.schema import AppInfraSettings
+from nbo.urls import get_deployment_url
 
 LocaleSettings().setup_locale()
 
@@ -64,6 +64,12 @@ else:
 with open(settings_main.model_training_output_infra_settings) as f:
     model_training_output = AppInfraSettings(**yaml.safe_load(f))
 
+
+use_case = datarobot.UseCase.get(
+    id=model_training_output.use_case_id,
+    resource_name="Predictive Content Generator Use Case",
+)
+
 if settings_main.default_prediction_server_id is not None:
     prediction_environment = datarobot.PredictionEnvironment.get(
         resource_name=settings_main.prediction_environment_resource_name,
@@ -78,6 +84,7 @@ else:
 pred_ai_deployment = datarobot.Deployment(
     registered_model_version_id=model_training_output.registered_model_version_id,
     prediction_environment_id=prediction_environment.id,
+    use_case_ids=[use_case.id],
     **settings_predictive.deployment_args.model_dump(exclude_none=True),
 )
 
@@ -87,14 +94,15 @@ llm_credential = DRCredential(
     credential_args=credential_args,
 )
 
-generative_custom_model = datarobot.CustomModel(
-    files=settings_generative.get_files(
-        runtime_parameter_values=llm_credential.runtime_parameter_values,
-    ),
-    runtime_parameter_values=llm_credential.runtime_parameter_values,
-    **settings_generative.custom_model_args.model_dump(mode="json", exclude_none=True),
-)
 
+generative_custom_model = RAGCustomModel(
+    resource_name=f"Predictive Content Generator Prep [{settings_main.project_name}]",
+    custom_model_args=settings_generative.custom_model_args,
+    llm_blueprint_args=settings_generative.llm_blueprint_args,
+    playground_args=settings_generative.playground_args,
+    use_case=use_case,
+    runtime_parameter_values=llm_credential.runtime_parameter_values,
+)
 
 generative_deployment = CustomModelDeployment(
     resource_name=f"Generative Custom Model Deployment [{settings_main.project_name}]",
@@ -104,6 +112,7 @@ generative_deployment = CustomModelDeployment(
     deployment_args=settings_generative.deployment_args,
     use_case_ids=[model_training_output.use_case_id],
 )
+
 
 custom_metrics = generative_deployment.id.apply(settings_generative.set_custom_metrics)
 
@@ -138,7 +147,6 @@ app_source = datarobot.ApplicationSource(
         runtime_parameter_values=app_runtime_parameters
     ),
     runtime_parameter_values=app_runtime_parameters,
-    base_environment_id=GlobalRuntimeEnvironment.PYTHON_39_STREAMLIT.value.id,
     **settings_app_infra.app_source_args,
 )
 

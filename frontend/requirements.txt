@@ -13,3 +13,6 @@ tiktoken>=0.8.0,<0.9
 scikit-learn>=1.5.2,<2
 textblob>=0.18.0,<0.19
 babel>=2.16,<3
+
+openai>=1.31.2,<2
+httpx<0.28.0

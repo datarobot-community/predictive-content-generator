@@ -68,8 +68,11 @@ msgstr "バッチメール"
 msgid "Configure the settings used to create your email"
 msgstr "メール作成に使用する設定を行います。"
 
-msgid "Drafted an email for {selected_record}! Expand the container to get more info or check the model out [here](https://app.datarobot.com/projects/{project_id}/models)."
-msgstr "{selected_record}用のメールを作成しました！ コンテナを展開して詳細情報を取得するか、[こちら](https://app.datarobot.com/projects/{project_id}/models)でモデルをチェックしてください。"
+msgid "Drafted an email for {selected_record}!"
+msgstr "{selected_record}用のメールを作成しました！"
+
+msgid "Access the [leaderboard]({project_url}) to learn more about the predictive model."
+msgstr "予測モデルについて詳しく知るには、[リーダーボード]({project_url})にアクセスしてください。"
 
 msgid "Email Settings"
 msgstr "メール設定"
@@ -85,9 +88,6 @@ msgstr "{count}件のレコードのメールを生成..."
 
 msgid "Generating response and assessment metrics for {selected_record}..."
 msgstr "{selected_record}の応答および評価指標を生成しています..."
-
-msgid "Model controls the underlying LLM selection."
-msgstr "モデルは、LLMの選択項目をコントロールします。"
 
 msgid "New Draft"
 msgstr "新しい草案"
@@ -110,17 +110,11 @@ msgstr "予測の作成が完了しました。メールを生成しています
 msgid "Predictive Deployment [{project_name}]"
 msgstr "予測デプロイ [{project_name}]"
 
-msgid "See [here] to view and update tracking data"
-msgstr "トラッキングデータの表示と更新については、[こちら](https://app.datarobot.com/console-nextgen/deployments/{generative_deployment_id}/overview)をご覧ください。"
+msgid "See [here]({deployment_url}) to view and update tracking data"
+msgstr "トラッキングデータの表示と更新については、[こちら]({deployment_url})をご覧ください。"
 
 msgid "See the most important items in text feature `{text_explanation}` that influenced the prediction {customer_prediction_label}"
 msgstr "テキスト特徴量 {text_explanation}のうち、予測 {customer_prediction_label} に最も影響を与えた項目をご覧ください。"
-
-msgid "Select a model type:"
-msgstr "モデルタイプを選択してください："
-
-msgid "Select a temperature value:"
-msgstr "温度値を選択項目から選択してください。"
 
 msgid "Select a tone:"
 msgstr "トーンを選択："
@@ -133,9 +127,6 @@ msgstr "説明の数を選択してください："
 
 msgid "The number of explanations argument controls how many prediction explanations we pass to our prompt."
 msgstr "説明の引数の数は、プロンプトに渡す予測の説明の数をコントロールします。"
-
-msgid "The temperature argument in OpenAI's GPT determines the randomness of the model's output."
-msgstr "OpenAIのGPTにおける温度引数は、モデルの出力のランダム性を決定します。"
 
 msgid "Tone controls the attitude of the email."
 msgstr "トーンはメールの姿勢をコントロールします。"

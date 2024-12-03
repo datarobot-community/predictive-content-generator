@@ -23,6 +23,10 @@ class RuntimeEnvironment(BaseModel):
 
 
 class GlobalRuntimeEnvironment(Enum):
+    PYTHON_312_APPLICATION_BASE = RuntimeEnvironment(
+        name="[DataRobot] Python 3.12",
+        id="66d07fae0513a1edf18595bb",
+    )
     PYTHON_311_NOTEBOOK_BASE = RuntimeEnvironment(
         name="[DataRobot] Python 3.11 Notebook Base Image",
         id="664388ff6d426582042bb3e4",

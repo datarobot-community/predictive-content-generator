@@ -28,3 +28,19 @@ def get_deployment_url(deployment_id: str) -> str:
     """
     parsed_dr_url = urlsplit(os.environ["DATAROBOT_ENDPOINT"])
     return f"{parsed_dr_url.scheme}://{parsed_dr_url.netloc}/console-nextgen/deployments/{deployment_id}/"
+
+
+def get_project_url(project_id: str) -> str:
+    """Translate project ID to GUI URL.
+
+    Parameters
+    ----------
+    project_id : str
+        DataRobot project id.
+    endpoint: str
+        DataRobot public API endpoint e.g. envir
+    """
+    parsed_dr_url = urlsplit(os.environ["DATAROBOT_ENDPOINT"])
+    return (
+        f"{parsed_dr_url.scheme}://{parsed_dr_url.netloc}/projects/{project_id}/models"
+    )
