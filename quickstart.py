@@ -14,6 +14,7 @@
 
 # type: ignore
 import argparse
+import json
 import os
 import re
 import shutil
@@ -195,16 +196,38 @@ def setup_virtual_environment() -> None:
 
 
 def load_dotenv():
-    env_vars = {}
     with open(".env") as f:
-        for line in f.readlines():
-            if "=" in line:
-                k, v = line.split("=", 1)
-                k = k.strip()
-                v = re.sub(r"\s?#.*", "", v).rstrip()
-                v = v.strip().strip('"')
-                os.environ[k] = v
-                env_vars[k] = v
+        content = f.read()
+
+    pattern = r"""
+        (?:^|\n)         # Must start at beginning of string or after newline
+        (?![\s#])        # Negative lookahead: next char cannot be whitespace or #
+        ([A-Za-z_]\w*)   # Key: start with letter/underscore, then word chars
+        =\s*             # Equals with optional whitespace after
+        (?:
+            '(.*?)'      # Single quoted (group 2)
+            |"(.*?)"     # Double quoted (group 3)
+            |([^\n]+)    # Unquoted: everything until newline (group 4)
+        )
+    """
+
+    env_vars = {}
+    for match in re.finditer(pattern, content, re.MULTILINE | re.DOTALL | re.VERBOSE):
+        key = match.group(1).strip()
+
+        if match.group(2) is not None:  # Single quoted
+            value = match.group(2).strip()
+        elif match.group(3) is not None:  # Double quoted
+            value = match.group(3).strip()
+        else:  # Unquoted
+            value = match.group(4)
+            if " #" in value:  # Only strip comments after space
+                value = value.split(" #", 1)[0]
+            value = value.strip()
+
+        env_vars[key] = value
+
+    os.environ.update(env_vars)
     return env_vars
 
 
@@ -228,8 +251,26 @@ def setup_pulumi_config(work_dir: Path, stack_name: str, env_vars: dict):
     run_pulumi_command(stack_select, work_dir, env_vars)
 
 
+def print_app_url():
+    try:
+        pulumi_output = subprocess.check_output(["pulumi", "stack", "output", "-j"])
+        pulumi_output_dict = json.loads(pulumi_output)
+        application_id = pulumi_output_dict["DATAROBOT_APPLICATION_ID"]
+        datarobot_endpoint = os.environ["DATAROBOT_ENDPOINT"]
+        url = f"{datarobot_endpoint.rstrip('/').replace('api/v2', '')}custom_applications/{application_id}/"
+        print("\n\n")
+        print("=" * 80)
+        print(f"\n    Your app is ready! Application URL:\n\n    {url}\n")
+        print("=" * 80)
+    except Exception as e:
+        print(e)
+
+
 def main():
     args = parse_args()
+    if args.stack_name == "YOUR_PROJECT_NAME":
+        print("Please use a different project name")
+        sys.exit(0)
     check_dotenv_exists()
     # Load environment variables
     env_vars = load_dotenv()
@@ -258,6 +299,8 @@ def main():
         print("\nCreate/update stack...")
         run_pulumi_command(["pulumi", "up", "--yes"], work_dir, env_vars)
         print("Stack update complete")
+
+        print_app_url()
 
 
 if __name__ == "__main__":

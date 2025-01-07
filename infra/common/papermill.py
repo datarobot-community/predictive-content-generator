@@ -16,7 +16,7 @@ import pathlib
 import sys
 from typing import Optional
 
-import papermill as pm  # type: ignore[import-untyped]
+import papermill as pm
 
 
 def run_notebook(

@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+## [0.1.9] - 2025-01-06
+
+### Fixed
+- quickstart.py now supports multiline values correctly
+- quickstart now asks you to change the default project name
+- quickstart now prints the application URL
+
+
+### Changed
+- Add python 3.9 requirement to README
+- More detailed .env.template
+- Change of LLM single code change
+- More prominent LLM setting
+- pulumi-datarobot bumped to 0.5.3
+- Instructions to change the LLM in Readme adjusted to the new process
+- Better exception handling around credential validation
+- Update safe_dump to support unicode
+- Sanitised input column names for the NBO data set
+
+### Added
+- Support for AWS Credential type and AWS-based LLM blueprints
+- Full testing of the LLM credentials before start
+  
 ## [0.1.8] - 2024-12-03
 
 ### Added

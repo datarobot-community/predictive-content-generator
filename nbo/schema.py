@@ -39,6 +39,8 @@ class OutcomeDetail(BaseModel):
 
 
 class AppDataScienceSettings(BaseModel):
+    model_config = ConfigDict(protected_namespaces=())
+
     association_id_column_name: str
     page_title: str
     page_subtitle: str

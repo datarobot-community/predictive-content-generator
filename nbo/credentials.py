@@ -11,111 +11,81 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 from __future__ import annotations
 
-from typing import Any, Dict, Optional, Union
+from typing import Any, Dict, Optional
 
-from pydantic import AliasChoices, AliasPath, Field
+from pydantic import (
+    AliasChoices,
+    AliasPath,
+    Field,
+)
 from pydantic_settings import (
     BaseSettings,
 )
 
 
-class AzureOpenAICredentials(BaseSettings):
+class DRCredentials(BaseSettings): ...
+
+
+class AzureOpenAICredentials(DRCredentials):
     """LLM credentials auto-constructed using environment variables."""
 
-    api_version: str = Field(
+    api_key: str = Field(
         validation_alias=AliasChoices(
-            AliasPath("MLOPS_RUNTIME_PARAM_OPENAI_API_VERSION", "payload"),
-            "OPENAI_API_VERSION",
+            "OPENAI_API_KEY",
+            AliasPath("MLOPS_RUNTIME_PARAM_OPENAI_API_KEY", "payload", "apiToken"),
         ),
     )
     azure_endpoint: str = Field(
         validation_alias=AliasChoices(
-            AliasPath("MLOPS_RUNTIME_PARAM_OPENAI_API_BASE", "payload"),
             "OPENAI_API_BASE",
+            AliasPath("MLOPS_RUNTIME_PARAM_OPENAI_API_BASE", "payload"),
         )
     )
-    api_key: str = Field(
+    api_version: str | None = Field(
+        default=None,
         validation_alias=AliasChoices(
-            AliasPath("MLOPS_RUNTIME_PARAM_OPENAI_API_KEY", "payload", "apiToken"),
-            "OPENAI_API_KEY",
+            "OPENAI_API_VERSION",
+            AliasPath("MLOPS_RUNTIME_PARAM_OPENAI_API_VERSION", "payload"),
         ),
     )
     azure_deployment: str | None = Field(
         default=None,
         validation_alias=AliasChoices(
-            AliasPath("MLOPS_RUNTIME_PARAM_OPENAI_API_DEPLOYMENT_ID", "payload"),
             "OPENAI_API_DEPLOYMENT_ID",
+            AliasPath("MLOPS_RUNTIME_PARAM_OPENAI_API_DEPLOYMENT_ID", "payload"),
         ),
     )
 
-    def test(self, model: str | None = None) -> None:
-        import openai
 
-        try:
-            client = openai.AzureOpenAI(
-                api_key=self.api_key,
-                azure_endpoint=self.azure_endpoint,
-                api_version=self.api_version,
-            )
-            client.chat.completions.create(
-                messages=[{"role": "user", "content": "hello"}],
-                model=model or self.azure_deployment,  # type: ignore[arg-type]
-            )
-        except Exception as e:
-            raise ValueError(
-                f"Unable to run a successful test completion against model '{model}' "
-                "with provided Azure OpenAI credentials. Please validate your credentials."
-            ) from e
-
-
-class GoogleLLMCredentials(BaseSettings):
+class GoogleCredentials(DRCredentials):
     service_account_key: Dict[str, Any] = Field(
+        validation_alias="GOOGLE_SERVICE_ACCOUNT"
+    )
+    region: Optional[str] = Field(default="us-west1", validation_alias="GOOGLE_REGION")
+
+
+class AWSBedrockCredentials(DRCredentials):
+    aws_access_key_id: str = Field(
         validation_alias=AliasChoices(
-            AliasPath(
-                "MLOPS_RUNTIME_PARAM_GOOGLE_SERVICE_ACCOUNT", "payload", "gcpKey"
-            ),
-            "GOOGLE_SERVICE_ACCOUNT",
+            "AWS_ACCESS_KEY_ID",
+            AliasPath("MLOPS_RUNTIME_PARAM_AWS_ACCOUNT", "payload", "awsAccessKeyId"),
         )
     )
-    region: Optional[str] = Field(
+    aws_secret_access_key: str = Field(
         validation_alias=AliasChoices(
-            AliasPath("MLOPS_RUNTIME_PARAM_GOOGLE_REGION", "payload"),
-            "GOOGLE_REGION",
-        ),
-        default="us-west1",
+            "AWS_SECRET_ACCESS_KEY",
+            AliasPath(
+                "MLOPS_RUNTIME_PARAM_AWS_ACCOUNT", "payload", "awsSecretAccessKey"
+            ),
+        )
     )
-
-    def test(self, model: str) -> None:
-        try:
-            import requests
-            from google.auth.transport.requests import (  # type: ignore[import-untyped]
-                Request,
-            )
-            from google.oauth2 import service_account  # type: ignore[import-untyped]
-
-            credentials = service_account.Credentials.from_service_account_info(
-                self.service_account_key,
-                scopes=["https://www.googleapis.com/auth/cloud-platform"],
-            )
-            credentials.refresh(Request())
-
-            messages = [{"role": "user", "parts": [{"text": "Hello"}]}]
-            resp = requests.post(
-                f"https://{self.region}-aiplatform.googleapis.com/v1/projects/"
-                f"{credentials.project_id}/locations/{self.region}/publishers/"
-                f"google/models/{model}:generateContent",
-                headers={"Authorization": f"Bearer {credentials.token}"},
-                json={"contents": messages},
-            )
-            resp.raise_for_status()
-        except Exception as e:
-            raise ValueError(
-                f"Unable to run a successful test completion against model '{model}' "
-                "with provided Azure OpenAI credentials. Please validate your credentials."
-            ) from e
-
-
-LLMCredentials = Union[AzureOpenAICredentials, GoogleLLMCredentials]
+    aws_session_token: Optional[str] = Field(
+        default=None,
+        validation_alias=AliasChoices(
+            "AWS_SESSION_TOKEN",
+            AliasPath("MLOPS_RUNTIME_PARAM_AWS_ACCOUNT", "payload", "awsSessionToken"),
+        ),
+    )
+    region_name: Optional[str] = Field(default=None, validation_alias="AWS_REGION")

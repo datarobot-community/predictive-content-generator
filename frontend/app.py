@@ -33,7 +33,7 @@ from helpers import (
     pred_ai_deployment_id,
     set_outcome_details,
 )
-from streamlit_theme import st_theme  # type: ignore[import-untyped]
+from streamlit_theme import st_theme
 
 sys.path.append("..")
 from nbo.custom_metrics import metrics_manager

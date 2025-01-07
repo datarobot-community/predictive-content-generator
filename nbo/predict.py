@@ -21,7 +21,7 @@ from typing import Any, Dict, Optional
 import datarobot as dr
 import pandas as pd
 from datarobot.models.deployment.deployment import Deployment
-from datarobot_predict.deployment import (  # type: ignore[import-untyped]
+from datarobot_predict.deployment import (
     PredictionResult,
 )
 from openai import OpenAI

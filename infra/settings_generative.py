@@ -36,6 +36,8 @@ from .settings_main import (
     project_name,
 )
 
+LLM = GlobalLLM.AZURE_OPENAI_GPT_4_O
+
 playground_args = PlaygroundArgs(
     resource_name=f"Predictive Content Generator Playground [{project_name}]",
 )
@@ -43,7 +45,7 @@ playground_args = PlaygroundArgs(
 
 llm_blueprint_args = LLMBlueprintArgs(
     resource_name=f"Predictive Content Generator LLM Blueprint [{project_name}]",
-    llm_id=GlobalLLM.AZURE_OPENAI_GPT_3_5_TURBO,
+    llm_id=LLM.name,
     llm_settings=datarobot.LlmBlueprintLlmSettingsArgs(
         max_completion_length=512,
         temperature=0.5,

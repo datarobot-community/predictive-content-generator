@@ -28,9 +28,11 @@ from infra import (
 from infra.common.feature_flags import check_feature_flags
 from infra.common.papermill import run_notebook
 from infra.components.custom_model_deployment import CustomModelDeployment
-from infra.components.dr_credential import DRCredential
+from infra.components.dr_llm_credential import (
+    get_credential_runtime_parameter_values,
+    get_credentials,
+)
 from infra.components.rag_custom_model import RAGCustomModel
-from infra.settings_llm_credential import credential, credential_args
 from nbo.i18n import LocaleSettings
 from nbo.resources import (
     app_env_name,
@@ -88,10 +90,10 @@ pred_ai_deployment = datarobot.Deployment(
     **settings_predictive.deployment_args.model_dump(exclude_none=True),
 )
 
-llm_credential = DRCredential(
-    resource_name=f"Generic LLM Credential [{settings_main.project_name}]",
-    credential=credential,
-    credential_args=credential_args,
+credentials = get_credentials(settings_generative.LLM)
+
+credential_runtime_parameter_values = get_credential_runtime_parameter_values(
+    credentials=credentials
 )
 
 
@@ -101,7 +103,7 @@ generative_custom_model = RAGCustomModel(
     llm_blueprint_args=settings_generative.llm_blueprint_args,
     playground_args=settings_generative.playground_args,
     use_case=use_case,
-    runtime_parameter_values=llm_credential.runtime_parameter_values,
+    runtime_parameter_values=credential_runtime_parameter_values,
 )
 
 generative_deployment = CustomModelDeployment(
