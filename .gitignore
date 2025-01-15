@@ -154,6 +154,7 @@ venv.bak/
 .mypy_cache/
 
 deployment_generative/model-metadata.yaml
+Pulumi.*.yaml
 
 frontend/*.yaml
 frontend/metadata.yaml

@@ -13,11 +13,14 @@
 # limitations under the License.
 
 import pathlib
+import sys
 
 import datarobot as dr
 import pulumi
 import pulumi_datarobot as datarobot
 import yaml
+
+sys.path.append("..")
 
 from infra import (
     settings_app_infra,
@@ -46,7 +49,7 @@ from nbo.urls import get_deployment_url
 
 LocaleSettings().setup_locale()
 
-check_feature_flags(pathlib.Path("infra/feature_flag_requirements.yaml"))
+check_feature_flags(pathlib.Path("feature_flag_requirements.yaml"))
 
 if not (
     settings_main.model_training_output_infra_settings.exists()

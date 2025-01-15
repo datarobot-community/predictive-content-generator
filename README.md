@@ -83,8 +83,8 @@ App Templates contain three families of complementary logic. For this template, 
   ```
 - **Operational logic**: Necessary to turn on all DataRobot assets.
   ```
-  __main__.py  # Pulumi program for configuring DataRobot to serve and monitor AI & App logic
-  infra/  # Settings for resources and assets created in DataRobot
+  infra/  # Settings for resources and assets to be created in DataRobot
+  infra/__main__.py  # Pulumi program for configuring DataRobot to serve and monitor AI and App logic
   ```
 
 ## Why build AI Apps with DataRobot app templates?

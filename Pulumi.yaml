@@ -1,6 +1,7 @@
 name: nbo
 runtime:
   name: python
+main: infra
 description: Predictive Content Generator
 config:
   pulumi:tags:

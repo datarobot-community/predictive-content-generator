@@ -179,6 +179,8 @@ def setup_virtual_environment() -> None:
 
         try:
             run_subprocess_in_venv(["pip", "install", "-U", "uv"])
+            if is_datarobot_codespace():
+                os.system("uv pip install $(pip freeze | grep ipykernel)")
             # Install requirements using uv
             run_subprocess_in_venv(["uv", "pip", "install", "-r", "requirements.txt"])
         except Exception as e:

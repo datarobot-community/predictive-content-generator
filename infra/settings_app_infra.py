@@ -13,7 +13,6 @@
 # limitations under the License.
 
 import textwrap
-from pathlib import Path
 from typing import List, Sequence, Tuple
 
 import datarobot as dr
@@ -24,9 +23,9 @@ from infra.common.globals import GlobalRuntimeEnvironment
 from infra.common.schema import ApplicationSourceArgs
 from nbo.i18n import LanguageCode, LocaleSettings
 
-from .settings_main import model_training_output_ds_settings, project_name
+from .settings_main import PROJECT_ROOT, model_training_output_ds_settings, project_name
 
-application_path = Path("frontend/")
+application_path = PROJECT_ROOT / "frontend"
 
 app_source_args = ApplicationSourceArgs(
     resource_name=f"Predictive Content Generator App Source [{project_name}]",
@@ -90,16 +89,18 @@ def get_app_files(
         and not f.name.endswith(".yaml")
     ]
 
+    nbo_path = PROJECT_ROOT / "nbo"
+
     source_files.extend(
         [
-            ("nbo/__init__.py", "nbo/__init__.py"),
-            ("nbo/schema.py", "nbo/schema.py"),
-            ("nbo/i18n.py", "nbo/i18n.py"),
-            ("nbo/predict.py", "nbo/predict.py"),
-            ("nbo/resources.py", "nbo/resources.py"),
-            ("nbo/credentials.py", "nbo/credentials.py"),
-            ("nbo/urls.py", "nbo/urls.py"),
-            ("nbo/custom_metrics.py", "nbo/custom_metrics.py"),
+            (str(nbo_path / "__init__.py"), "nbo/__init__.py"),
+            (str(nbo_path / "schema.py"), "nbo/schema.py"),
+            (str(nbo_path / "i18n.py"), "nbo/i18n.py"),
+            (str(nbo_path / "predict.py"), "nbo/predict.py"),
+            (str(nbo_path / "resources.py"), "nbo/resources.py"),
+            (str(nbo_path / "credentials.py"), "nbo/credentials.py"),
+            (str(nbo_path / "urls.py"), "nbo/urls.py"),
+            (str(nbo_path / "custom_metrics.py"), "nbo/custom_metrics.py"),
             (str(application_path / "metadata.yaml"), "metadata.yaml"),
             (str(model_training_output_ds_settings), "app_settings.yaml"),
         ]
@@ -110,7 +111,9 @@ def get_app_files(
     if application_locale != LanguageCode.EN:
         source_files.append(
             (
-                f"nbo/locale/{application_locale}/LC_MESSAGES/base.mo",
+                str(
+                    nbo_path / "locale" / application_locale / "LC_MESSAGES" / "base.mo"
+                ),
                 f"nbo/locale/{application_locale}/LC_MESSAGES/base.mo",
             )
         )

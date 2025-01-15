@@ -24,9 +24,14 @@ prediction_environment_resource_name = (
     f"Predictive Content Generator Prediction Environment [{project_name}]"
 )
 
-model_training_nb = Path("notebooks/train_model_nbo.ipynb")
+PROJECT_ROOT = Path(__file__).resolve().parent.parent.absolute()
 
-model_training_output_ds_settings = Path(f"frontend/app_settings.{project_name}.yaml")
-model_training_output_infra_settings = Path(
-    f"notebooks/app_infra_settings.{project_name}.yaml"
+model_training_nb = PROJECT_ROOT / "notebooks" / "train_model_nbo.ipynb"
+
+model_training_output_ds_settings = (
+    PROJECT_ROOT / "frontend" / f"app_settings.{project_name}.yaml"
+)
+
+model_training_output_infra_settings = (
+    PROJECT_ROOT / "notebooks" / f"app_infra_settings.{project_name}.yaml"
 )
