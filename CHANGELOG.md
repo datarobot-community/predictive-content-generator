@@ -7,23 +7,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [0.1.11] - 2025-02-10
+
+### Fixed
+
+- Frontend for binary classification deployments no longer misses prediction explanations
+
 ## [0.1.10] - 2025-01-15
 
 ### Fixed
+
 - Codespace python env no longer broken by quickstart
 
 ### Changed
+
 - Move pulumi entrypoint to the infra directory
 
 ## [0.1.9] - 2025-01-06
 
 ### Fixed
+
 - quickstart.py now supports multiline values correctly
 - quickstart now asks you to change the default project name
 - quickstart now prints the application URL
 
-
 ### Changed
+
 - Add python 3.9 requirement to README
 - More detailed .env.template
 - Change of LLM single code change
@@ -35,15 +44,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Sanitised input column names for the NBO data set
 
 ### Added
+
 - Support for AWS Credential type and AWS-based LLM blueprints
 - Full testing of the LLM credentials before start
   
 ## [0.1.8] - 2024-12-03
 
 ### Added
+
 - add context tracing to this recipe.
 
 ### Changed
+
 - update pulumi-datarobot to >=0.4.5
 - Changed default target name to the buzok standard "resultText"
 - improvements to the README
@@ -56,9 +68,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Use python 3.12 app source environment
 
 ### Fixed
+
 - Remove hardcoded endpoint in frontend project and deployment urls
 - Fix comment handling in quickstart
-
 
 ## [0.1.7] - 2024-11-12
 
@@ -69,20 +81,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.6] - 2024-11-12
 
 ### Fixed
+
 - Hide the Streamlit `deploy` button
 - Ensure app settings update does not cause `pulumi up` to fail
 
 ### Changed
+
 - Update DataRobot logo
 
 ## [0.1.5] - 2024-11-07
 
 ### Changed
+
 - Bring release/10.2 in sync with main
 
 ## [0.1.4] - 2024-11-07
 
 ### Added
+
 - quickstart.py script for getting started more quickly
 
 ## [0.1.3] - 2024-10-28
@@ -90,8 +106,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Changelog file to keep track of changes in the project.
-- Multi language support in frontend (Spanish, French, Japanese, Korean, Portuguese) 
-- Link Application, Deployment and Registered model to the use case in DR 
+- Multi language support in frontend (Spanish, French, Japanese, Korean, Portuguese)
+- Link Application, Deployment and Registered model to the use case in DR
 
 ### Removed
 

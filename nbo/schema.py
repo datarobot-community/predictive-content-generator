@@ -120,17 +120,26 @@ class Prediction(BaseModel):
 
         # Extract explanations
         explanations = []
+
+        # multiclass case
+        prefix = "CLASS_1_EXPLANATION_{}_"
+
+        # binary case
+        if prefix.format(1) + "FEATURE_NAME" not in data:
+            prefix = prefix.replace("CLASS_1_", "")
+
         for i in range(1, 11):  # Assuming there are 10 explanations
-            prefix = f"CLASS_1_EXPLANATION_{i}_"
-            if f"{prefix}FEATURE_NAME" in data:
+            i_prefix = prefix.format(i)
+
+            if f"{i_prefix}FEATURE_NAME" in data:
                 explanation = Explanation(
-                    feature_name=data[f"{prefix}FEATURE_NAME"],
-                    strength=float(data[f"{prefix}STRENGTH"]),
-                    qualitative_strength=data[f"{prefix}QUALITATIVE_STRENGTH"],
-                    feature_value=data[f"{prefix}ACTUAL_VALUE"],
+                    feature_name=data[f"{i_prefix}FEATURE_NAME"],
+                    strength=float(data[f"{i_prefix}STRENGTH"]),
+                    qualitative_strength=data[f"{i_prefix}QUALITATIVE_STRENGTH"],
+                    feature_value=data[f"{i_prefix}ACTUAL_VALUE"],
                     per_n_gram_text_explanation=(
-                        json.loads(data[f"{prefix}TEXT_NGRAMS"])
-                        if data[f"{prefix}TEXT_NGRAMS"] != "[]"
+                        json.loads(data[f"{i_prefix}TEXT_NGRAMS"])
+                        if data[f"{i_prefix}TEXT_NGRAMS"] != "[]"
                         else None
                     ),
                 )
