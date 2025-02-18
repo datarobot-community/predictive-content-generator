@@ -98,8 +98,9 @@ class GlobalGuardrailTemplateName(str, Enum):
     SENTIMENT_CLASSIFIER = "Sentiment Classifier"
     STAY_ON_TOPIC_FOR_INPUTS = "Stay on topic for inputs"
     STAY_ON_TOPIC_FOR_OUTPUTS = "Stay on topic for output"
-    TOKEN_COUNT = "Token Count"
     TOXICITY = "Toxicity"
+    RESPONSE_TOKENS = "Response Tokens"
+    PROMPT_TOKENS = "Prompt Tokens"
 
 
 # ('aws', 'gcp', 'azure', 'onPremise', 'datarobot', 'datarobotServerless', 'openShift', 'other', 'snowflake', 'sapAiCore')
@@ -145,6 +146,9 @@ class GlobalLLM:
     AZURE_OPENAI_GPT_4_O = LLMConfig(
         name="azure-openai-gpt-4-o", credential_type="azure"
     )
+    AZURE_OPENAI_GPT_4_O_MINI = LLMConfig(
+        name="azure-openai-gpt-4-o-mini", credential_type="azure"
+    )
     # AWS Models
     AMAZON_TITAN = LLMConfig(name="amazon-titan", credential_type="aws")
     ANTHROPIC_CLAUDE_2 = LLMConfig(name="anthropic-claude-2", credential_type="aws")
@@ -165,4 +169,4 @@ class GlobalLLM:
     GOOGLE_1_5_PRO = LLMConfig(name="google-gemini-1.5-pro", credential_type="google")
 
     # API Models
-    DEPLOYED_LLM = LLMConfig(name="deployed-llm", credential_type="api")
+    DEPLOYED_LLM = LLMConfig(name="custom-model", credential_type="api")

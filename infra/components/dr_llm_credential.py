@@ -163,6 +163,7 @@ def get_credentials(llm: LLMConfig, test_credentials: bool = True) -> DRCredenti
                         GlobalLLM.AZURE_OPENAI_GPT_4.name: "gpt-4",
                         GlobalLLM.AZURE_OPENAI_GPT_4_32K.name: "gpt-4-32k",
                         GlobalLLM.AZURE_OPENAI_GPT_4_O.name: "gpt-4o",
+                        GlobalLLM.AZURE_OPENAI_GPT_4_O_MINI.name: "gpt-4o-mini",
                         GlobalLLM.AZURE_OPENAI_GPT_4_TURBO.name: "gpt-4-turbo",
                     }
                     if (

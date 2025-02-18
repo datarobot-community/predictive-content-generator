@@ -411,18 +411,6 @@ class MetricsManager:
                 value, display = metric.calculate(**metric_inputs)
                 results[metric_id] = {"value": value, "display": display}
 
-        # Display warnings for missing inputs
-        if missing_inputs:
-            warning_message = "⚠️ Missing required inputs:\n"
-            for metric_id, missing in missing_inputs.items():
-                metric_name = self.metrics[metric_id].name
-                inputs_list = ", ".join(missing)
-                warning_message += f"\n- {metric_name}: {inputs_list}"
-            logger.warning(warning_message)
-
-            # Log details about provided inputs for debugging
-            logger.info("Provided inputs: " + ", ".join(f"{k}" for k in inputs.keys()))
-
         return results
 
     def submit_metrics(

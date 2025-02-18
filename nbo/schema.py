@@ -15,9 +15,13 @@
 from __future__ import annotations
 
 import json
+import sys
 from typing import Any, ClassVar, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, ValidationInfo, field_validator
+
+sys.path.append("..")
+from nbo.i18n import gettext
 
 association_id = "association_id"
 
@@ -85,12 +89,52 @@ class Generation(BaseModel):
     association_id: str
 
 
+# Dictionary to map quantitative strength symbols to descriptive text
+QUALITATIVE_STRENGTHS = {
+    "+++": {"label": gettext("is significantly increasing"), "color": "#ff0000"},
+    "++": {"label": gettext("is increasing"), "color": "#ff5252"},
+    "+": {"label": gettext("is slightly increasing"), "color": "#ff7b7b"},
+    "-": {"label": gettext("is slightly decreasing"), "color": "#c8deff"},
+    "--": {"label": gettext("is decreasing"), "color": "#afcdfb"},
+    "---": {"label": gettext("is significantly decreasing"), "color": "#91bafb"},
+}
+
+
 class Explanation(BaseModel):
     feature_name: str
     strength: float
     qualitative_strength: str
     feature_value: Any
     per_n_gram_text_explanation: Optional[list[dict[str, Any]]] = Field(default=None)
+
+    @field_validator("qualitative_strength", mode="before")
+    @classmethod
+    def convert_qualitative_strength(
+        cls, qualitative_strength: Any, info: ValidationInfo
+    ) -> str:
+        if (
+            isinstance(qualitative_strength, str)
+            and qualitative_strength in QUALITATIVE_STRENGTHS
+        ):
+            return qualitative_strength
+        else:
+            strength = info.data["strength"]
+            return cls.create_qualitative_strength(strength)
+
+    @staticmethod
+    def create_qualitative_strength(strength: float) -> str:
+        if strength > 0.5:
+            return "+++"
+        elif strength > 0.3:
+            return "++"
+        elif strength > 0:
+            return "+"
+        elif strength > -0.3:
+            return "-"
+        elif strength > -0.5:
+            return "--"
+        else:
+            return "---"
 
 
 class Prediction(BaseModel):

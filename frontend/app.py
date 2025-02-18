@@ -171,7 +171,7 @@ def main() -> None:
         )
 
     # Create our shared title container
-    title_container = st.container()
+    title_container = st.container(key="datarobot-logo")
 
     with title_container:
         (
@@ -180,11 +180,16 @@ def main() -> None:
         ) = title_container.columns([1, 2])
 
         theme = st_theme()
-        title_image = "./DataRobot_black.png"
-        if theme and theme.get("base") == "dark":
-            title_image = "./DataRobot_white.png"
 
-        col1.image(title_image, width=200)
+        # logo placeholder used for initial load
+        logo = '<svg width="133" height="20" xmlns="http://www.w3.org/2000/svg" id="datarobot-logo"></svg>'
+        if theme:
+            if theme.get("base") == "light":
+                logo = "./DataRobot_black.svg"
+            else:
+                logo = "./DataRobot_white.svg"
+
+        col1.image(logo, width=200)
 
         st.markdown(
             f"<h1 style='text-align: center;'>{app_settings.page_title}</h1>",

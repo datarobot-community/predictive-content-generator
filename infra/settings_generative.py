@@ -18,7 +18,7 @@ import datarobot as dr
 import pulumi_datarobot as datarobot
 from datarobotx.idp.custom_metrics import get_update_or_create_custom_metric
 
-from infra.common.globals import GlobalLLM, GlobalRuntimeEnvironment
+from infra.common.globals import GlobalLLM
 from infra.common.schema import (
     BaselineValues,
     CustomMetricArgs,
@@ -55,7 +55,6 @@ llm_blueprint_args = LLMBlueprintArgs(
 custom_model_args = CustomModelArgs(
     resource_name=f"Predictive Content Generator Generative Model [{project_name}]",
     name=f"Predictive Content Generator Generative Model [{project_name}]",
-    base_environment_id=GlobalRuntimeEnvironment.PYTHON_311_MODERATIONS.value.id,
     target_name=GenerativeDeploymentSettings().target_feature_name,
     target_type=dr.enums.TARGET_TYPE.TEXT_GENERATION,
 )

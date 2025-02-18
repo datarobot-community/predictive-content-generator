@@ -27,7 +27,6 @@ from pydantic import ValidationError
 
 sys.path.append("..")  # Adds the parent directory to the system path
 from nbo.custom_metrics import CUSTOM_METRICS, CustomMetric
-from nbo.i18n import gettext
 from nbo.predict import make_generative_deployment_predictions
 from nbo.resources import (
     CustomMetricIds,
@@ -35,6 +34,7 @@ from nbo.resources import (
     PredAIDeployment,
 )
 from nbo.schema import (
+    QUALITATIVE_STRENGTHS,
     AppDataScienceSettings,
     Explanation,
     Generation,
@@ -76,17 +76,6 @@ except (FileNotFoundError, ValidationError) as e:
     ) from e
 
 
-# Dictionary to map quantitative strength symbols to descriptive text
-QUALITATIVE_STRENGTHS = {
-    "+++": {"label": gettext("is significantly increasing"), "color": "#ff0000"},
-    "++": {"label": gettext("is increasing"), "color": "#ff5252"},
-    "+": {"label": gettext("is slightly increasing"), "color": "#ff7b7b"},
-    "-": {"label": gettext("is slightly decreasing"), "color": "#c8deff"},
-    "--": {"label": gettext("is decreasing"), "color": "#afcdfb"},
-    "---": {"label": gettext("is significantly decreasing"), "color": "#91bafb"},
-}
-
-
 def set_outcome_details(
     outcome_detail_list: List[OutcomeDetail],
 ) -> Dict[str, OutcomeDetail]:
@@ -96,21 +85,6 @@ def set_outcome_details(
         outcome_detail.prediction: outcome_detail
         for outcome_detail in outcome_detail_list
     }
-
-
-def create_qualitative_strength(strength: float) -> str:
-    if strength > 0.5:
-        return "+++"
-    elif strength > 0.3:
-        return "++"
-    elif strength > 0:
-        return "+"
-    elif strength > -0.3:
-        return "-"
-    elif strength > -0.5:
-        return "--"
-    else:
-        return "---"
 
 
 def get_important_text_features(
@@ -164,7 +138,7 @@ def color_texts(text: str, ngram_texts: Dict[str, float]) -> str:
     html_style = "<mark style='padding: 0 5px 0 5px; border-radius: 5px;background-color:{}'>{}</mark>"
     for word in text.replace(":", "").split(" "):
         if word in ngram_texts and ngram_texts[word] != 0:
-            qual_strength = create_qualitative_strength(ngram_texts[word])
+            qual_strength = Explanation.create_qualitative_strength(ngram_texts[word])
             color = QUALITATIVE_STRENGTHS[qual_strength]["color"]
             word = html_style.format(color, word)
         all_words.append(word)
@@ -202,7 +176,9 @@ def make_important_features_list(
             )
             if prediction_explanation.qualitative_strength not in QUALITATIVE_STRENGTHS:
                 prediction_explanation.qualitative_strength = (
-                    create_qualitative_strength(prediction_explanation.strength)
+                    Explanation.create_qualitative_strength(
+                        prediction_explanation.strength
+                    )
                 )
             explanation = (
                 f"-{feature} {QUALITATIVE_STRENGTHS[prediction_explanation.qualitative_strength]['label']} "
@@ -216,7 +192,9 @@ def make_important_features_list(
                 != prediction_explanation.qualitative_strength
             ):
                 prediction_explanation.qualitative_strength = (
-                    create_qualitative_strength(prediction_explanation.strength)
+                    Explanation.create_qualitative_strength(
+                        prediction_explanation.strength
+                    )
                 )
             # Build explanation string
             explanation = (
@@ -252,7 +230,9 @@ def create_prompt(
     rsp_list = []
     for pe in prediction_explanations[:number_of_explanations]:
         if pe.qualitative_strength not in QUALITATIVE_STRENGTHS:
-            pe.qualitative_strength = create_qualitative_strength(pe.strength)
+            pe.qualitative_strength = Explanation.create_qualitative_strength(
+                pe.strength
+            )
         feature = pe.feature_name.replace("_", " ")
         featureValue = (
             float(pe.feature_value)

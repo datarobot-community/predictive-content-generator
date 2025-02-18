@@ -142,4 +142,11 @@ button[kind='secondaryFormSubmit']:hover {
     width: calc(100% - 2rem);
 }
 
-.stAppDeployButton {display:none;}
+.stAppDeployButton {
+    display: none;
+}
+
+/* Remove rounded corners from DataRobot logo */
+.st-key-datarobot-logo img {
+    border-radius: 0;
+}

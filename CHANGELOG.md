@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [0.1.12] - 2025-02-18
+
+### Fixed
+- Shap deployments now properly supported
+- Remove hard-coded environment ID from LLM custom model
+
 ## [0.1.11] - 2025-02-10
 
 ### Fixed
