@@ -1,5 +1,5 @@
 pulumi>=3.133.0,<4
-pulumi-datarobot>=0.5.3,<0.6
+pulumi-datarobot>=0.8.14,<0.9
 
 datarobot>=3.5.2,<3.6
 datarobot-predict>=1.9.2,<1.10
