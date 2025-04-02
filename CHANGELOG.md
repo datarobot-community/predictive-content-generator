@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [v0.1.13-release.11.0] - 2025-04-02
+- Predictive Content Generator now uses a DataRobot LLM Blueprint
+- LLM use is now optional
+- Resource bundle config option for the custom model
+- Improved error handling for package installations
+
 ## [0.1.13] - 2025-03-06
 
 ### Fixed 

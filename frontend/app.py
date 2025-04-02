@@ -62,7 +62,7 @@ DATASET_ID = DatasetId().id
 
 @st.cache_data(show_spinner=False)
 def get_dataset() -> pd.DataFrame:
-    dataset = dr.Dataset.get(DATASET_ID)  # type: ignore[attr-defined]
+    dataset = dr.Dataset.get(DATASET_ID)
     df = dataset.get_as_dataframe()
     df[app_settings.record_identifier["column_name"]] = df[
         app_settings.record_identifier["column_name"]
@@ -269,7 +269,7 @@ def main() -> None:
                 customer_prediction_probability = gettext(
                     "**Predicted Probability:** {predicted_probabilities}"
                 ).format(
-                    predicted_probabilities=f"{max([v for k, v in prediction.class_probabilities.items()]) :.1%}"
+                    predicted_probabilities=f"{max([v for k, v in prediction.class_probabilities.items()]):.1%}"
                 )
                 # Store the prediction information in the session state
                 st.session_state.predicted_label = customer_prediction_label
@@ -282,7 +282,7 @@ def main() -> None:
                 with prediction_response_container:
                     # Add a bit of space for better layout
                     st.write("\n\n")
-                    deployment = dr.Deployment.get(pred_ai_deployment_id)  # type: ignore[attr-defined]
+                    deployment = dr.Deployment.get(pred_ai_deployment_id)
                     project_id = str(deployment.model.get("project_id"))  # type: ignore[union-attr]
 
                     # Informational expander

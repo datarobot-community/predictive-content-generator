@@ -15,9 +15,14 @@
 import os
 from pathlib import Path
 
+from infra.common.globals import (
+    GlobalRuntimeEnvironment,
+)
 from infra.common.stack import get_stack
 
 project_name = get_stack()
+
+runtime_environment_moderations = GlobalRuntimeEnvironment.PYTHON_312_MODERATIONS.value
 
 default_prediction_server_id = os.getenv("DATAROBOT_PREDICTION_ENVIRONMENT_ID", None)
 prediction_environment_resource_name = (

@@ -27,6 +27,7 @@ from .settings_main import PROJECT_ROOT, model_training_output_ds_settings, proj
 
 application_path = PROJECT_ROOT / "frontend"
 
+
 app_source_args = ApplicationSourceArgs(
     resource_name=f"Predictive Content Generator App Source [{project_name}]",
     base_environment_id=GlobalRuntimeEnvironment.PYTHON_312_APPLICATION_BASE.value.id,

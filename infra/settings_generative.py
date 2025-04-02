@@ -15,10 +15,14 @@
 import json
 
 import datarobot as dr
+import pulumi
 import pulumi_datarobot as datarobot
 from datarobotx.idp.custom_metrics import get_update_or_create_custom_metric
 
-from infra.common.globals import GlobalLLM
+from infra.common.globals import (
+    GlobalCustomModelResourceBundles,
+    GlobalLLM,
+)
 from infra.common.schema import (
     BaselineValues,
     CustomMetricArgs,
@@ -34,9 +38,10 @@ from nbo.schema import GenerativeDeploymentSettings, association_id
 from .settings_main import (
     default_prediction_server_id,
     project_name,
+    runtime_environment_moderations,
 )
 
-LLM = GlobalLLM.AZURE_OPENAI_GPT_4_O
+LLM = GlobalLLM.AZURE_OPENAI_GPT_4_O_MINI
 
 playground_args = PlaygroundArgs(
     resource_name=f"Predictive Content Generator Playground [{project_name}]",
@@ -57,6 +62,9 @@ custom_model_args = CustomModelArgs(
     name=f"Predictive Content Generator Generative Model [{project_name}]",
     target_name=GenerativeDeploymentSettings().target_feature_name,
     target_type=dr.enums.TARGET_TYPE.TEXT_GENERATION,
+    resource_bundle_id=GlobalCustomModelResourceBundles.CPU_M.value.id,
+    base_environment_id=runtime_environment_moderations.id,
+    opts=pulumi.ResourceOptions(delete_before_replace=True),
 )
 
 

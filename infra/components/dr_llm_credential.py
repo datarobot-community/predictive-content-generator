@@ -31,12 +31,12 @@ from nbo.credentials import (
 
 from ..settings_main import project_name
 
-# from .aws_credential import AWSCredential
-
 
 def get_credential_runtime_parameter_values(
-    credentials: DRCredentials,
+    credentials: DRCredentials | None,
 ) -> list[datarobot.CustomModelRuntimeParameterValueArgs]:
+    if credentials is None:
+        return []
     if isinstance(credentials, AzureOpenAICredentials):
         rtps: list[dict[str, Any]] = [
             {
@@ -148,9 +148,13 @@ def get_credential_runtime_parameter_values(
 
 
 # Initialize the LLM client based on the selected LLM and its credential type
-def get_credentials(llm: LLMConfig, test_credentials: bool = True) -> DRCredentials:
+def get_credentials(
+    llm: LLMConfig, test_credentials: bool = True
+) -> DRCredentials | None:
     try:
         credentials: DRCredentials
+        if llm == GlobalLLM.DEPLOYED_LLM:
+            return None
         if llm.credential_type == "azure":
             credentials = AzureOpenAICredentials()
             if test_credentials:

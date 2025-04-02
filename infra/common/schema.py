@@ -95,6 +95,7 @@ class CustomModelArgs(BaseModel):
     negative_class_label: str | None = None
     positive_class_label: str | None = None
     folder_path: str | None = None
+    resource_bundle_id: str | None = None
 
 
 class RegisteredModelArgs(BaseModel):
@@ -152,6 +153,11 @@ class PlaygroundArgs(BaseModel):
     name: str | None = None
 
 
+class LLMSettings(BaseModel):
+    max_completion_length: int = Field(le=512)
+    system_prompt: str
+
+
 class VectorDatabaseSettings(BaseModel):
     max_documents_retrieved_per_prompt: Optional[int] = None
     max_tokens: Optional[int] = None
@@ -175,6 +181,7 @@ class ChunkingParameters(BaseModel):
     chunking_method: VectorDatabaseChunkingMethod | None = None
     chunk_size: int | None = Field(ge=128, le=512)
     chunk_overlap_percentage: int | None = None
+    is_separator_regex: bool | None = None
     separators: list[str] | None = None
 
 

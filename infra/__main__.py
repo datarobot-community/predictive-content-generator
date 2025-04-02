@@ -12,8 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import os
 import pathlib
 import sys
+import textwrap
 
 import datarobot as dr
 import pulumi
@@ -29,13 +31,16 @@ from infra import (
     settings_predictive,
 )
 from infra.common.feature_flags import check_feature_flags
+from infra.common.globals import GlobalLLM
 from infra.common.papermill import run_notebook
 from infra.components.custom_model_deployment import CustomModelDeployment
 from infra.components.dr_llm_credential import (
     get_credential_runtime_parameter_values,
     get_credentials,
 )
-from infra.components.rag_custom_model import RAGCustomModel
+from infra.components.proxy_llm_blueprint import ProxyLLMBlueprint
+from infra.settings_proxy_llm import CHAT_MODEL_NAME
+from nbo.credentials import DRCredentials
 from nbo.i18n import LocaleSettings
 from nbo.resources import (
     app_env_name,
@@ -46,6 +51,17 @@ from nbo.resources import (
 )
 from nbo.schema import AppInfraSettings
 from nbo.urls import get_deployment_url
+
+TEXTGEN_DEPLOYMENT_ID = os.environ.get("TEXTGEN_DEPLOYMENT_ID")
+TEXTGEN_REGISTERED_MODEL_ID = os.environ.get("TEXTGEN_REGISTERED_MODEL_ID")
+
+if settings_generative.LLM == GlobalLLM.DEPLOYED_LLM:
+    pulumi.info(f"{TEXTGEN_DEPLOYMENT_ID=}")
+    pulumi.info(f"{TEXTGEN_REGISTERED_MODEL_ID=}")
+    if (TEXTGEN_DEPLOYMENT_ID is None) == (TEXTGEN_REGISTERED_MODEL_ID is None):  # XOR
+        raise ValueError(
+            "Either TEXTGEN_DEPLOYMENT_ID or TEXTGEN_REGISTERED_MODEL_ID must be set when using a deployed LLM. Plese check your .env file"
+        )
 
 LocaleSettings().setup_locale()
 
@@ -93,29 +109,85 @@ pred_ai_deployment = datarobot.Deployment(
     **settings_predictive.deployment_args.model_dump(exclude_none=True),
 )
 
-credentials = get_credentials(settings_generative.LLM)
+credentials: DRCredentials | None  # type: ignore[syntax]
+try:
+    credentials = get_credentials(settings_generative.LLM)
+except ValueError:
+    raise
+except TypeError:
+    pulumi.warn(
+        textwrap.dedent("""\
+        Failed to find credentials for LLM. Continuing deployment without LLM support.
 
-credential_runtime_parameter_values = get_credential_runtime_parameter_values(
+        If you intended to provide credentials, please consult the Readme and follow the instructions.
+        """)
+    )
+    credentials = None
+
+credentials_runtime_parameters_values = get_credential_runtime_parameter_values(
     credentials=credentials
 )
 
+playground = datarobot.Playground(
+    use_case_id=use_case.id,
+    **settings_generative.playground_args.model_dump(),
+)
 
-generative_custom_model = RAGCustomModel(
-    resource_name=f"Predictive Content Generator Prep [{settings_main.project_name}]",
-    custom_model_args=settings_generative.custom_model_args,
-    llm_blueprint_args=settings_generative.llm_blueprint_args,
-    playground_args=settings_generative.playground_args,
-    use_case=use_case,
-    runtime_parameter_values=credential_runtime_parameter_values,
+if settings_generative.LLM == GlobalLLM.DEPLOYED_LLM:
+    if TEXTGEN_REGISTERED_MODEL_ID is not None:
+        proxy_llm_registered_model = datarobot.RegisteredModel.get(
+            resource_name="Existing TextGen Registered Model",
+            id=TEXTGEN_REGISTERED_MODEL_ID,
+        )
+
+        proxy_llm_deployment = datarobot.Deployment(
+            resource_name=f"Predictive Content Generator LLM Deployment [{settings_main.project_name}]",
+            registered_model_version_id=proxy_llm_registered_model.version_id,
+            prediction_environment_id=prediction_environment.id,
+            label=f"Predictive Content Generator LLM Deployment [{settings_main.project_name}]",
+            use_case_ids=[use_case.id],
+            opts=pulumi.ResourceOptions(
+                replace_on_changes=["registered_model_version_id"]
+            ),
+        )
+    elif TEXTGEN_DEPLOYMENT_ID is not None:
+        proxy_llm_deployment = datarobot.Deployment.get(
+            resource_name="Existing LLM Deployment", id=TEXTGEN_DEPLOYMENT_ID
+        )
+    else:
+        raise ValueError(
+            "Either TEXTGEN_REGISTERED_MODEL_ID or TEXTGEN_DEPLOYMENT_ID have to be set in `.env`"
+        )
+
+    llm_blueprint = ProxyLLMBlueprint(
+        use_case_id=use_case.id,
+        playground_id=playground.id,
+        proxy_llm_deployment_id=proxy_llm_deployment.id,
+        chat_model_name=CHAT_MODEL_NAME,
+        **settings_generative.llm_blueprint_args.model_dump(mode="python"),
+    )
+elif settings_generative.LLM != GlobalLLM.DEPLOYED_LLM:
+    llm_blueprint = datarobot.LlmBlueprint(  # type: ignore[assignment]
+        playground_id=playground.id,
+        **settings_generative.llm_blueprint_args.model_dump(),
+    )
+
+generative_custom_model = datarobot.CustomModel(
+    **settings_generative.custom_model_args.model_dump(exclude_none=True),
+    use_case_ids=[use_case.id],
+    source_llm_blueprint_id=llm_blueprint.id,
+    runtime_parameter_values=[]
+    if settings_generative.LLM.name == GlobalLLM.DEPLOYED_LLM.name
+    else credentials_runtime_parameters_values,
 )
 
 generative_deployment = CustomModelDeployment(
-    resource_name=f"Generative Custom Model Deployment [{settings_main.project_name}]",
+    resource_name=f"Predictive Content Generator LLM Deployment [{settings_main.project_name}]",
     custom_model_version_id=generative_custom_model.version_id,
     registered_model_args=settings_generative.registered_model_args,
     prediction_environment=prediction_environment,
     deployment_args=settings_generative.deployment_args,
-    use_case_ids=[model_training_output.use_case_id],
+    use_case_ids=[use_case.id],  # type: ignore[list-item]
 )
 
 
