@@ -77,13 +77,11 @@ docstring-code-format = false
 # enabled.
 docstring-code-line-length = "dynamic"
 
-
 [tool.mypy]
 untyped_calls_exclude = "google"
 
 plugins = "pydantic.mypy"
 strict = true
-ignore_missing_imports = true
 exclude = """(?x)(
     output/ # exclude files starting with "output"
     | deployment_.*/
@@ -94,7 +92,51 @@ exclude = """(?x)(
     | tests/
     | e2e/
   )"""
-python_version = "3.9"
+python_version = "3.10"
+check_untyped_defs = true
+disallow_any_generics = true
+disallow_incomplete_defs = true
+disallow_subclassing_any = true
+disallow_untyped_calls = true
+disallow_untyped_decorators = true
+disallow_untyped_defs = true
+enable_error_code = "ignore-without-code"
+implicit_reexport = true
+ignore_missing_imports = false
+no_implicit_optional = true
+show_column_numbers = true
+warn_redundant_casts = true
+warn_return_any = true
+warn_unused_configs = true
+warn_unused_ignores = true
+
+[[tool.mypy.overrides]]
+module = "datarobot.*"
+implicit_reexport = true
+
+[[tool.mypy.overrides]]
+module = "datarobot_predict.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "datarobotx.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]] # papermill is untyped
+module = "papermill.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]] # textblob is untyped
+module = "textblob.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]] # sklearn is untyped
+module = "sklearn.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]] # streamlit_theme is untyped
+module = "streamlit_theme.*"
+ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 norecursedirs = "tests/e2e"

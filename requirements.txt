@@ -1,5 +1,6 @@
-pulumi>=3.133.0,<4
-pulumi-datarobot>=0.8.14,<0.9
+pulumi==3.153.0
+pulumi-datarobot>=0.8.15,<0.9
+datarobot-pulumi-utils>=0.0.2.post2,<0.1
 
 datarobot>=3.5.2,<3.6
 datarobot-predict>=1.9.2,<1.10
@@ -13,6 +14,7 @@ openai>=1.31.2,<2
 httpx<0.28.0
 # Constrained by datarobot-drum
 pandas>=2.0.3,<3
+pandas-stubs>=2.2.3.241126,<3.0
 
 streamlit>=1.39.0,<2
 st-theme>=1.2.3,<2
@@ -31,5 +33,9 @@ ruff==0.6.9
 
 babel>=2.16,<3
 
+PyYAML
+types-PyYAML
+
 google-auth
 boto3
+boto3-stubs

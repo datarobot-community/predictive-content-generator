@@ -20,8 +20,9 @@ from typing import Any
 import pulumi
 import pulumi_datarobot as datarobot
 import pydantic
+from datarobot_pulumi_utils.schema.llms import LLMConfig, LLMs
 
-from infra.common.globals import GlobalLLM, LLMConfig
+from infra.settings_main import project_name
 from nbo.credentials import (
     AWSBedrockCredentials,
     AzureOpenAICredentials,
@@ -29,14 +30,12 @@ from nbo.credentials import (
     GoogleCredentials,
 )
 
-from ..settings_main import project_name
-
-# from .aws_credential import AWSCredential
-
 
 def get_credential_runtime_parameter_values(
-    credentials: DRCredentials,
+    credentials: DRCredentials | None,
 ) -> list[datarobot.CustomModelRuntimeParameterValueArgs]:
+    if credentials is None:
+        return []
     if isinstance(credentials, AzureOpenAICredentials):
         rtps: list[dict[str, Any]] = [
             {
@@ -148,9 +147,13 @@ def get_credential_runtime_parameter_values(
 
 
 # Initialize the LLM client based on the selected LLM and its credential type
-def get_credentials(llm: LLMConfig, test_credentials: bool = True) -> DRCredentials:
+def get_credentials(
+    llm: LLMConfig, test_credentials: bool = True
+) -> DRCredentials | None:
     try:
         credentials: DRCredentials
+        if llm == LLMs.DEPLOYED_LLM:
+            return None
         if llm.credential_type == "azure":
             credentials = AzureOpenAICredentials()
             if test_credentials:
@@ -158,13 +161,13 @@ def get_credentials(llm: LLMConfig, test_credentials: bool = True) -> DRCredenti
                     import openai
 
                     lookup = {
-                        GlobalLLM.AZURE_OPENAI_GPT_3_5_TURBO.name: "gpt-35-turbo",
-                        GlobalLLM.AZURE_OPENAI_GPT_3_5_TURBO_16K.name: "gpt-35-turbo-16k",
-                        GlobalLLM.AZURE_OPENAI_GPT_4.name: "gpt-4",
-                        GlobalLLM.AZURE_OPENAI_GPT_4_32K.name: "gpt-4-32k",
-                        GlobalLLM.AZURE_OPENAI_GPT_4_O.name: "gpt-4o",
-                        GlobalLLM.AZURE_OPENAI_GPT_4_O_MINI.name: "gpt-4o-mini",
-                        GlobalLLM.AZURE_OPENAI_GPT_4_TURBO.name: "gpt-4-turbo",
+                        LLMs.AZURE_OPENAI_GPT_3_5_TURBO.name: "gpt-35-turbo",
+                        LLMs.AZURE_OPENAI_GPT_3_5_TURBO_16K.name: "gpt-35-turbo-16k",
+                        LLMs.AZURE_OPENAI_GPT_4.name: "gpt-4",
+                        LLMs.AZURE_OPENAI_GPT_4_32K.name: "gpt-4-32k",
+                        LLMs.AZURE_OPENAI_GPT_4_O.name: "gpt-4o",
+                        LLMs.AZURE_OPENAI_GPT_4_O_MINI.name: "gpt-4o-mini",
+                        LLMs.AZURE_OPENAI_GPT_4_TURBO.name: "gpt-4-turbo",
                     }
                     if (
                         credentials.azure_deployment is not None
@@ -205,11 +208,11 @@ def get_credentials(llm: LLMConfig, test_credentials: bool = True) -> DRCredenti
             credentials = AWSBedrockCredentials()
             if test_credentials:
                 lookup = {
-                    GlobalLLM.ANTHROPIC_CLAUDE_3_HAIKU.name: "anthropic.claude-3-haiku-20240307-v1:0",
-                    GlobalLLM.ANTHROPIC_CLAUDE_3_SONNET.name: "anthropic.claude-3-sonnet-20240229-v1:0",
-                    GlobalLLM.ANTHROPIC_CLAUDE_3_OPUS.name: "anthropic.claude-3-opus-20240229-v1:0",
-                    GlobalLLM.AMAZON_TITAN.name: "amazon.titan-text-express-v1",
-                    GlobalLLM.ANTHROPIC_CLAUDE_2.name: "anthropic.claude-v2:1",
+                    LLMs.ANTHROPIC_CLAUDE_3_HAIKU.name: "anthropic.claude-3-haiku-20240307-v1:0",
+                    LLMs.ANTHROPIC_CLAUDE_3_SONNET.name: "anthropic.claude-3-sonnet-20240229-v1:0",
+                    LLMs.ANTHROPIC_CLAUDE_3_OPUS.name: "anthropic.claude-3-opus-20240229-v1:0",
+                    LLMs.AMAZON_TITAN.name: "amazon.titan-text-express-v1",
+                    LLMs.ANTHROPIC_CLAUDE_2.name: "anthropic.claude-v2:1",
                 }
                 if credentials.region_name is None:
                     pulumi.warn("AWS region not set. Using default 'us-west-1'.")
@@ -254,9 +257,9 @@ def get_credentials(llm: LLMConfig, test_credentials: bool = True) -> DRCredenti
             credentials = GoogleCredentials()
             if test_credentials:
                 lookup = {
-                    GlobalLLM.GOOGLE_1_5_PRO.name: "gemini-1.5-pro-001",
-                    GlobalLLM.GOOGLE_BISON.name: "chat-bison@002",
-                    GlobalLLM.GOOGLE_GEMINI_1_5_FLASH.name: "gemini-1.5-flash-001",
+                    LLMs.GOOGLE_1_5_PRO.name: "gemini-1.5-pro-001",
+                    LLMs.GOOGLE_BISON.name: "chat-bison@002",
+                    LLMs.GOOGLE_GEMINI_1_5_FLASH.name: "gemini-1.5-flash-001",
                 }
                 try:
                     import openai

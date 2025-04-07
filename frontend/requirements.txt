@@ -1,6 +1,7 @@
 datarobot>=3.5.2,<3.6
 datarobot-predict>=1.9.2,<1.10
 pandas>=2,<3  # constrained by DRUM
+pandas-stubs>=2.2.3.241126,<3.0
 
 pydantic>=2.9.2,<2.10
 pydantic-settings>=2.5.2,<2.6

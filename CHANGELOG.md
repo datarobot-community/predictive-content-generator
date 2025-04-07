@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [0.1.14] - 2025-04-07
+
+### Added 
+
+- Predictive Content Generator now uses a DataRobot LLM Blueprint
+- LLM use is now optional
+- Resource bundle config option for the custom model
+- Improved error handling for package installations
+
+### Changed
+
+- Installed [the datarobot-pulumi-utils library](https://github.com/datarobot-oss/datarobot-pulumi-utils) to incorporate majority of reused logic in the `infra.*` subpackages.
+
 ## [0.1.13] - 2025-03-06
 
 ### Fixed 

@@ -87,7 +87,8 @@ def get_activate_command():
                 "&&",
                 "conda",
                 "activate",
-                f"{str(venv_dir)}" "&&",
+                f"{str(venv_dir)}",
+                "&&",
             ]
 
     else:
@@ -132,14 +133,29 @@ def run_subprocess_in_venv(command: list[str]):
     if is_windows():
         full_cmd = get_activate_command() + command
         # shell = True, otherwise CMD complains it can't find the file
-        subprocess.run(" ".join(full_cmd), check=True, cwd=work_dir, shell=True)
+        result = subprocess.run(
+            " ".join(full_cmd),
+            check=True,
+            cwd=work_dir,
+            shell=True,
+            capture_output=True,
+            text=True,
+        )
     else:
         full_cmd = ["bash", "-c", " ".join(get_activate_command() + command)]
         print(full_cmd)
-        subprocess.run(
+        result = subprocess.run(
             full_cmd,
             check=True,
             cwd=work_dir,
+            capture_output=True,
+            text=True,
+        )
+
+    if result.returncode != 0:
+        print(f"Error running command: {result.stderr}")
+        raise subprocess.CalledProcessError(
+            result.returncode, result.args, result.stdout, result.stderr
         )
 
 
@@ -238,7 +254,7 @@ def run_pulumi_command(command: list, work_dir: Path, env_vars: dict):
     cmd_str = " ".join(command)
     try:
         if is_windows():
-            os.system(f'{" ".join(get_activate_command())}{cmd_str}')
+            os.system(f"{' '.join(get_activate_command())}{cmd_str}")
         else:
             os.system(f"bash -c '{' '.join(get_activate_command())}{cmd_str}'")
     except Exception as e:

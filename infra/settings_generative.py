@@ -11,32 +11,31 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 import json
 
 import datarobot as dr
+import pulumi
 import pulumi_datarobot as datarobot
-from datarobotx.idp.custom_metrics import get_update_or_create_custom_metric
-
-from infra.common.globals import GlobalLLM
-from infra.common.schema import (
-    BaselineValues,
-    CustomMetricArgs,
+from datarobot_pulumi_utils.schema.custom_models import (
     CustomModelArgs,
+    CustomModelResourceBundles,
     DeploymentArgs,
-    LLMBlueprintArgs,
-    PlaygroundArgs,
     RegisteredModelArgs,
 )
+from datarobot_pulumi_utils.schema.llms import LLMBlueprintArgs, LLMs, PlaygroundArgs
+from datarobot_pulumi_utils.schema.predictions import BaselineValues, CustomMetricArgs
+from datarobotx.idp.custom_metrics import get_update_or_create_custom_metric
+
 from nbo.custom_metrics import CustomMetric, metrics_manager
 from nbo.schema import GenerativeDeploymentSettings, association_id
 
 from .settings_main import (
     default_prediction_server_id,
     project_name,
+    runtime_environment_moderations,
 )
 
-LLM = GlobalLLM.AZURE_OPENAI_GPT_4_O
+LLM = LLMs.AZURE_OPENAI_GPT_4_O_MINI
 
 playground_args = PlaygroundArgs(
     resource_name=f"Predictive Content Generator Playground [{project_name}]",
@@ -57,6 +56,9 @@ custom_model_args = CustomModelArgs(
     name=f"Predictive Content Generator Generative Model [{project_name}]",
     target_name=GenerativeDeploymentSettings().target_feature_name,
     target_type=dr.enums.TARGET_TYPE.TEXT_GENERATION,
+    resource_bundle_id=CustomModelResourceBundles.CPU_M.value.id,
+    base_environment_id=runtime_environment_moderations.id,
+    opts=pulumi.ResourceOptions(delete_before_replace=True),
 )
 
 
@@ -111,4 +113,5 @@ def set_custom_metrics(deployment_id: str) -> str:
             deployment_id=deployment_id,
             **custom_metrics[metric].model_dump(mode="json", exclude_none=True),
         )
+
     return json.dumps(custom_metric_ids)

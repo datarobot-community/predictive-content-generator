@@ -102,14 +102,23 @@ Each template provides an end-to-end AI architecture, from raw inputs to deploye
 
 ### Change the LLM
 
-1. Modify the `LLM` setting in `infra/settings_generative.py` by changing `LLM=GlobalLLM.AZURE_OPENAI_GPT_4_O` to any other LLM from the `GlobalLLM` object.
-2. Provide the required credentials in `.env` dependent on your choice.
-3. Run `pulumi up` to update your stack (Or rerun your quickstart).
+1. Modify the `LLM` setting in `infra/settings_generative.py` by changing `LLM=GlobalLLM.AZURE_OPENAI_GPT_4_O_MINI` to any other LLM from the `GlobalLLM` object. 
+     - Trial users: Please set `LLM=GlobalLLM.AZURE_OPENAI_GPT_4_O_MINI` since GPT-4o is not supported in the trial. Use the `OPENAI_API_DEPLOYMENT_ID` in `.env` to override which model is used in your azure organisation. You'll still see GPT 4o-mini in the playground, but the deployed app will use the provided azure deployment.  
+2. To use an existing TextGen model or deployment:
+      - In `infra/settings_generative.py`: Set `LLM=GlobalLLM.DEPLOYED_LLM`.
+      - In `.env`: Set either the `TEXTGEN_REGISTERED_MODEL_ID` or the `TEXTGEN_DEPLOYMENT_ID`
+      - In `.env`: Set `CHAT_MODEL_NAME` to the model name expected by the deployment (e.g. "claude-3-7-sonnet-20250219" for an anthropic deployment, "datarobot-deployed-llm" for NIM models ) 
+3. In `.env`: If not using an existing TextGen model or deployment, provide the required credentials dependent on your choice.
+4. Run `pulumi up` to update your stack (Or rerun your quickstart).
       ```bash
       source set_env.sh  # On windows use `set_env.bat`
       pulumi up
       ```
-      
+
+
+> **⚠️ Availability information:**  
+> Using a NIM model requires custom model GPU inference, a premium feature. You will experience errors by using this type of model without the feature enabled. Contact your DataRobot representative or administrator for information on enabling this feature.
+
 ### Change the data and model training method
 
 1. Edit the notebook `notebooks/train_model_nbo.ipynb` which includes steps to import and prepare training data and configure settings to train models. The last cell of each notebook is required for the rest of the pipeline.

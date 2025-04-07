@@ -11,25 +11,25 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 import textwrap
 from typing import List, Sequence, Tuple
 
 import datarobot as dr
 import pulumi
 import pulumi_datarobot as datarobot
+from datarobot_pulumi_utils.schema.apps import ApplicationSourceArgs
+from datarobot_pulumi_utils.schema.exec_envs import RuntimeEnvironments
 
-from infra.common.globals import GlobalRuntimeEnvironment
-from infra.common.schema import ApplicationSourceArgs
 from nbo.i18n import LanguageCode, LocaleSettings
 
 from .settings_main import PROJECT_ROOT, model_training_output_ds_settings, project_name
 
 application_path = PROJECT_ROOT / "frontend"
 
+
 app_source_args = ApplicationSourceArgs(
     resource_name=f"Predictive Content Generator App Source [{project_name}]",
-    base_environment_id=GlobalRuntimeEnvironment.PYTHON_312_APPLICATION_BASE.value.id,
+    base_environment_id=RuntimeEnvironments.PYTHON_312_APPLICATION_BASE.value.id,
 ).model_dump(mode="json", exclude_none=True)
 
 
