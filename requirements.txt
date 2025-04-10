@@ -1,6 +1,6 @@
 pulumi==3.153.0
 pulumi-datarobot>=0.8.15,<0.9
-datarobot-pulumi-utils>=0.0.2.post2,<0.1
+datarobot-pulumi-utils>=0.0.2.post8,<0.1
 
 datarobot>=3.5.2,<3.6
 datarobot-predict>=1.9.2,<1.10

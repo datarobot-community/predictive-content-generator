@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [0.1.15] - 2025-04-10
+
+### Changed
+
+- Changed the LLMSettings schema for LLM proxy settings instead of Pulumi class
+
 ## [0.1.14] - 2025-04-07
 
 ### Added 

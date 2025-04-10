@@ -22,7 +22,12 @@ from datarobot_pulumi_utils.schema.custom_models import (
     DeploymentArgs,
     RegisteredModelArgs,
 )
-from datarobot_pulumi_utils.schema.llms import LLMBlueprintArgs, LLMs, PlaygroundArgs
+from datarobot_pulumi_utils.schema.llms import (
+    LLMBlueprintArgs,
+    LLMs,
+    LLMSettings,
+    PlaygroundArgs,
+)
 from datarobot_pulumi_utils.schema.predictions import BaselineValues, CustomMetricArgs
 from datarobotx.idp.custom_metrics import get_update_or_create_custom_metric
 
@@ -45,7 +50,7 @@ playground_args = PlaygroundArgs(
 llm_blueprint_args = LLMBlueprintArgs(
     resource_name=f"Predictive Content Generator LLM Blueprint [{project_name}]",
     llm_id=LLM.name,
-    llm_settings=datarobot.LlmBlueprintLlmSettingsArgs(
+    llm_settings=LLMSettings(
         max_completion_length=512,
         temperature=0.5,
     ),
