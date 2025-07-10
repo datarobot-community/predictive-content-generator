@@ -45,7 +45,7 @@ from nbo.resources import (
     pred_ai_deployment_env_name,
 )
 from nbo.schema import AppInfraSettings
-from nbo.urls import get_deployment_url
+from nbo.urls import get_deployment_url_from_env
 from utils.credentials import (
     get_credential_runtime_parameter_values,
     get_credentials,
@@ -251,11 +251,11 @@ pulumi.export(app_env_name, app.id)
 
 pulumi.export(
     settings_generative.deployment_args.resource_name,
-    generative_deployment.id.apply(get_deployment_url),
+    generative_deployment.id.apply(get_deployment_url_from_env),
 )
 pulumi.export(
     settings_predictive.deployment_args.resource_name,
-    pred_ai_deployment.id.apply(get_deployment_url),
+    pred_ai_deployment.id.apply(get_deployment_url_from_env),
 )
 pulumi.export(
     settings_app_infra.app_resource_name,

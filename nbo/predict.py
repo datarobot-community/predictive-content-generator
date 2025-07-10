@@ -15,8 +15,9 @@
 from __future__ import annotations
 
 import logging
+import uuid
 from dataclasses import dataclass
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, cast
 
 import datarobot as dr
 import pandas as pd
@@ -25,6 +26,7 @@ from datarobot_predict.deployment import (
     PredictionResult,
 )
 from openai import OpenAI
+from openai.types.chat.chat_completion import ChatCompletion
 from pydantic import ValidationError
 
 from nbo.resources import GenerativeDeployment, PredAIDeployment
@@ -101,6 +103,36 @@ def make_pred_ai_deployment_predictions(
     ]
 
 
+def extract_association_id_from_completion(response: ChatCompletion) -> str:
+    """
+    Extract the returned DataRobot association ID from the ChatCompletion response.
+    If all attempts fail, generate a new association ID.
+    """
+    model_extra = response.model_extra
+    if model_extra is None:
+        model_extra = {}
+
+    # Check for direct association ID first
+    # If the generative deployment execution environment includes datarobot-drum>=1.16.16,
+    # there should be a datarobot_association_id returned.
+    returned_association_id = model_extra.get("datarobot_association_id")
+    if returned_association_id is not None:
+        return cast(str, returned_association_id)
+
+    # Check moderations for association ID
+    # If the generative deployment is running with datarobot-drum<1.16.16,
+    # the association ID is only returned when moderations are enabled.
+    datarobot_moderations = model_extra.get("datarobot_moderations", {})
+    returned_association_id = datarobot_moderations.get("association_id")
+    if returned_association_id is not None:
+        return cast(str, returned_association_id)
+
+    # Generate new association ID as fallback
+    # In this case we have no choice but to generate a new association ID,
+    # as we have exhausted our methods for extracting it from the output.
+    return str(uuid.uuid4())
+
+
 def make_generative_deployment_predictions(
     requests: list[LLMRequest],
 ) -> list[Generation]:
@@ -122,11 +154,13 @@ def make_generative_deployment_predictions(
                 {"role": "user", "content": llm_request.prompt},
             ],
         )
+        association_id = extract_association_id_from_completion(response)
         generation = Generation(
             content=response.choices[0].message.content,
             prompt_used=llm_request.prompt,
-            association_id=llm_request.association_id,
+            association_id=association_id,
         )
+
         result.append(generation)
 
     return result

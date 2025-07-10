@@ -12,11 +12,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 import os
 from urllib.parse import urlsplit
 
+from streamlit_javascript import st_javascript  # type: ignore[import-untyped]
 
-def get_deployment_url(deployment_id: str) -> str:
+
+def get_base_url() -> str:
+    base_url = "/"
+    try:
+        base_url = st_javascript("window.location.origin + '/'")
+        if not isinstance(base_url, str):  # base_url == 0 while page is loading
+            base_url = "/"
+    except Exception:
+        pass
+    return base_url
+
+
+def get_deployment_url_from_env(deployment_id: str) -> str:
     """Translate deployment ID to GUI URL.
 
     Parameters
@@ -30,6 +44,20 @@ def get_deployment_url(deployment_id: str) -> str:
     return f"{parsed_dr_url.scheme}://{parsed_dr_url.netloc}/console-nextgen/deployments/{deployment_id}/"
 
 
+def get_deployment_url(deployment_id: str) -> str:
+    """Translate deployment ID to GUI URL.
+
+    Parameters
+    ----------
+    deployment_id : str
+        DataRobot deployment id.
+    endpoint: st
+        DataRobot public API endpoint e.g. envir
+    """
+    base_url = get_base_url()
+    return f"{base_url}console-nextgen/deployments/{deployment_id}/"
+
+
 def get_project_url(project_id: str) -> str:
     """Translate project ID to GUI URL.
 
@@ -40,7 +68,5 @@ def get_project_url(project_id: str) -> str:
     endpoint: str
         DataRobot public API endpoint e.g. envir
     """
-    parsed_dr_url = urlsplit(os.environ["DATAROBOT_ENDPOINT"])
-    return (
-        f"{parsed_dr_url.scheme}://{parsed_dr_url.netloc}/projects/{project_id}/models"
-    )
+    base_url = get_base_url()
+    return f"{base_url}projects/{project_id}/models"

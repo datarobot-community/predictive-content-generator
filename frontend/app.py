@@ -213,7 +213,7 @@ def main() -> None:
         record_display_name = app_settings.record_identifier["display_name"]
 
         # Extract unique customer names from the dataframe
-        customers_list: list[str] = df[record_id].unique().tolist()  # type: ignore[assignment]
+        customers_list: list[str] = df[record_id].unique().tolist()
 
         # Customer selection form and dropdown
         with customer_selection_container:
@@ -287,7 +287,7 @@ def main() -> None:
 
                     # Informational expander
                     prediction_info_expander = st.expander(
-                        gettext("Drafted an email for {selected_record}!").format(
+                        gettext("Computed prediction for {selected_record}!").format(
                             selected_record=selected_record,
                         ),
                         expanded=False,

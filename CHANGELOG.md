@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [0.2.0] - 2025-07-10
+
+### Fixed
+
+- Fixed project and deployment links for on-premises installations
+- Fixed association ID logic for chat completion generation
+- Improved security of the testing infrastructure
+- Clarified prediction generation messaging in frontend
+
+### Changed
+
+- Updated mypy from 1.11.2 to 1.16.1
+- Improved CI/CD pipeline reliability and consistency
+
+### Added
+
+- Added shell script linting configuration
+- Added Docker container linting configuration
+- Added automated workflows for code formatting and validation
+- Added security scanning with scheduled checks
+- Added automated dependency update configuration
+
 ## [0.1.15] - 2025-04-10
 
 ### Changed
@@ -15,7 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.14] - 2025-04-07
 
-### Added 
+### Added
 
 - Predictive Content Generator now uses a DataRobot LLM Blueprint
 - LLM use is now optional
@@ -28,13 +50,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.13] - 2025-03-06
 
-### Fixed 
+### Fixed
+
 - "Already Linked" issue
 - "version name required" issue
 
 ## [0.1.12] - 2025-02-18
 
 ### Fixed
+
 - Shap deployments now properly supported
 - Remove hard-coded environment ID from LLM custom model
 
@@ -78,7 +102,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Support for AWS Credential type and AWS-based LLM blueprints
 - Full testing of the LLM credentials before start
-  
+
 ## [0.1.8] - 2024-12-03
 
 ### Added

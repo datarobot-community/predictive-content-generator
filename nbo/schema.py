@@ -76,7 +76,6 @@ class LLMRequest(BaseModel):
     prompt: str = Field(
         serialization_alias=GenerativeDeploymentSettings().prompt_feature_name
     )
-    association_id: str = Field(serialization_alias=association_id)
     number_of_explanations: int
     tone: str
     verbosity: str

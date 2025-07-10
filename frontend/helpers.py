@@ -16,7 +16,6 @@ from __future__ import annotations
 import itertools
 import subprocess
 import sys
-import uuid
 from typing import Any, Dict, List
 
 import pandas as pd
@@ -268,12 +267,10 @@ def get_llm_response(
         tone=tone,
         verbosity=verbosity,
     )
-    request_id = str(uuid.uuid4())
 
     # Get output
     request = LLMRequest(
         prompt=prompt,
-        association_id=request_id,
         number_of_explanations=number_of_explanations,
         tone=tone,
         verbosity=verbosity,
@@ -303,17 +300,15 @@ def batch_email_responses(
             verbosity=verbosity,
         )
         prompts.append(prompt)
-    request_ids = [str(uuid.uuid4()) for _ in range(len(record_ids))]
     llm_request_data = [
         LLMRequest(
             prompt=prompt,
-            association_id=request_id,
             number_of_explanations=number_of_explanations,
             tone=tone,
             verbosity=verbosity,
             system_prompt=app_settings.system_prompt,
         )
-        for prompt, request_id in zip(prompts, request_ids)
+        for prompt in prompts
     ]
     generations = make_generative_deployment_predictions(
         llm_request_data,
