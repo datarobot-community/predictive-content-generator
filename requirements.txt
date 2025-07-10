@@ -22,7 +22,7 @@ streamlit-javascript>=0.1.5,<1.0
 plotly>=5.24.1,<6
 tiktoken>=0.8.0,<0.9
 scikit-learn>=1.5.2,<2
-textblob>=0.18.0,<0.19
+textblob>=0.18.0,<0.20
 
 jupyterlab>=4.2.5,<5
 papermill>=2.6.0,<3
