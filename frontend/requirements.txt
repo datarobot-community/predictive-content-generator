@@ -1,0 +1,20 @@
+datarobot>=3.5.2,<3.6
+datarobot-predict>=1.9.2,<1.10
+pandas>=2,<3  # constrained by DRUM
+pandas-stubs>=2.2.3.241126,<3.0
+
+pydantic>=2.9.2,<2.10
+pydantic-settings>=2.5.2,<2.6
+eval_type_backport>=0.2.0,<0.3
+
+streamlit>=1.39.0,<2
+st-theme>=1.2.3,<2
+streamlit-javascript>=0.1.5,<1.0
+plotly>=5.24.1,<6
+tiktoken>=0.8.0,<0.9
+scikit-learn>=1.5.2,<2
+textblob>=0.18.0,<0.19
+babel>=2.16,<3
+
+openai>=1.31.2,<2
+httpx<0.28.0

@@ -1,0 +1,327 @@
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2024-12-03 21:45+0000\n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Repo: recipe-bob\n"
+"X-Segment-Count: 70\n"
+"X-Word-Count: 953\n"
+
+msgid ""
+"\n"
+"\n"
+"{customer_prediction_label}\n"
+"\n"
+"{customer_prediction_probability}\n"
+"\n"
+"**List of Prediction Explanations:**\n"
+"\n"
+"{rsp}"
+msgstr ""
+"\n"
+"\n"
+"{customer_prediction_label}\n"
+"\n"
+"{customer_prediction_probability}\n"
+"\n"
+"**予測の説明のリスト：**\n"
+"\n"
+"{rsp}"
+
+msgid ""
+"                    Introducing our International Call Plan, specifically designed for the globally connected individual.\n"
+"                    With this plan, enjoy unlimited international calls and texts to over 50 selected countries, ensuring you stay connected\n"
+"                    with family, friends, and colleagues across borders without worrying about hefty fees. This plan also includes 15GB of\n"
+"                    high-speed data, and unlimited domestic calls and texts, providing a comprehensive package for all your communication needs.\n"
+"                    For destinations not included in our selected list, competitive per-minute rates apply, and we've also thrown in premium\n"
+"                    features like free voicemail and call forwarding at no additional cost. The International Call Plan is perfect for\n"
+"                    expatriates, frequent travelers, or anyone who wants to maintain seamless international connections without the burden of\n"
+"                    restrictive costs."
+msgstr ""
+"                    グローバルに活躍する個人のお客様向けに特別に用意された国際通話プランをご紹介します。\n"
+"                    このプランでは、厳選された50か国以上への国際通話とテキストメッセージが無制限でご利用いただけます。\n"
+"                    高額な通話料を心配することなく、国境を越えてご家族やご友人、同僚の方々と連絡を取り合うことができます。このプランには、高速データ通信15GB、\n"
+"                    国内通話およびテキストメッセージも無制限でご利用いただけるなど、あらゆるコミュニケーションニーズに対応する総合的なパッケージとなっています。\n"
+"                    対象リストに含まれない国への通話には、分単位の格安料金が適用され、追加料金なしで\n"
+"                    無料のボイスメールや着信転送などのプレミアム機能もご利用いただけます。この国際通話プランは、\n"
+"                    海外駐在員や頻繁に海外へ渡航される方、高額な通話料金の負担なくシームレスな国際通信を維持したい方\n"
+"                    にとって最適です。"
+
+msgid ""
+"                    Introducing our new Daytime Plan, tailored for professionals who primarily use their mobile services\n"
+"                    during traditional working hours. The Daytime Plan offers unlimited calls, texts, and a robust 10GB of high-speed data\n"
+"                    from 8 AM to 6 PM, Monday through Friday. Outside of these hours and on weekends, a cost-efficient pay-as-you-go rate\n"
+"                    will be applied to give you the flexibility you need without breaking the bank. The plan also includes free voicemail\n"
+"                    services and call forwarding options, making it an ideal choice for those who want to stay connected without the hassle\n"
+"                    of worrying about overages during their most active hours. Whether you're coordinating with your team, staying in touch\n"
+"                    with clients, or managing remote operations, our Daytime Plan ensures you're always just a call or text away."
+msgstr ""
+"                    主に従来の勤務時間中にモバイルサービスを利用するビジネスパーソン向けに、新しいデイタイムプランを\n"
+"                    ご用意しました。デイタイムプランでは、月曜日から金曜日の午前8時から午後6時まで、通話、テキストメッセージが\n"
+"                    無制限で、高速データ通信が10GBご利用いただけます。この時間帯以外および週末は、経済的な従量制料金が適用され、\n"
+"                    余分な負担なく、必要なときだけご利用いただけます。このプランには、無料のボイスメールサービスと\n"
+"                    着信転送オプションも含まれており、最も忙しい時間帯に超過料金を心配することなく連絡を取り合いたい方\n"
+"                    にとって理想的な選択肢となります。社内での調整、顧客への連絡、遠隔地の業務管理など、\n"
+"                    どのような場合でも、弊社のデイタイムプランをご利用いただければ、いつでも電話やテキストメッセージで連絡が可能です。"
+
+msgid ""
+"                    Introducing the Enhanced Voicemail Plan, the latest offering tailored for individuals seeking a cutting-edge\n"
+"                    solution to their messaging needs. Recognizing the importance of voicemail in modern communication, our plan goes beyond just\n"
+"                    storing messages. It features transcription services, turning your voicemails into readable text sent directly to your email or\n"
+"                    preferred messaging platform. Additionally, users benefit from extended storage capacities, allowing voicemails to be saved for\n"
+"                    up to 6 months, and priority playback options to streamline the most important messages. Integrated with AI-driven spam filters,\n"
+"                    this plan ensures you only receive messages that truly matter, reducing clutter and enhancing productivity. Whether you're a busy\n"
+"                    professional or someone who values organized and efficient communication, our Enhanced Voicemail Plan is designed to keep you\n"
+"                    ahead in the digital age."
+msgstr ""
+"                    ボイスメール強化プランのご紹介です。メッセージングニーズに対して最先端のソリューションをお探しの個人の\n"
+"                    お客様向けの最新プランです。現代のコミュニケーションにおけるボイスメールの重要性を認識したこのプランは、単にメッセージを\n"
+"                    保存するだけではありません。ボイスメールを読みやすいテキストに変換し、電子メールやお好みのメッセージングプラットフォームに直接送信する\n"
+"                    文字起こしサービスを備えています。さらに、ストレージ容量の拡張により、ボイスメールを最大6か月間保存できるほか、\n"
+"                    優先再生オプションにより、最も重要なメッセージを効率的に再生できます。このプランには、AI搭載のスパムフィルターが\n"
+"                    組み込まれており、本当に重要なメッセージだけを確実に受信できるため、煩雑さが軽減され、生産性が向上します。多忙なプロフェッショナルの方にも、\n"
+"                    体系的かつ効率的なコミュニケーションを重視する方にも、ボイスメール強化プランはデジタル時代を先取りするように\n"
+"                    設計されています。"
+
+msgid ""
+"                    Introducing the Evening Call Plan, designed for individuals who are most active during the evening hours and are looking\n"
+"                    for a cost-effective way to stay connected. This plan provides unlimited calls and texts, along with a generous 8GB of\n"
+"                    high-speed data, all available from 6 PM to 12 AM every day. During daytime hours, a reasonable pay-as-you-go rate applies,\n"
+"                    giving you the freedom to use your phone as needed without unexpected costs. Also included in this package are essential\n"
+"                    features like free voicemail and call forwarding, making it a perfect fit for those who love socializing, gaming, or\n"
+"                    streaming content in the evening. The Evening Call Plan offers the ideal solution for night owls, allowing them to\n"
+"                    communicate and surf the web to their heart's content during the hours they are most active."
+msgstr ""
+"                    夜間通話プランのご紹介です。夜間の時間帯に最も利用が多く、コスト効率の高い通信手段をお探しの個人のお客様向けに\n"
+"                    用意されたプランです。このプランでは、毎日午後6時から午前0時まで、無制限の通話とテキストメッセージに加え、\n"
+"                    8GBの大容量高速データ通信をご利用いただけます。日中の時間帯は、ご利用分に応じたリーズナブルな従量制料金が適用されるため、\n"
+"                    予想外の出費を心配することなく、必要なときに携帯電話を自由にお使いいただけます。このパッケージには、無料のボイスメールや\n"
+"                    着信転送などの基本機能も含まれており、夜間にソーシャルネットワーキングやゲーム、ストリーミングコンテンツ\n"
+"                    を楽しむ方にも最適です。夜間通話プランは、夜型のお客様にとって理想的なソリューションです。\n"
+"                    お客様が最もアクティブな時間帯に、思う存分コミュニケーションやネットサーフィンを楽しむことができます。"
+
+msgid ""
+"            Combine predictive and generative AI to help automatically create highly personalized emails for your customers.\n"
+"            All you need to do is select a customer from the dropdown and hit submit!"
+msgstr ""
+"            予測AIと生成AIを組み合わせて、顧客一人ひとりに合わせたメールを自動的に作成することができます。\n"
+"            必要なのは、ドロップダウンメニューから顧客を選択し、送信ボタンを押すだけです。"
+
+msgid ""
+"            Draft an email to an existing client that markets the plan {prediction_label}.\n"
+"            The email should be addressed to {selected_record} and contain a subject line and body.\n"
+"            Be sure to only incorporate the following call plan details:\n"
+"            {outcome_description}\n"
+"            Keep the email tone {tone}. Keep the length {verbosity}. Try not to use many emojis.\n"
+"            Incorporate the following list of factors that influenced our offer decision:\n"
+"\n"
+"            {rsp}"
+msgstr ""
+"            既存のクライアントに{prediction_label}プランを紹介するメールを作成します。\n"
+"            このメールは{selected_record}宛てとし、件名と本文を含めます。\n"
+"            この通話プランの詳細は、以下の内容のみとします：\n"
+"            {outcome_description}\n"
+"            メールのトーンは{tone}にします。長さは{verbosity}にします。絵文字はあまり使用しないようにします。\n"
+"            オファーの決定に寄与した以下の要素を組み込みます：\n"
+"\n"
+"            {rsp}"
+
+msgid ""
+"            You are a marketing specialist named Justin and you work for TelCorp., a telecommunications company.\n"
+"            You have detailed information about each of your customers and their past purchasing and usage behavior.\n"
+"            You also have a list of important factors that explain why a customer may enjoy a particular call plan offer.\n"
+"            The goal is to incorporate these factors into a marketing email introducing a specific offer."
+msgstr ""
+"            あなたの名前はジャスティン、通信会社TelCorp.でマーケティング担当として勤務しています。\n"
+"            あなたは、個々の顧客について、詳細な情報と過去の購買および利用状況を把握しています。\n"
+"            また、顧客が特定の通話プランのオファーに魅力を感じる理由を裏付ける重要な要素もリストアップしています。\n"
+"            目標は、特定のオファーを紹介するマーケティングメールにこれらの要素を組み込むことです。"
+
+msgid "**Below find more detailed background about possible outcomes:**"
+msgstr "**考えられる結果についての詳細な背景を以下に示します：**"
+
+msgid "**Monitoring Settings:** "
+msgstr "**監視設定：**"
+
+msgid "**Predicted Label:** {predicted_label}"
+msgstr "**予測ラベル：**{predicted_label}"
+
+msgid "**Predicted Probability:** {predicted_probabilities}"
+msgstr "**予測確率：**{predicted_probabilities}"
+
+msgid "**Prompt Settings:** "
+msgstr "**プロンプト設定：**"
+
+msgid "Analyzing {count} records..."
+msgstr "{count}レコードを分析中..."
+
+msgid "Apply"
+msgstr "適用"
+
+msgid "Batch Emails"
+msgstr "バッチメール"
+
+msgid "Best model: {model_type}\\n\\nMetrics:"
+msgstr "最適なモデル：{model_type}\\n\\n指標："
+
+msgid "Configure the settings used to create your email"
+msgstr "メールの作成に使用する設定を行う"
+
+msgid "Creating Autopilot Run {name}"
+msgstr "オートパイロット実行{name}を作成"
+
+msgid "Creating Dataset {dataset_name}"
+msgstr "データセット{dataset_name}を作成"
+
+msgid "Creating Registered Model Version..."
+msgstr "登録モデルのバージョンを作成中..."
+
+msgid "Creating Use Case {use_case_name}"
+msgstr "ユースケース{use_case_name}を作成"
+
+msgid "Customer"
+msgstr "顧客"
+
+msgid "Daytime Plan"
+msgstr "デイタイムプラン"
+
+msgid "Drafted an email for {selected_record}!"
+msgstr "{selected_record}用のメールを作成しました！"
+
+msgid "Email"
+msgstr "Eメール"
+
+msgid "Email Settings"
+msgstr "メール設定"
+
+msgid "Enhanced Voicemail Plan"
+msgstr "ボイスメール強化プラン"
+
+msgid "Evening Call Plan"
+msgstr "夜間通話プラン"
+
+msgid "Finished! All {count} emails have been drafted and results have been saved."
+msgstr "終了しました。{count}件のメールがすべて下書きされ、結果が保存されました。"
+
+msgid "Generate Emails"
+msgstr "メールの生成"
+
+msgid "Generating emails for {count} records..."
+msgstr "{count}レコードのメールを生成しています..."
+
+msgid "Generating response and assessment metrics for {selected_record}..."
+msgstr "{selected_record}の回答と評価指標を生成しています..."
+
+msgid "International Call Plan"
+msgstr "国際通話プラン"
+
+msgid "New Draft"
+msgstr "新規ドラフト"
+
+msgid "Newly Generated Email:"
+msgstr "新たに生成されたメール："
+
+msgid "Next Best Offer Email Campaign"
+msgstr "ネクストベストオファーのメールキャンペーン"
+
+msgid "No Action"
+msgstr "何もしない"
+
+msgid "Our model predicted that you are better off not targeting {selected_record} with any email offer. The best next step is to not take any action."
+msgstr "このモデルでは、{selected_record}に対してメールによるオファーをしない方が良いと予測しています。次のステップとして最善なのは、何もしないことです。"
+
+msgid "Outcome Details"
+msgstr "結果の詳細"
+
+msgid "Please upload a csv file to generate emails."
+msgstr "メールを生成するにはcsvファイルをアップロードしてください。"
+
+msgid "Predictions have been made! Generating emails..."
+msgstr "予測が行われました。メールを生成しています..."
+
+msgid "See [here]({deployment_url}) to view and update tracking data"
+msgstr "トラッキングデータの表示と更新については、[こちら]({deployment_url})をご覧ください。"
+
+msgid "See the most important items in text feature `{text_explanation}` that influenced the prediction {customer_prediction_label}"
+msgstr "予測{customer_prediction_label}に影響を与えたテキスト特徴量`{text_explanation}`の中で最も重要な項目を確認します"
+
+msgid "Select a tone:"
+msgstr "トーンを選択してください："
+
+msgid "Select a verbosity:"
+msgstr "冗長度を選択してください："
+
+msgid "Select the number of explanations:"
+msgstr "説明の数を選択してください："
+
+msgid "Submit"
+msgstr "送信"
+
+msgid "The number of explanations argument controls how many prediction explanations we pass to our prompt."
+msgstr "説明数の引数は、プロンプトに渡す予測説明の数を制御します。"
+
+msgid "Tone controls the attitude of the email."
+msgstr "トーンはメールの雰囲気を制御します。"
+
+msgid "Upload a csv:"
+msgstr "csvをアップロードしてください："
+
+msgid "Verbosity helps to determine the length and wordiness of the email."
+msgstr "冗長度は、メールの長さと言葉数を決めるのに役立ちます。"
+
+msgid "Your download should start automatically."
+msgstr "ダウンロードは自動的に開始されます。"
+
+msgid "Your feedback has been successfully saved!"
+msgstr "フィードバックが正常に保存されました。"
+
+msgid "authoritative and expert"
+msgstr "信頼でき専門的"
+
+msgid "educational and informative"
+msgstr "勉強になり参考になる"
+
+msgid "formal and elevated"
+msgstr "フォーマルで格調高い"
+
+msgid "friendly and casual"
+msgstr "親しみやすくカジュアルl"
+
+msgid "is decreasing"
+msgstr "減少している"
+
+msgid "is increasing"
+msgstr "増加している"
+
+msgid "is significantly decreasing"
+msgstr "著しく減少している"
+
+msgid "is significantly increasing"
+msgstr "著しく増加している"
+
+msgid "is slightly decreasing"
+msgstr "わずかに減少している"
+
+msgid "is slightly increasing"
+msgstr "わずかに増加している"
+
+msgid "lighthearted and funny"
+msgstr "陽気で笑える"
+
+msgid "long and detailed"
+msgstr "長くて詳細"
+
+msgid "normal"
+msgstr "通常"
+
+msgid "short and sweet"
+msgstr "短くて簡潔"
+
+msgid "the likelihood this customer is expected to purchase"
+msgstr "この顧客が購入する見込み"
+
+msgid "witty and playful"
+msgstr "ウィットに富んで遊び心のある"

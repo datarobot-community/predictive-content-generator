@@ -1,0 +1,152 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto');
+
+html,
+body,
+/* [class*="css"] {
+    font-family: 'Roboto', sans-serif;
+} */
+
+html,
+/* body {
+    font-size: 14px;
+} */
+
+button[kind='secondary'],
+button[kind='secondaryFormSubmit'] {
+    padding: 8px 16px !important;
+    border-radius: 4px !important;
+    border: transparent !important;
+    background: #297CB9 !important;
+    color: white !important;
+    font-size: 14px !important;
+}
+
+section[data-testid="stSidebar"] div.stButton button {
+    padding: 8px 16px !important;
+    border-radius: 4px !important;
+    border: transparent !important;
+    background: #297CB9 !important;
+    color: white !important;
+    font-size: 14px !important;
+}
+
+section[data-testid="stSidebar"] div.stSlider .css-1vzeuhh {
+    border-radius: 4px !important;
+    border: transparent !important;
+    background: #297CB9 !important;
+    color: white !important;
+}
+
+section[data-testid="stSidebar"] div.stSlider .css-10y5sf6,
+.css-bigoer {
+    border-radius: 4px !important;
+    border: transparent !important;
+    color: #297CB9 !important;
+}
+
+section[data-testid="stSidebar"] [data-baseweb="slider"] div.stSlider .st-de .st-el .st-ek {
+    background-image: linear-gradient(to right, #297CB9 0%, #297CB9 50%, #97A6C340 50%, #97A6C340 100%);
+}
+
+div.stSlider>div[data-baseweb="slider"]>div[data-testid="stTickBar"]>div {
+    background-color: linear-gradient(to right, #297CB9 0%, #297CB9 50%, #97A6C340 50%, #97A6C340 100%);
+}
+
+div[data-testid="column"] {
+    width: fit-content !important;
+    flex: unset;
+}
+
+div[data-testid="column"] * {
+    width: fit-content !important;
+}
+
+.css-bigoer {
+    background-color: #297CB9 !important;
+}
+
+.css-1iusqyk {
+    color: rgb(31 30 30) !important;
+}
+
+section[data-testid="stSidebar"] div.stSlider .st-de {
+    background: #97A6C340 !important;
+}
+
+section[data-testid="stSpinner"] {
+    color: #297CB9 !important;
+}
+
+.css-1nz25jz {
+    border-top-color: #297CB9 !important;
+}
+
+/* [data-testid="stMarkdownContainer"] > button[aria-expanded="true"], [data-testid="stMarkdownContainer"]:hover {
+    color: #297CB9 !important;
+} */
+
+[data-testid="stExpanderToggleIcon"]:hover {
+    fill: #297CB9 !important;
+}
+
+.streamlit-expander:hover,
+.streamlit-expanderHeader:hover {
+    color: #297CB9 !important;
+}
+
+/* button[kind='secondary']:hover,
+button[kind='secondaryFormSubmit']:hover {
+    background: #297CB9 !important;
+} */
+
+/* [data-baseweb="tab-list"] > button[aria-selected="true"] {
+    color: #3CA3E8;
+} */
+
+[data-baseweb="tab-highlight"] {
+    background-color: #3CA3E8;
+}
+
+[data-baseweb="tab-list"]>button[aria-selected="true"],
+[data-baseweb="tab-list"]>button:hover,
+[data-baseweb="tab-highlight"] {
+    color: #3CA3E8;
+}
+
+.element:hover {
+    background-color: #3CA3E8;
+    color: #3CA3E8;
+}
+
+/* header {
+    background-color: #171c20 !important;
+    border-bottom: 1px solid #2a3036;
+} */
+
+[data-testid="stSidebarNav"] {
+    padding-top: 20px;
+}
+
+[data-testid="stSidebarNav"]> :last-child {
+    display: none;
+}
+
+[data-testid="stSidebar"]>* {
+    overflow: hidden;
+}
+
+[data-testid="stSidebar"] .block-container {
+    position: absolute !important;
+    left: 1rem;
+    top: 2rem;
+    width: calc(100% - 2rem);
+}
+
+.stAppDeployButton {
+    display: none;
+}
+
+/* Remove rounded corners from DataRobot logo */
+.st-key-datarobot-logo img {
+    border-radius: 0;
+}
