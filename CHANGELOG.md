@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [0.1.17-release.11.1.0] - 2025-07-11
+
+### Changed
+
+- Pinned pulumi-datarobot version from >=0.8.13,<0.9 to 0.10.8
+
 ## [0.1.16-release.11.1.0] - 2025-07-10
 
 ### Fixed
