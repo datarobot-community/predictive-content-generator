@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [0.1.18-release.11.1.0] - 2025-08-04
+
+### Fixed
+
+- Fix feedback buttons reloading whole app and content
+
 ## [0.1.17-release.11.1.0] - 2025-07-11
 
 ### Changed

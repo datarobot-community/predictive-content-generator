@@ -70,6 +70,36 @@ def get_dataset() -> pd.DataFrame:
     return df
 
 
+@st.fragment
+def feedback_buttons_fragment():
+    # Create multiple columns for different components
+    _, _, c2, c3 = st.columns([10, 10, 2, 2])
+
+    # Button for positive feedback in the second column
+    with c2:
+        thumbs_up = st.button("👍🏻", key="button-thumbsup")
+
+    # Button for negative feedback in the third column
+    with c3:
+        thumbs_down = st.button("👎🏻", key="button-thumbsdown")
+
+    # Capture feedback when either button is clicked
+    if thumbs_up or thumbs_down:
+        # Report back to deployment
+        feedback = (
+            1.0 if thumbs_up else 0.0 if thumbs_down else None
+        )
+        user_feedback_metric_values = {"user_feedback": feedback}
+        metrics_manager.submit_metrics(
+            user_feedback_metric_values,
+            request_id=st.session_state.unique_uuid,
+        )
+        st.toast(
+            gettext("Your feedback has been successfully saved!"),
+            icon="🥳",
+        )
+
+
 def main() -> None:
     # Initialize DataRobot client and objects
 
@@ -374,32 +404,7 @@ def main() -> None:
                         )
 
                     with post_email_container:
-                        # Create multiple columns for different components
-                        _, _, c2, c3 = st.columns([10, 10, 1, 1])
-
-                        # Button for positive feedback in the second column
-                        with c2:
-                            thumbs_up = st.button("👍🏻", key="button-thumbsup")
-
-                        # Button for negative feedback in the third column
-                        with c3:
-                            thumbs_down = st.button("👎🏻", key="button-thumbsdown")
-
-                        # Capture feedback when either button is clicked
-                        if thumbs_up or thumbs_down:
-                            # Report back to deployment
-                            feedback = (
-                                1.0 if thumbs_up else 0.0 if thumbs_down else None
-                            )
-                            user_feedback_metric_values = {"user_feedback": feedback}
-                            metrics_manager.submit_metrics(
-                                user_feedback_metric_values,
-                                request_id=st.session_state.unique_uuid,
-                            )
-                            st.toast(
-                                gettext("Your feedback has been successfully saved!"),
-                                icon="🥳",
-                            )
+                        feedback_buttons_fragment()
 
                         # Clear any Streamlit widgets that may be set to display below this
                         st.empty()
