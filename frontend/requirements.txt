@@ -1,4 +1,4 @@
-datarobot>=3.5.2,<3.6
+datarobot>=3.9.1,<4.0.0
 datarobot-predict>=1.9.2,<1.10
 pandas>=2,<3  # constrained by DRUM
 pandas-stubs>=2.2.3.241126,<3.0

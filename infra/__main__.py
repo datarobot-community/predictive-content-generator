@@ -239,6 +239,8 @@ app = datarobot.CustomApplication(
     resource_name=settings_app_infra.app_resource_name,
     source_version_id=app_source.version_id,
     use_case_ids=[model_training_output.use_case_id],
+    resources=app_source.resources,
+    opts=pulumi.ResourceOptions(depends_on=[app_source]),
 )
 
 app.id.apply(settings_app_infra.ensure_app_settings)

@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [0.2.2] - 2025-12-15
+
+### Fixed
+
+- Fix subsequent customer selections to show newly generated emails
+
+### Added
+
+- Integration with DataRobot Python client 3.9.1 `CustomApplication` and `CustomApplicationSource` entities.
+- Dynamic resource fetching from CustomApplicationSource when creating CustomApplications.
+
 ## [0.2.1] - 2025-07-11
 
 ### Fixed

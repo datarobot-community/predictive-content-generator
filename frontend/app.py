@@ -71,7 +71,7 @@ def get_dataset() -> pd.DataFrame:
 
 
 @st.fragment
-def feedback_buttons_fragment():
+def feedback_buttons_fragment() -> None:
     # Create multiple columns for different components
     _, _, c2, c3 = st.columns([10, 10, 2, 2])
 
@@ -86,9 +86,7 @@ def feedback_buttons_fragment():
     # Capture feedback when either button is clicked
     if thumbs_up or thumbs_down:
         # Report back to deployment
-        feedback = (
-            1.0 if thumbs_up else 0.0 if thumbs_down else None
-        )
+        feedback = 1.0 if thumbs_up else 0.0 if thumbs_down else None
         user_feedback_metric_values = {"user_feedback": feedback}
         metrics_manager.submit_metrics(
             user_feedback_metric_values,
@@ -359,7 +357,7 @@ def main() -> None:
                             if text_explanations:
                                 st.markdown(
                                     color_texts(
-                                        prediction_row.at[0, text_explanation],
+                                        str(prediction_row.at[0, text_explanation]),
                                         text_explanations,
                                     ),
                                     unsafe_allow_html=True,
@@ -377,7 +375,7 @@ def main() -> None:
                         ).format(selected_record=selected_record)
 
                         st.error(generated_email)
-                        st.stop()
+                        return
                     else:
                         # Log the number of explanations to be used in the prompt
                         logger.info(
@@ -393,11 +391,13 @@ def main() -> None:
                         )
                         st.session_state.unique_uuid = generation.association_id
 
+                        # Update session state for the widget key before creating it
+                        st.session_state["generated_email"] = generation.content
+
                         # Display the generated email
                         st.subheader(gettext("Newly Generated Email:"))
                         generated_email = st.text_area(
                             label=gettext("Email"),
-                            value=generation.content,
                             height=450,
                             label_visibility="collapsed",
                             key="generated_email",
