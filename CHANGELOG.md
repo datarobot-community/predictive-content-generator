@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [0.2.3] - 2026-06-23
+
+### Added
+- DataRobot CLI integration: Introduced CLI-driven quickstart and configuration via `dr start`.
+
+### Changed
+- Updated the default LLM to Azure OpenAI GPT-5-mini, with README instructions for changing the LLM.
+
+### Fixed
+- Fixed generative LLM deployment failing to load when LLM credentials are configured by preserving the blueprint's default runtime parameters.
+
+### Improvements
+- Updated `README.md` to prioritize CLI-based quickstart (`dr start`), improved setup flow and Codespace instructions.
+
 ## [0.2.2] - 2025-12-15
 
 ### Fixed

@@ -24,6 +24,7 @@ from datarobot_pulumi_utils.schema.custom_models import (
 )
 from datarobot_pulumi_utils.schema.llms import (
     LLMBlueprintArgs,
+    LLMConfig,
     LLMs,
     LLMSettings,
     PlaygroundArgs,
@@ -40,7 +41,10 @@ from .settings_main import (
     runtime_environment_moderations,
 )
 
-LLM = LLMs.AZURE_OPENAI_GPT_4_O_MINI
+LLMs.AZURE_OPENAI_GPT_5_MINI = LLMConfig(
+    name="azure-openai-gpt-5-mini", credential_type="azure"
+)
+LLM = LLMs.AZURE_OPENAI_GPT_5_MINI
 
 playground_args = PlaygroundArgs(
     resource_name=f"Predictive Content Generator Playground [{project_name}]",

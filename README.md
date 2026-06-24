@@ -1,5 +1,23 @@
 # Predictive Content Generator
 
+<p align="center">
+  <a href="https://app.datarobot.com/usecases/application-templates/66df7eab3168a83282cf4ad9?referrerUrl=github">
+    <img src="https://img.shields.io/badge/US-Open%20in%20a%20Codespace-%23909BF5?style=flat&labelColor=%2330373D" alt="US - Open in a Codespace">
+  </a>
+  <a href="https://app.eu.datarobot.com/usecases/application-templates/66df7eab3168a83282cf4ad9?referrerUrl=github">
+    <img src="https://img.shields.io/badge/EU-Open%20in%20a%20Codespace-%232BC46F?labelColor=%2330373D" alt="EU - Open in a Codespace">
+  </a>
+  <a href="https://app.jp.datarobot.com/usecases/application-templates/66df7eab3168a83282cf4ad9?referrerUrl=github">
+    <img src="https://img.shields.io/badge/JP-Open%20in%20a%20Codespace-%23EDA769?labelColor=%2330373D" alt="JP - Open in a Codespace">
+  </a>
+  <a href="https://app.jp.datarobot.com/usecases/application-templates/66df7eab3168a83282cf4ad9?referrerUrl=github">
+    <img src="https://img.shields.io/badge/JP-%E3%80%8CCodespace%20%E3%81%A7%E9%96%8B%E3%81%8F%E3%80%8D-%23EDA769?labelColor=%2330373D" alt="JP - 「Codespaceで開く」">
+  </a>
+  <a href="https://join.slack.com/t/datarobot-community/shared_invite/zt-3uzfp8k50-SUdMqeux25ok9_5wr4okrg">
+    <img src="https://img.shields.io/badge/%23applications-a?label=Slack&labelColor=30373D&color=81FBA6" alt="Slack #applications">
+  </a>
+</p>
+
 The predictive content generator is a customizable app template for generating content using predictive model outputs. Real world use cases for this technology include:
 
 - Using a next-best-offer predictive model to automatically draft personalized promotions.
@@ -20,52 +38,143 @@ The predictive content generator highlights the combination of:
 
 ## Table of Contents
 
-1. [Setup](#setup)
-2. [Architecture overview](#architecture-overview)
-3. [Why build AI Apps with DataRobot app templates?](#why-build-ai-apps-with-datarobot-app-templates)
-4. [Make changes](#make-changes)
+1. [Prerequisites](#prerequisites)
+2. [Quick Start](#-quick-start)
+3. [Architecture overview](#architecture-overview)
+4. [Why build AI Apps with DataRobot app templates?](#why-build-ai-apps-with-datarobot-app-templates)
+5. [Make changes](#make-changes)
    - [Change the LLM](#change-the-llm)
+   - [Add a new LLM](#add-a-new-llm)
    - [Change the data and model training method](#change-the-data-and-model-training-method)
    - [Modify the front-end](#modify-the-front-end)
    - [Change the language in the front-end](#change-the-language-in-the-front-end)
-5. [Share results](#share-results)
-6. [Delete all provisioned resources](#delete-all-provisioned-resources)
-7. [Setup for advanced users](#setup-for-advanced-users)
-8. [Data privacy](#data-privacy)
+6. [Share results](#share-results)
+7. [Delete all provisioned resources](#delete-all-provisioned-resources)
+8. [Setup for advanced users](#setup-for-advanced-users)
+9. [Data privacy](#data-privacy)
 
-## Setup
+## Prerequisites
 
-> [!IMPORTANT]  
-> If you are running this template in a DataRobot codespace, `pulumi` is already configured and the repository is automatically cloned;
-> skip to **Step 3**.
+If you are using DataRobot Codespaces, this is already complete for you. If not, install:
 
-1. If `pulumi` is not already installed, install the CLI following instructions [here](https://www.pulumi.com/docs/iac/download-install/). 
-   After installing `pulumi` for the first time, restart your terminal and run:
-   ```bash
-   pulumi login --local  # omit --local to use Pulumi Cloud (requires separate account)
-   ```
+- [Python](https://www.python.org/downloads/) 3.9+
+- [Taskfile.dev](https://taskfile.dev/#/installation) (task runner)
+- [Pulumi](https://www.pulumi.com/docs/iac/download-install/) (infrastructure as code)
 
-2. Clone the template repository.
+## 🚀 Quick Start
 
-   ```bash
-   git clone https://github.com/datarobot-community/predictive-content-generator.git
-   cd predictive-content-generator
-   ```
+### Quickstart with DataRobot CLI
 
-3. Rename the file `.env.template` to `.env` in the root directory of the repo and populate your credentials.
-   This template is pre-configured to use an Azure OpenAI endpoint. If you wish to use a different LLM provider, modifications to the code will be [necessary](#change-the-llm).
-   Please refer to the documentation inside `.env.template`
-   
-4. In a terminal, run the following command:
-   
-   ```bash
-   python quickstart.py YOUR_PROJECT_NAME  # Windows users may have to use `py` instead of `python`
-   ```
-   Python 3.9+ is required.
+#### 1. Install the DataRobot CLI
 
-Advanced users who want to control virtual environment creation, dependency installation, environment variable setup,
-and `pulumi` invocation, see [the advanced setup instructions](#setup-for-advanced-users).
+If you haven't already, install the DataRobot CLI by following the installation instructions at:  
+https://github.com/datarobot-oss/cli?tab=readme-ov-file#installation
 
+#### 2. Start the Application
+
+Run the following command to start the Predictive Content Generator application. An interactive wizard will guide you through the selection of configuration options, including creating a `.env` file in the root directory and populating it with environment variables you specify during the wizard.
+
+```sh
+dr start
+```
+
+The DataRobot CLI (`dr`) will:
+- Guide you through configuration setup
+- Create and populate your `.env` file with the necessary environment variables
+- Deploy your application to DataRobot
+- Display a link to your running application when complete
+
+When deployment completes, the terminal will display a link to your running application.\
+👉 **Click the link to open and start using your app!**
+
+### Build in Codespace
+
+If you're using **DataRobot Codespace**, everything you need is already installed.
+Follow the steps below to launch the entire application in just a few minutes.
+
+Use the built-in terminal on the left sidebar of the Codespace.
+
+From the project root:
+
+```sh
+dr start
+```
+
+When deployment completes, the terminal will display a link to your running application.\
+👉 **Click the link to open and start using your app!**
+
+### Template Development
+
+For local development, follow all of the steps below.
+
+#### 1. Install Pulumi (if you don't have it yet)
+
+If Pulumi is not already installed, follow the installation instructions in the Pulumi [documentation](https://www.pulumi.com/docs/iac/download-install/).
+After installing for the first time, **restart your terminal** and run:
+
+```sh
+pulumi login --local      # omit --local to use Pulumi Cloud (requires an account)
+```
+
+#### 2. Clone the Template Repository
+
+```sh
+git clone https://github.com/datarobot-community/predictive-content-generator.git
+cd predictive-content-generator
+```
+
+#### 3. Create and Populate Your `.env` File
+Run the following command to launch an interactive wizard that helps you create and populate your `.env` file based on `.env.template` and walks you through the required credentials setup.
+```sh
+dr dotenv setup
+```
+If you want to locate the credentials manually:
+
+- DataRobot API Token:
+  See Create a DataRobot API Key in the [DataRobot API Quickstart docs](https://docs.datarobot.com/en/docs/api/api-quickstart/index.html#create-a-datarobot-api-key).
+
+- DataRobot Endpoint:
+  See Retrieve the API Endpoint in the same [Quickstart docs](https://docs.datarobot.com/en/docs/api/api-quickstart/index.html#retrieve-the-api-endpoint).
+
+- LLM Endpoint & API Key (Azure OpenAI):
+  This template is pre-configured to use an Azure OpenAI endpoint. If you wish to use a different LLM provider, modifications to the code will be [necessary](#change-the-llm).
+  Refer to the [Azure OpenAI documentation](https://learn.microsoft.com/en-us/azure/ai-services/openai/chatgpt-quickstart?tabs=command-line%2Cjavascript-keyless%2Ctypescript-keyless%2Cpython-new&pivots=programming-language-python#retrieve-key-and-endpoint) for your resource and deployment values.
+
+#### 4. Develop the Template
+
+Run the following to deploy or update your application:
+```bash
+source set_env.sh  # On Windows use `set_env.bat`
+pulumi up
+```
+Alternatively, run the following command for a simpler setup:
+
+```sh
+python quickstart.py YOUR_PROJECT_NAME
+# Windows users may need:  py quickstart.py YOUR_PROJECT_NAME
+```
+Replace `YOUR_PROJECT_NAME` with any name you prefer, then press **Enter**.
+
+When deployment completes, the terminal will display a link to your running application.\
+👉 **Click the link to open and start using your app!**
+
+**What does `quickstart.py` do?**
+
+The quickstart script automates the entire setup process for you:
+
+- Creates and activates a Python virtual environment
+- Installs all required dependencies
+- Loads your `.env` configuration
+- Sets up the Pulumi stack with your project name
+- Runs `pulumi up` to deploy your application
+- Displays your application URL when complete
+
+This single command replaces all the manual steps described in the [advanced setup section](#setup-for-advanced-users).
+
+Python 3.9+ is required.
+
+Advanced users desiring control over virtual environment creation, dependency installation, environment variable setup
+and `pulumi` invocation see [here](#setup-for-advanced-users).
 
 ## Architecture overview
 ![Predictive content generator](https://s3.amazonaws.com/datarobot_public/drx/recipe_gifs/predictive_content_architecture.svg)
@@ -118,6 +227,47 @@ Each template provides an end-to-end AI architecture, from raw inputs to deploye
 
 > **⚠️ Availability information:**  
 > Using a NIM model requires custom model GPU inference, a premium feature. You will experience errors by using this type of model without the feature enabled. Contact your DataRobot representative or administrator for information on enabling this feature.
+
+### Add a new LLM
+
+If the LLM you want to use isn't already defined in the `LLMs` object, you can register it manually using `LLMConfig`.
+
+1. Find the ID of the LLM you want to add by running the following in a Python session:
+
+   ```python
+   import datarobot
+   print('\n'.join([i['id'] for i in datarobot.genai.LLMDefinition.list()]))
+   ```
+
+2. In `infra/settings_generative.py`, add `LLMConfig` to the existing import and register the new LLM before the `LLM =` assignment:
+
+   ```python
+   from datarobot_pulumi_utils.schema.llms import (
+       LLMBlueprintArgs,
+       LLMConfig,
+       LLMs,
+       LLMSettings,
+       PlaygroundArgs,
+   )
+
+   LLMs.YOUR_LLM_NAME = LLMConfig(name="YOUR_LLM_ID", credential_type="azure")
+   LLM = LLMs.YOUR_LLM_NAME
+   ```
+
+   Replace `YOUR_LLM_NAME` with a descriptive attribute name and `YOUR_LLM_ID` with the ID from step 1.
+
+3. In `utils/credentials.py`, add a mapping from the new LLM name to its Azure deployment name inside the `get_credentials` function:
+
+   ```python
+   LLMs.YOUR_LLM_NAME.name: "YOUR_AZURE_DEPLOYMENT_NAME",
+   ```
+
+4. Run `pulumi up` to update your stack.
+
+   ```bash
+   source set_env.sh  # On windows use `set_env.bat`
+   pulumi up
+   ```
 
 ### Change the data and model training method
 

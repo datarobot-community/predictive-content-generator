@@ -168,6 +168,7 @@ def get_credentials(
                         LLMs.AZURE_OPENAI_GPT_4_O.name: "gpt-4o",
                         LLMs.AZURE_OPENAI_GPT_4_O_MINI.name: "gpt-4o-mini",
                         LLMs.AZURE_OPENAI_GPT_4_TURBO.name: "gpt-4-turbo",
+                        LLMs.AZURE_OPENAI_GPT_5_MINI.name: "gpt-5-mini",
                     }
                     if (
                         credentials.azure_deployment is not None
@@ -199,7 +200,7 @@ def get_credentials(
                             Unable to run a successful test completion against deployment '{credentials.azure_deployment or lookup[llm.name]}'
                             on '{credentials.azure_endpoint}' with API version '{credentials.api_version or "2023-05-15"}'
                             with provided Azure OpenAI credentials. Please validate your credentials.
-                            
+
                             Please validate your credentials or check {__file__} for details.
                             """)
                     ) from e
@@ -246,10 +247,10 @@ def get_credentials(
                 except Exception as e:
                     raise ValueError(
                         textwrap.dedent(f"""
-                            Unable to run a successful test completion against model '{lookup[llm.name]}' in region '{credentials.region_name or "us-west-1"}' 
+                            Unable to run a successful test completion against model '{lookup[llm.name]}' in region '{credentials.region_name or "us-west-1"}'
                             using request body '{request_body}' with provided AWS credentials.
-                            
-                            
+
+
                             Please validate your credentials or check {__file__} for details.
                             """)
                     ) from e
