@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [0.2.4] - 2026-07-15
+
+### Fixed
+- Generative LLM custom models now submit the full blueprint/DRUM default runtime parameter set explicitly alongside credentials, replacing the previous read-modify-write version merge. The merge only worked when the existing version still carried the defaults, so a deployment already broken by a partial submission couldn't self-repair; explicit submission fixes it on the next `pulumi up`.
+
+### Removed
+- Removed the `datarobotx-idp`-based custom model version merge helper from `infra/__main__.py`, no longer needed now that the full parameter set is submitted directly.
+
 ## [0.2.3] - 2026-06-23
 
 ### Added

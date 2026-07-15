@@ -22,8 +22,8 @@ import subprocess
 import sys
 from pathlib import Path
 
-if sys.version_info[0] < 3 or (sys.version_info[0] >= 3 and sys.version_info[1] < 9):
-    print("Must be using Python version 3.9 or higher")
+if sys.version_info[0] < 3 or (sys.version_info[0] >= 3 and sys.version_info[1] < 12):
+    print("Must be using Python version 3.12 or higher")
     exit(1)
 
 work_dir = Path(os.path.dirname(__file__))
@@ -174,7 +174,7 @@ def create_virtual_environment() -> None:
                     "create",
                     "--prefix",
                     str(venv_dir),
-                    "python=3.11",
+                    "python=3.12",
                     "pip",
                     "-y",
                 ],

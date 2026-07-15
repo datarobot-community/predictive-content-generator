@@ -171,7 +171,7 @@ The quickstart script automates the entire setup process for you:
 
 This single command replaces all the manual steps described in the [advanced setup section](#setup-for-advanced-users).
 
-Python 3.9+ is required.
+Python 3.12+ is required.
 
 Advanced users desiring control over virtual environment creation, dependency installation, environment variable setup
 and `pulumi` invocation see [here](#setup-for-advanced-users).
