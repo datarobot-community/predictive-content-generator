@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [11.12.0] - 2026-09-09
+
+### Changed
+- Removed the application-side reconstruction of LLM blueprint runtime parameters. DataRobot 11.12 and later preserve blueprint defaults when credential runtime parameters are supplied.
+
 ## [0.2.4] - 2026-07-15
 
 ### Fixed

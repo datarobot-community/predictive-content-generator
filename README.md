@@ -48,10 +48,11 @@ The predictive content generator highlights the combination of:
    - [Change the data and model training method](#change-the-data-and-model-training-method)
    - [Modify the front-end](#modify-the-front-end)
    - [Change the language in the front-end](#change-the-language-in-the-front-end)
-6. [Share results](#share-results)
-7. [Delete all provisioned resources](#delete-all-provisioned-resources)
-8. [Setup for advanced users](#setup-for-advanced-users)
-9. [Data privacy](#data-privacy)
+6. [Testing](#testing)
+7. [Share results](#share-results)
+8. [Delete all provisioned resources](#delete-all-provisioned-resources)
+9. [Setup for advanced users](#setup-for-advanced-users)
+10. [Data privacy](#data-privacy)
 
 ## Prerequisites
 
@@ -300,6 +301,33 @@ pulumi up
 #### Change the language in the front-end
 
 Optionally, you can set the application locale in `nbo/i18n.py`, e.g. `APP_LOCALE = LanguageCode.JA`. Supported locales are Japanese and English, with English set as the default.
+
+## Testing
+
+### Pytest suite
+
+The tests in `tests/` (excluding `tests/e2e/`) exercise the deployed
+generative pipeline and — via Streamlit's `AppTest` — the frontend directly.
+
+```bash
+pip install -r requirements.txt
+pytest tests --ignore=tests/e2e
+```
+
+Pass `--pulumi_up` to deploy a fresh, disposable stack for the run instead of
+using the currently-selected one:
+
+```bash
+pytest tests --ignore=tests/e2e --pulumi_up                       # tear down on success, keep the stack if a test fails (for debugging)
+pytest tests --ignore=tests/e2e --pulumi_up --always_delete_stack # always tear down, even after a failure
+```
+
+### End-to-end tests
+
+`tests/e2e/` holds two suites: a Cypress suite (what the Harness `e2e_v2`
+pipeline actually runs) and an older Selenium suite that CI does not invoke.
+See [tests/e2e/README.md](tests/e2e/README.md) for setup, configuration, and
+how to run either one.
 
 ## Share results
 
